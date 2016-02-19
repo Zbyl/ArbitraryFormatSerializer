@@ -3,7 +3,7 @@
 
 #include "binary_serializers/ISerializer.h"
 
-#include "formatters/unified_formatter_base.h"
+#include "formatters/implement_save_load_serialize.h"
 #include "binary_formatters/string_formatter.h"
 #include "formatters/map_formatter.h"
 #include "formatters/vector_formatter.h"
@@ -40,7 +40,7 @@ bool operator==(SimpleStruct, SimpleStruct)
     return false;
 }
 
-class simple_struct_formatter : public unified_formatter_base<simple_struct_formatter>
+class simple_struct_formatter : public implement_save_load<simple_struct_formatter>
 {
 public:
     template<typename TSerializer>
@@ -59,6 +59,14 @@ public:
 
 void example()
 {
+    static_assert(!has_serialize<int, VectorSaveSerializer, SimpleStruct>::type::value, "A<int> doesn't have serialize");
+    static_assert(has_serialize<simple_struct_formatter, VectorSaveSerializer, SimpleStruct>::value, "simple_struct_formatter doesn't have serialize");
+    static_assert(has_serialize<const simple_struct_formatter, VectorSaveSerializer, SimpleStruct>::value, "Lola");
+    static_assert(can_save<VectorSaveSerializer>::value, "VectorSaveSerializer can't save");
+    static_assert(!can_load<VectorSaveSerializer>::value, "VectorSaveSerializer can load");
+    static_assert(can_load<MemoryLoadSerializer>::value, "MemoryLoadSerializer can't load");
+    static_assert(!can_save<MemoryLoadSerializer>::value, "MemoryLoadSerializer can save");
+
     // serialization
     VectorSaveSerializer vectorWriter;
     SimpleStruct simple;

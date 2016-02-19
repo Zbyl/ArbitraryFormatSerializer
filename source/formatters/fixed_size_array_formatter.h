@@ -14,7 +14,6 @@
 #ifndef ArbitraryFormatSerializer_fixed_size_array_formatter_H
 #define ArbitraryFormatSerializer_fixed_size_array_formatter_H
 
-#include "unified_formatter_base.h"
 #include "binary_formatters/verbatim_formatter.h"
 
 #include <boost/static_assert.hpp>

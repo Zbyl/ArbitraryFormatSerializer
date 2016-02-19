@@ -14,12 +14,12 @@
 #ifndef ArbitraryFormatSerializer_object_formatter_H
 #define ArbitraryFormatSerializer_object_formatter_H
 
-#include "unified_formatter_base.h"
+#include "implement_save_load_serialize.h"
 
 namespace arbitrary_format
 {
 
-class object_formatter : public unified_formatter_base<object_formatter>
+class object_formatter : public implement_save_load<object_formatter>
 {
 public:
     template<typename T, typename TSerializer>
