@@ -1,0 +1,34 @@
+/////////////////////////////////////////////////////////////////////////////
+/// ArbitraryFormatSerializer
+///    Library for serializing data in arbitrary formats.
+///
+/// object_formatter.h
+///
+/// This file contains object_formatter that formats an object using it's serialize() method.
+///
+/// Distributed under Apache License, Version 2.0 (http://www.apache.org/licenses/LICENSE-2.0)
+/// (c) 2014 Zbigniew Skowron, zbychs@gmail.com
+///
+/////////////////////////////////////////////////////////////////////////////
+
+#ifndef ArbitraryFormatSerializer_object_formatter_H
+#define ArbitraryFormatSerializer_object_formatter_H
+
+#include "unified_formatter_base.h"
+
+namespace arbitrary_format
+{
+
+class object_formatter : public unified_formatter_base<object_formatter>
+{
+public:
+    template<typename T, typename TSerializer>
+    void serialize(TSerializer& serializer, T& object)
+    {
+        object->serialize(serializer);
+    }
+};
+
+} // namespace arbitrary_format
+
+#endif // ArbitraryFormatSerializer_object_formatter_H
