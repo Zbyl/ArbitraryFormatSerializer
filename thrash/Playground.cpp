@@ -8,8 +8,8 @@
 #include "binary_formatters/string_formatter.h"
 #include "formatters/map_formatter.h"
 #include "binary_formatters/endian_formatter.h"
-#include "formatters/type_formatter.h"
-#include "formatters/any_formatter.h"
+//#include "formatters/type_formatter.h"
+//#include "formatters/any_formatter.h"
 #include "formatters/vector_formatter.h"
 #include "formatters/const_formatter.h"
 #include "binary_formatters/bit_formatter.h"
@@ -65,67 +65,10 @@ public:
         return buffer;
     }
 
-    bool saving()
-    {
-        return true;
-    }
-
-    /// @brief Returs true if serializer is a loading serializer.
-    bool loading() { return !saving(); }
-
-    /// @brief Saves given object using specified formatter.
-    ///        Will throw serialization_exception if serializer is a loading serializer.
-    template<typename Formatter, typename T>
-    void save(const T& object, Formatter& formatter = Formatter())
-    {
-        if (!saving())
-        {
-            BOOST_THROW_EXCEPTION(serialization_exception() << detail::errinfo_description("Can't save to a loading serializer."));
-        }
-
-        formatter.save(*this, object);
-    }
-
-    /// @brief Loads given object using specified formatter.
-    ///        Will throw serialization_exception if serializer is a saving serializer.
-    template<typename Formatter, typename T>
-    void load(T& object, Formatter& formatter = Formatter())
-    {
-        if (!loading())
-        {
-            BOOST_THROW_EXCEPTION(serialization_exception() << detail::errinfo_description("Can't load from a saving serializer."));
-        }
-
-        formatter.load(*this, object);
-    }
-
-    /// @brief Serializes given object using specified formatter.
-    ///        Calls save() or load() depending on whether serializer if a saving or loading serializer.
-    template<typename Formatter, typename T>
-    void serialize(T& object, const Formatter& formatter = Formatter())
-    {
-        if (saving())
-        {
-            formatter.save(*this, object);
-        }
-        else
-        {
-            formatter.load(*this, object);
-        }
-    }
-
 public:
+    using saving_serializer = std::true_type;
+
     void saveData(const boost::uint8_t* data, size_t size)
-    {
-        serializeData(const_cast<boost::uint8_t*>(data), size);
-    }
-
-    void loadData(boost::uint8_t* data, size_t size)
-    {
-        serializeData(data, size);
-    }
-
-    void serializeData(boost::uint8_t* data, size_t size)
     {
         buffer.insert(buffer.end(), data, data + size);
     }
@@ -145,21 +88,23 @@ int main(int argc, char* argv[])
     std::map<int, std::string> map3;
     std::map<int, std::string> map4;
 
+#if 0
     type_formatter< TempVectorSaveSerializer, std::map<int, std::string> > mapFormat2(mapFormat);
 
     any_formatter<MemoryLoadSerializer> mapFormat3(make_any_formatter<MemoryLoadSerializer, std::map<int, std::string> >(mapFormat));
 
-    type_formatter<ISeekableSerializer, std::map<int, std::string> > mapFormat4(mapFormat);
+    type_formatter<ISeekableSerializer<ISlowSerializer>, std::map<int, std::string> > mapFormat4(mapFormat);
 
     TempVectorSaveSerializer vectorWriter;
-    vectorWriter.serialize(map, mapFormat);
-    vectorWriter.serialize(map, mapFormat2);
-    make_seekable_serializer_force(vectorWriter).serialize(map, mapFormat4);
+    serialize(vectorWriter,map, mapFormat);
+    serialize(vectorWriter, map, mapFormat2);
+    slow_serialize(make_seekable_serializer_force_ex<ISlowSerializer>(vectorWriter), map, mapFormat4);
 
     MemoryLoadSerializer vectorReader(vectorWriter.getData());
-    make_seekable_serializer_force(vectorReader).serialize(map2, mapFormat4);
-    vectorReader.serialize(map3, mapFormat3);
-    vectorReader.serialize(map4, mapFormat);
+    slow_serialize(make_seekable_serializer_force_ex<ISlowSerializer>(vectorReader), map2, mapFormat4);
+    serialize(vectorReader, map3, mapFormat3);
+    serialize(vectorReader, map4, mapFormat);
+#endif
 
     std::vector<int> vector {1, 2, 3, 4, 5};
 

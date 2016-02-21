@@ -81,7 +81,7 @@ void example()
     serialize< const_formatter<simple_struct_formatter> >(vectorReader, simple2);
 }
 
-int main(int argc, char* argv[])
+int mainE(int argc, char* argv[])
 {
     example();
     return 0;

@@ -21,6 +21,7 @@
 namespace arbitrary_format
 {
 
+/// @todo: Fix this for saving and loading only serializers.
 template<typename TSerializer, typename T>
 class type_formatter
 {

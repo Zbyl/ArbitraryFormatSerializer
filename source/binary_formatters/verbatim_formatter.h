@@ -27,7 +27,7 @@ class verbatim_formatter
 {
 public:
     /// @brief Stores given pod the same way as it's stored in memory.
-    template<typename T, typename TSerializer = ISerializer>
+    template<typename T, typename TSerializer>
     void save(TSerializer& serializer, const T& pod) const
     {
         static_assert(std::is_pod<T>::value, "verbatim_formatter can store only PODs");
@@ -36,7 +36,7 @@ public:
     }
 
     /// @brief Loads given pod the same way as it's stored in memory.
-    template<typename T, typename TSerializer = ISerializer>
+    template<typename T, typename TSerializer>
     void load(TSerializer& serializer, T& pod) const
     {
         static_assert(std::is_pod<T>::value, "verbatim_formatter can store only PODs");

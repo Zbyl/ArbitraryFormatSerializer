@@ -186,7 +186,7 @@ using polymorphic_serializer_t = std::conditional_t<is_saving_serializer<TSerial
                                                         std::conditional_t<is_loading_serializer<TSerializer>::value, ISlowSerializer, ISaveSerializer>,
                                                         std::conditional_t<is_loading_serializer<TSerializer>::value, ILoadSerializer, CantMakePolymorphicSerializer<TSerializer>> >;
 
-template<typename TSerializer, typename PolymorphicSerializer = polymorphic_serializer_t<TSerializer>>
+template<typename PolymorphicSerializer>
 class ISeekableSerializer : public virtual PolymorphicSerializer
 {
 public:
@@ -284,11 +284,11 @@ GENERATE_HAS_MEMBER(seek);
 /// @param ForceCreate  If true, then type will be created, but missing methods in TSerializer will result in generation of methods that throw not_implemented exception.
 ///                     If false, then type will not be created if there are any missing methods in TSerializer.
 template<typename TSerializer, bool ForceCreate = false, typename PolymorphicSerializer = polymorphic_serializer_t<TSerializer>>
-class AnySeekableSerializer : public virtual AnySerializer<TSerializer, PolymorphicSerializer>, public virtual ISeekableSerializer<TSerializer, PolymorphicSerializer>
+class AnySeekableSerializer : public virtual AnySerializer<TSerializer, PolymorphicSerializer>, public virtual ISeekableSerializer<PolymorphicSerializer>
 {
 public:
     explicit AnySeekableSerializer(TSerializer& serializer)
-        : AnySerializer<TSerializer>(serializer)
+        : AnySerializer<TSerializer, PolymorphicSerializer>(serializer)
         , serializer(serializer)
     {
     }
@@ -350,9 +350,27 @@ AnySeekableSerializer<T> make_seekable_serializer(T& serializer)
 }
 
 template<typename T>
-AnySeekableSerializer<T, true> make_seekable_serializer_force(T& serializer)
+AnySeekableSerializer<T> make_seekable_serializer_force(T& serializer)
 {
-    return AnySeekableSerializer<T, true>(serializer);
+    return AnySeekableSerializer<T>(serializer);
+}
+
+template<typename PolymorphicSerializer, typename T>
+AnySeekableSerializer<T, false, PolymorphicSerializer> make_serializer_ex(T& serializer)
+{
+    return AnySeekableSerializer<T, false, PolymorphicSerializer>(serializer);
+}
+
+template<typename PolymorphicSerializer, typename T>
+AnySeekableSerializer<T, false, PolymorphicSerializer> make_seekable_serializer_ex(T& serializer)
+{
+    return AnySeekableSerializer<T, false, PolymorphicSerializer>(serializer);
+}
+
+template<typename PolymorphicSerializer, typename T>
+AnySeekableSerializer<T, true, PolymorphicSerializer> make_seekable_serializer_force_ex(T& serializer)
+{
+    return AnySeekableSerializer<T, true, PolymorphicSerializer>(serializer);
 }
 
 } // namespace binary

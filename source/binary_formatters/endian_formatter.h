@@ -41,14 +41,14 @@ class endian_formatter
 public:
     /// @brief Stores given bool in TargetOrder byte order.
     ///        Throws lossy_conversion if Size is not enough to represent actual run-time value of pod.
-    template<typename TSerializer = ISerializer>
+    template<typename TSerializer>
     void save(TSerializer& serializer, bool b) const
     {
         save(serializer, static_cast<int>(b));
     }
 
     /// @brief Loads given bool from TargetOrder byte order.
-    template<typename TSerializer = ISerializer>
+    template<typename TSerializer>
     void load(TSerializer& serializer, bool& b) const
     {
         using SizedInt = typename integer_of_size<false, sizeof(bool)>::type;
@@ -57,7 +57,7 @@ public:
 
     /// @brief Stores given pod in TargetOrder byte order.
     ///        Throws lossy_conversion if Size is not enough to represent actual run-time value of pod.
-    template<typename T, typename TSerializer = ISerializer>
+    template<typename T, typename TSerializer>
     typename std::enable_if< std::is_integral<T>::value || std::is_enum<T>::value >::type 
     save(TSerializer& serializer, const T& pod) const
     {
@@ -77,7 +77,7 @@ public:
     }
 
     /// @brief Loads given pod from TargetOrder byte order.
-    template<typename T, typename TSerializer = ISerializer>
+    template<typename T, typename TSerializer>
     typename std::enable_if< std::is_integral<T>::value || std::is_enum<T>::value >::type 
     load(TSerializer& serializer, T& pod) const
     {
@@ -92,7 +92,7 @@ public:
     }
 
     /// @brief Stores given pod in TargetOrder byte order.
-    template<typename T, typename TSerializer = ISerializer>
+    template<typename T, typename TSerializer>
     typename std::enable_if< !(std::is_integral<T>::value || std::is_enum<T>::value) >::type 
     save(TSerializer& serializer, const T& pod) const
     {
@@ -113,7 +113,7 @@ public:
     }
 
     /// @brief Loads given pod from TargetOrder byte order.
-    template<typename T, typename TSerializer = ISerializer>
+    template<typename T, typename TSerializer>
     typename std::enable_if< !(std::is_integral<T>::value || std::is_enum<T>::value) >::type 
     load(TSerializer& serializer, T& pod) const
     {

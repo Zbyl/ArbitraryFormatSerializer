@@ -95,7 +95,7 @@ public:
 
         ScopedSerializer<TSerializer> scopedSerializer(serializer, byteCount);
         decltype(auto) sizedValueFormatter = sized_formatter(value_formatter, byteCount);
-        scopedSerializer.load(value, sizedValueFormatter);
+        sizedValueFormatter.load(scopedSerializer, value);
         scopedSerializer.verifyAllBytesProcessed();
     }
 };
