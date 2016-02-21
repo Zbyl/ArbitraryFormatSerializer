@@ -14,41 +14,48 @@
 #ifndef ArbitraryFormatSerializer_SizeCountingSerializer_H
 #define ArbitraryFormatSerializer_SizeCountingSerializer_H
 
-#include "ISerializer.h"
-
-#include <boost/cstdint.hpp>
+#include <cstdint>
 
 namespace arbitrary_format
 {
 namespace binary
 {
 
-class SizeCountingSerializer : public SerializerMixin<SizeCountingSerializer>
+template<bool Saving>
+class SizeCountingSerializerImpl
 {
-    boost::uintmax_t byteCount;
+    uintmax_t byteCount;
 public:
-    SizeCountingSerializer()
+    SizeCountingSerializerImpl()
         : byteCount(0)
     {
     }
 
-    /// @brief Returns number of bytes that has been stored to this serializer so far.
-    boost::uintmax_t getByteCount()
+    /// @brief Returns number of bytes that has been stored to / loaded from this serializer so far.
+    uintmax_t getByteCount()
     {
         return byteCount;
     }
 
-    bool saving()
+public:
+    using saving_serializer = std::bool_constant<Saving>;
+    using loading_serializer = std::bool_constant<!Saving>;
+
+    template<typename T, std::enable_if_t<Saving && std::is_same<T, uint8_t>::value>* sfinae = nullptr>
+    void saveData(const T* data, size_t size)
     {
-        return true;
+        byteCount += size;
     }
 
-public:
-    void serializeData(boost::uint8_t* data, size_t size)
+    template<typename T, std::enable_if_t<!Saving && std::is_same<T, uint8_t>::value>* sfinae = nullptr>
+    void loadData(T* data, size_t size)
     {
         byteCount += size;
     }
 };
+
+using SizeCountingSerializer = SizeCountingSerializerImpl<true>;
+using LoadSizeCountingSerializer = SizeCountingSerializerImpl<false>;
 
 } // namespace binary
 } // namespace arbitrary_format

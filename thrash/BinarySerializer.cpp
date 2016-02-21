@@ -44,45 +44,48 @@ class simple_struct_formatter : public implement_save_load<simple_struct_formatt
 {
 public:
     template<typename TSerializer>
-    void serialize(TSerializer& serializer, SimpleStruct& simpleStruct) const
+    void save_or_load(TSerializer& serializer, SimpleStruct& simpleStruct) const
     {
         /// syntax 1: binary format specified as a template parameter
-        binary::serialize< little_endian<4> >(serializer, simpleStruct.number);
-        binary::serialize< string_formatter< little_endian<2> > >(serializer, simpleStruct.text);
+        serialize< little_endian<4> >(serializer, simpleStruct.number);
+        serialize< string_formatter< little_endian<2> > >(serializer, simpleStruct.text);
 
         /// syntax 2: binary format specified as a function parameter (allows for stateful formatters)
         ///            count formatter     key formatter            value formatter
         map_formatter< little_endian<4>, little_endian<1>, string_formatter< little_endian<4> > > mapFormat;
-        serializer.serialize(simpleStruct.map, mapFormat);
+        serialize(serializer, simpleStruct.map, mapFormat);
     }
 };
 
 void example()
 {
-    static_assert(!has_serialize<int, VectorSaveSerializer, SimpleStruct>::type::value, "A<int> doesn't have serialize");
-    static_assert(has_serialize<simple_struct_formatter, VectorSaveSerializer, SimpleStruct>::value, "simple_struct_formatter doesn't have serialize");
-    static_assert(has_serialize<const simple_struct_formatter, VectorSaveSerializer, SimpleStruct>::value, "Lola");
-    static_assert(can_save<VectorSaveSerializer>::value, "VectorSaveSerializer can't save");
-    static_assert(!can_load<VectorSaveSerializer>::value, "VectorSaveSerializer can load");
-    static_assert(can_load<MemoryLoadSerializer>::value, "MemoryLoadSerializer can't load");
-    static_assert(!can_save<MemoryLoadSerializer>::value, "MemoryLoadSerializer can save");
+    static_assert(!has_save_or_load<int, VectorSaveSerializer, SimpleStruct>::type::value, "A<int> doesn't have serialize");
+    static_assert(has_save_or_load<simple_struct_formatter, VectorSaveSerializer, SimpleStruct>::value, "simple_struct_formatter doesn't have serialize");
+    static_assert(has_save_or_load<const simple_struct_formatter, VectorSaveSerializer, SimpleStruct>::value, "const simple_struct_formatter doesn't have serialize");
+    static_assert(is_saving_serializer<VectorSaveSerializer>::value, "VectorSaveSerializer can't save");
+    static_assert(!is_loading_serializer<VectorSaveSerializer>::value, "VectorSaveSerializer can load");
+    static_assert(is_loading_serializer<MemoryLoadSerializer>::value, "MemoryLoadSerializer can't load");
+    static_assert(!is_saving_serializer<MemoryLoadSerializer>::value, "MemoryLoadSerializer can save");
 
     // serialization
     VectorSaveSerializer vectorWriter;
     SimpleStruct simple;
-    vectorWriter.serialize<simple_struct_formatter>(simple);
+    serialize<simple_struct_formatter>(vectorWriter, simple);
 
     // deserialization
     MemoryLoadSerializer vectorReader(vectorWriter.getData());
     SimpleStruct simple2;
-    vectorReader.serialize<simple_struct_formatter>(simple2);
+     serialize<simple_struct_formatter>(vectorReader, simple2);
 
-    vectorWriter.serialize< const_formatter<simple_struct_formatter> >(simple);
-    vectorReader.serialize< const_formatter<simple_struct_formatter> >(simple2);
+    serialize< const_formatter<simple_struct_formatter> >(vectorWriter, simple);
+    serialize< const_formatter<simple_struct_formatter> >(vectorReader, simple2);
 }
 
-int mainE(int argc, char* argv[])
+int main(int argc, char* argv[])
 {
+    example();
+    return 0;
+
     map_formatter< little_endian<4>, little_endian<1>, string_formatter< little_endian<4> > > mapFormat;
 
     std::map<int, std::string> map;
@@ -92,38 +95,40 @@ int mainE(int argc, char* argv[])
     map[2] = "Kota";
 
     CoutSerializer coutSerializer(true);
-    coutSerializer.serialize(map, mapFormat);
+    serialize(coutSerializer, map, mapFormat);
 
-    coutSerializer.serialize< map_formatter<
+    serialize< map_formatter<
                                     little_endian<4>,
                                     little_endian<1>,
                                     string_formatter< little_endian<4> >
-                                > >(map);
+                                > >(coutSerializer, map);
 
     std::map<int, std::string> map2;
     std::map<int, std::string> map3;
     std::map<int, std::string> map4;
 
-    type_formatter<ISerializer, std::map<int, std::string> > mapFormat2(mapFormat);
+    type_formatter<ISlowSerializer, std::map<int, std::string> > mapFormat2(mapFormat);
 
-    any_formatter<ISerializer> mapFormat3(make_any_formatter<ISerializer, std::map<int, std::string> >(mapFormat));
+    any_formatter<ISlowSerializer> mapFormat3(make_any_formatter<ISlowSerializer, std::map<int, std::string> >(mapFormat));
 
-    boost::uint8_t lola = 5;
-    boost::uint8_t lola2;
+    uint8_t lola = 5;
+    uint8_t lola2;
 
     VectorSaveSerializer vectorWriter;
-    vectorWriter.serialize(map, mapFormat);
-    AnySerializer<VectorSaveSerializer>(vectorWriter).serialize(map, mapFormat2);
-    AnySerializer<VectorSaveSerializer>(vectorWriter).serialize(map, mapFormat3);
-    vectorWriter.serialize< const_formatter< fixed_size_array_formatter< little_endian<4> > > >("MAGIC_STRING");
-    vectorWriter.serialize< inefficient_size_prefix_formatter< little_endian<1>, little_endian<4> > >(lola);
+    serialize(vectorWriter, map, mapFormat);
+    auto anyVectorWriter = AnySerializer<VectorSaveSerializer, ISlowSerializer>(vectorWriter);
+    slow_serialize(anyVectorWriter, map, mapFormat2);
+    slow_serialize(anyVectorWriter, map, mapFormat3);
+    serialize< const_formatter< fixed_size_array_formatter< little_endian<4> > > >(vectorWriter, "MAGIC_STRING");
+    serialize< inefficient_size_prefix_formatter< little_endian<1>, little_endian<4> > >(vectorWriter, lola);
 
     MemoryLoadSerializer vectorReader(vectorWriter.getData());
-    AnySerializer<MemoryLoadSerializer>(vectorReader).serialize(map2, mapFormat3);
-    vectorReader.serialize(map3, mapFormat);
-    AnySerializer<MemoryLoadSerializer>(vectorReader).serialize(map4, mapFormat2);
-    vectorReader.serialize< const_formatter< fixed_size_array_formatter< little_endian<4> > > >("MAGIC_STRING");
-    vectorReader.serialize< inefficient_size_prefix_formatter< little_endian<1>, little_endian<4> > >(lola2);
+    auto anyVectorReader = AnySerializer<MemoryLoadSerializer, ISlowSerializer>(vectorReader);
+    slow_serialize(anyVectorReader, map2, mapFormat3);
+    serialize(vectorReader, map3, mapFormat);
+    slow_serialize(anyVectorReader, map4, mapFormat2);
+    serialize< const_formatter< fixed_size_array_formatter< little_endian<4> > > >(vectorReader, "MAGIC_STRING");
+    serialize< inefficient_size_prefix_formatter< little_endian<1>, little_endian<4> > >(vectorReader, lola2);
 
     return 0;
 }

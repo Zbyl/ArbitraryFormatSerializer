@@ -17,30 +17,28 @@
 #include "ISerializer.h"
 
 #include <iostream>
+#include <cstdint>
 
 namespace arbitrary_format
 {
 namespace binary
 {
 
-class CoutSerializer : public SerializerMixin<CoutSerializer>
+class CoutSerializer
 {
     bool appendNewLines;
 public:
     /// @brief Constructs the serializer.
-    /// @param appendNewLines    If true the serializer will add a new line after every call to serializeData(). Useful for debugging of formatters.
+    /// @param appendNewLines    If true the serializer will add a new line after every call to saveData(). Useful for debugging of formatters.
     explicit CoutSerializer(bool appendNewLines = false)
         : appendNewLines(appendNewLines)
     {
     }
 
-    bool saving()
-    {
-        return true;
-    }
-
 public:
-    void serializeData(boost::uint8_t* data, size_t size)
+    using saving_serializer = std::true_type;
+
+    void saveData(const uint8_t* data, size_t size)
     {
         for (size_t i = 0; i < size; ++i)
         {

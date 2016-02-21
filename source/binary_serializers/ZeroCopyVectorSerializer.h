@@ -43,7 +43,7 @@ public:
         return buffer;
     }
 
-    bool saving()
+    bool saving() const
     {
         return true;
     }

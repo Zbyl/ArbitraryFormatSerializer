@@ -19,39 +19,42 @@
 
 #include "serialization_exceptions.h"
 
+#include <cstdint>
+
 namespace arbitrary_format
 {
 namespace binary
 {
 
 template<typename TSerializer>
-class ScopedSerializer : public SerializerMixin< ScopedSerializer<TSerializer> >
+class ScopedSerializer
 {
     TSerializer& serializer;
-    boost::uintmax_t byteLimit;
-    boost::uintmax_t bytesProcessed;
+    uintmax_t byteLimit;
+    uintmax_t bytesProcessed;
 public:
-    ScopedSerializer(TSerializer& serializer, boost::uintmax_t byteLimit)
+    ScopedSerializer(TSerializer& serializer, uintmax_t byteLimit)
         : serializer(serializer)
         , byteLimit(byteLimit)
         , bytesProcessed(0)
     {
+        static_assert(is_saving_serializer<TSerializer>::value || is_loading_serializer<TSerializer>::value, "Serializer isn't a loading or saving serializer. Don't know how it should work.");
     }
 
     /// @brief Returns number of bytes that this serializer was allowed to process.
-    boost::uintmax_t getByteLimit()
+    uintmax_t getByteLimit()
     {
         return byteLimit;
     }
 
     /// @brief Returns number of bytes that has been processed by this serializer so far.
-    boost::uintmax_t getBytesProcessed()
+    uintmax_t getBytesProcessed()
     {
         return bytesProcessed;
     }
 
     /// @brief Returns number of bytes that are still left to be processed.
-    boost::uintmax_t getBytesLeft()
+    uintmax_t getBytesLeft()
     {
         return byteLimit - bytesProcessed;
     }
@@ -66,13 +69,31 @@ public:
         }
     }
 
-    virtual bool saving()
+    bool saving() const
     {
-        return serializer.saving();
+        return is_serializer_saving(serializer);
     }
 
 public:
-    virtual void serializeData(boost::uint8_t* data, size_t size)
+    using saving_serializer = is_saving_serializer<TSerializer>;
+    using loading_serializer = is_loading_serializer<TSerializer>;
+
+    template<typename T, std::enable_if_t<saving_serializer::value && std::is_same<T, uint8_t>::value>* sfinae = nullptr>
+    void saveData(const T* data, size_t size)
+    {
+        countData(size);
+        serializer.saveData(data, size);
+    }
+
+    template<typename T, std::enable_if_t<loading_serializer::value && std::is_same<T, uint8_t>::value>* sfinae = nullptr>
+    void loadData(T* data, size_t size)
+    {
+        countData(size);
+        serializer.loadData(data, size);
+    }
+
+private:
+    void countData(size_t size)
     {
         bytesProcessed += size;
         if (bytesProcessed > byteLimit)
@@ -86,8 +107,6 @@ public:
                 BOOST_THROW_EXCEPTION(end_of_input() << detail::errinfo_requested_this_many_bytes_more(bytesProcessed - byteLimit));
             }
         }
-
-        serializer.serializeData(data, size);
     }
 };
 

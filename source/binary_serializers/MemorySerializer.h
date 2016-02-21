@@ -27,7 +27,7 @@ namespace arbitrary_format
 namespace binary
 {
 
-class MemorySaveSerializer : public SerializerMixin<MemorySaveSerializer>
+class MemorySaveSerializer
 {
     uint8_t* buffer;
     size_t bufferSize;
@@ -60,11 +60,6 @@ public:
         return bufferSize;
     }
 
-    bool saving()
-    {
-        return true;
-    }
-
     size_t position()
     {
         return bufferPosition;
@@ -80,7 +75,9 @@ public:
     }
 
 public:
-    void serializeData(uint8_t* data, size_t size)
+    using saving_serializer = std::true_type;
+
+    void saveData(const uint8_t* data, size_t size)
     {
         if (bufferPosition + size > bufferSize)
         {
@@ -92,7 +89,7 @@ public:
     }
 };
 
-class MemoryLoadSerializer : public SerializerMixin<MemoryLoadSerializer>
+class MemoryLoadSerializer
 {
     const uint8_t* buffer;
     size_t bufferSize;
@@ -120,11 +117,6 @@ public:
     {
     }
 
-    bool saving()
-    {
-        return false;
-    }
-
     size_t position()
     {
         return bufferPosition;
@@ -140,7 +132,9 @@ public:
     }
 
 public:
-    void serializeData(uint8_t* data, size_t size)
+    using loading_serializer = std::true_type;
+
+    void loadData(uint8_t* data, size_t size)
     {
         if (bufferPosition + size > bufferSize)
         {

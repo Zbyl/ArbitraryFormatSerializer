@@ -19,15 +19,16 @@
 #include "serialization_exceptions.h"
 
 #include <vector>
+#include <cstdint>
 
 namespace arbitrary_format
 {
 namespace binary
 {
 
-class VectorSaveSerializer : public SerializerMixin<VectorSaveSerializer>
+class VectorSaveSerializer
 {
-    std::vector<boost::uint8_t> buffer;
+    std::vector<uint8_t> buffer;
     size_t pos;
 public:
     VectorSaveSerializer()
@@ -35,14 +36,9 @@ public:
     {
     }
 
-    const std::vector<boost::uint8_t>& getData()
+    const std::vector<uint8_t>& getData()
     {
         return buffer;
-    }
-
-    bool saving()
-    {
-        return true;
     }
 
     size_t position()
@@ -61,7 +57,9 @@ public:
     }
 
 public:
-    void serializeData(boost::uint8_t* data, size_t size)
+    using saving_serializer = std::true_type;
+
+    void saveData(const uint8_t* data, size_t size)
     {
         if (pos == buffer.size())
         {

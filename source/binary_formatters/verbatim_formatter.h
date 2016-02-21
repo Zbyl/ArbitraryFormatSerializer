@@ -32,7 +32,7 @@ public:
     {
         static_assert(std::is_pod<T>::value, "verbatim_formatter can store only PODs");
         static_assert(sizeof(T) == Size, "verbatim_formatter<Size> can store only PODs of size == Size");
-        serializer.serializeData(reinterpret_cast<boost::uint8_t*>(&pod), Size);
+        serializer.saveData(reinterpret_cast<boost::uint8_t*>(&pod), Size);
     }
 
     /// @brief Loads given pod the same way as it's stored in memory.
@@ -41,7 +41,7 @@ public:
     {
         static_assert(std::is_pod<T>::value, "verbatim_formatter can store only PODs");
         static_assert(sizeof(T) == Size, "verbatim_formatter<Size> can store only PODs of size == Size");
-        serializer.serializeData(reinterpret_cast<boost::uint8_t*>(&pod), Size);
+        serializer.loadData(reinterpret_cast<boost::uint8_t*>(&pod), Size);
     }
 };
 
