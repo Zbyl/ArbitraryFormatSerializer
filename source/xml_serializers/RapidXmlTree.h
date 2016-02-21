@@ -330,7 +330,7 @@ public:
         m_document.parse<rapidxml::parse_no_data_nodes | rapidxml::parse_declaration_node>(m_xml.data());
     }
 
-    const std::string& getEncoding()
+    const std::string& getEncoding() const
     {
         return m_encoding;
     }
@@ -355,6 +355,95 @@ private:
     std::string m_encoding;
     rapidxml::xml_document<> m_document;
 };
+
+template<bool Saving>
+class RapidXmlAttributeSerializer : public RapidXmlAttribute
+{
+public:
+    RapidXmlAttributeSerializer(const RapidXmlAttribute& attribute)
+        : RapidXmlAttribute(attribute)
+    {
+    }
+
+    using saving_serializer = std::bool_constant<Saving>;
+    using loading_serializer = std::bool_constant<!Saving>;
+};
+
+template<bool Saving>
+class RapidXmlTreeSerializer : public RapidXmlTree
+{
+public:
+    RapidXmlTreeSerializer(const RapidXmlTree& element)
+        : RapidXmlTree(element)
+    {
+    }
+
+    using saving_serializer = std::bool_constant<Saving>;
+    using loading_serializer = std::bool_constant<!Saving>;
+
+    RapidXmlAttributeSerializer<Saving> addAttribute(const boost::optional<std::string>& name)
+    {
+        return RapidXmlTree::addAttribute(name);
+    }
+
+    RapidXmlAttributeSerializer<Saving> addAttribute(const char* name)
+    {
+        return RapidXmlTree::addAttribute(name);
+    }
+
+    RapidXmlAttributeSerializer<Saving> eatAttribute(const boost::optional<std::string>& name, bool sequential)
+    {
+        return RapidXmlTree::eatAttribute(name, sequential);
+    }
+
+    RapidXmlAttributeSerializer<Saving> eatAttribute(const char* name, bool sequential)
+    {
+        return RapidXmlTree::eatAttribute(name, sequential);
+    }
+
+    RapidXmlTreeSerializer<Saving> addElement(const boost::optional<std::string>& name, bool declaration = false)
+    {
+        return RapidXmlTree::addElement(name, declaration);
+    }
+
+    RapidXmlTreeSerializer<Saving> addElement(const char* name, bool declaration = false)
+    {
+        return RapidXmlTree::addElement(name, declaration);
+    }
+
+    RapidXmlTreeSerializer<Saving> eatElement(const boost::optional<std::string>& name, bool sequential)
+    {
+        return RapidXmlTree::eatElement(name, sequential);
+    }
+
+    RapidXmlTreeSerializer<Saving> eatElement(const char* name, bool sequential)
+    {
+        return RapidXmlTree::eatElement(name, sequential);
+    }
+};
+
+template<bool Saving>
+class RapidXmlDocumentSerializer : public RapidXmlDocument
+{
+public:
+    using RapidXmlDocument::RapidXmlDocument;
+
+    using saving_serializer = std::bool_constant<Saving>;
+    using loading_serializer = std::bool_constant<!Saving>;
+
+    RapidXmlTreeSerializer<Saving> getDocumentElement()
+    {
+        return RapidXmlDocument::getDocumentElement();
+    }
+
+    operator RapidXmlTreeSerializer<Saving>()
+    {
+        return getDocumentElement();
+    }
+};
+
+using RapidXmlSaveSerializer = RapidXmlDocumentSerializer<true>;
+using RapidXmlLoadSerializer = RapidXmlDocumentSerializer<false>;
 
 } // namespace xml
 } // namespace arbitrary_format

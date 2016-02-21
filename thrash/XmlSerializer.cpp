@@ -39,7 +39,7 @@ using namespace xml;
 
 int main(int argc, char* argv[])
 {
-    RapidXmlDocument document("utf-8");
+    RapidXmlSaveSerializer document("utf-8");
     RapidXmlDocument allDocument("utf-8");
 
     auto vec = std::vector<int> { 1, 2, 3, 4, 5 };
@@ -91,7 +91,7 @@ int main(int argc, char* argv[])
     optionalFormatter.save(document.getDocumentElement(), optNone);
     optionalFormatter.save(document.getDocumentElement(), optStr);
     boost::optional<std::string> a("ala");
-    binary::save<opt_format>(document.getDocumentElement(), a);
+    binary::serialize<opt_format>(document.getDocumentElement(), a);
 
     auto allFormatter = create_element_formatter("all", create_tuple_formatter(vectorElementFormatter, vectorElementFormatter2, mapElementFormatter));
 
