@@ -175,4 +175,4 @@ using opt_elt_format = element_formatter< _empty_, opt_format >;
 Here we used `assign_name` to name the parent element.
 
 ### Final words
-On the example of `boost::optional` we saw various ways to format data. Using the same tools it's very easy to format almost anything exactly the way you want int.
+On the example of `boost::optional` we saw various ways to format data. Using the same tools it's very easy to format almost anything exactly the way you want it.
