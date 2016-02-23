@@ -17,7 +17,7 @@ At the center of Xml serialization there are following classes:
 
 - [RapidXmlSaveSerializer and RapidXmlLoadSerializer](#rapidxmlsaveserializer-and-rapidxmlloadserializer)
 - [Quick note about element names](#quick-note-about-element-names)
-- [Example: formatting boost::optional](#example-formatting-boost-optional)
+- [Example: formatting boost::optional](#example-formatting-boostoptional)
   - [Format #1: content_exists](#format-1-content_exists)
   - [Format #2: attribute_formatter](#format-2-attribute_formatter)
   - [Format #3: element_formatter](#format-3-element_formatter)
