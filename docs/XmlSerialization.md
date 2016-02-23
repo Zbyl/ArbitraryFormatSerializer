@@ -1,5 +1,5 @@
 Xml serialization
-==============
+=================
 
 At the center of Xml serialization there are following classes:
 
@@ -13,8 +13,20 @@ At the center of Xml serialization there are following classes:
 > **Note** Xml serialization is built using RapidXml library by Marcin Kalicinski.
 > See: http://rapidxml.sourceforge.net/
 
+**Table of Contents**
+
+- [RapidXmlSaveSerializer and RapidXmlLoadSerializer](#rapidxmlsaveserializer-and-rapidxmlloadserializer)
+- [Quick note about element names](#quick-note-about-element-names)
+- [Example: formatting boost::optional](#example-formatting-boost-optional)
+  - [Format #1: content_exists](#format-1-content_exists)
+  - [Format #2: attribute_formatter](#format-2-attribute_formatter)
+  - [Format #3: element_formatter](#format-3-element_formatter)
+  - [Format #4: element_counter](#format-4-element_counter)
+  - [Format #5: assign_name](#format-5-assign_name)
+  - [Final words](#final-words)
+
 RapidXmlSaveSerializer and RapidXmlLoadSerializer
-===========================================
+=================================================
 
 RapidXmlSaveSerializer and RapidXmlLoadSerializer both represent a whole xml document.
 The both provide access to *document element*, which is a top level *node* of the xml.
@@ -47,7 +59,7 @@ serialize<doc_format>(document, value);
 `document_formatter` simply adds an xml declaration. Please not that it uses `document` as a serializer (not `document.getDocumentElement()` as before). It also extracts encoding from the `document`, so there's no need to specify it manually.
 
 Quick note about element names
-===========================
+==============================
 Element and attribute names are provided to formatters as compile time strings. Due to limitations of the C++ language, we need to declare such compile time strings as follows:
 ```cpp
 declare_compile_time_string(name, "value");
@@ -62,8 +74,8 @@ declare_compile_time_string(_something_, "something");
 > - using a `assign_name` formatter.
 > Those options will be discussed later.
 
-Example: formatting boost::optional< T >
-=================================
+Example: formatting boost::optional
+===================================
 `boost::optional<T>` is a class that can hold either object T or `boost::none`. In other words it either holds a value, or is empty.
 This type will allow us to showcase how to use various formatters to achieve desired results.
 
