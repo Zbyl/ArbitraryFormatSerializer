@@ -54,18 +54,13 @@ struct make_compile_time_string1
     using type = typename make_compile_time_string2<std::make_index_sequence<size>, str>::type;
 };
 
-#define make_compile_time_string(str) \
-( []() { \
-    struct constexpr_string_type { const char * chars = str; }; \
-    return make_compile_time_string1<sizeof(str) - 1, constexpr_string_type>::type(); \
-} () )
-
 #define declare_compile_time_string(name, str) \
-    auto declare_element_name_ ## name = make_compile_time_string(str); \
-    using name = decltype(declare_element_name_ ## name)
-
-//template<typename T, int N> using raw_array = T[N];
-//#define constant_string(str) (raw_array<const char, sizeof(str)> { str })
+    struct declare_compile_time_string_ ## name \
+    { \
+        struct constexpr_string_type { const char * chars = str; }; \
+        auto strFunc() { return make_compile_time_string1<sizeof(str) - 1, constexpr_string_type>::type(); } \
+    }; \
+    using name = decltype(declare_compile_time_string_ ## name {}.strFunc())
 
 } // namespace arbitrary_format
 

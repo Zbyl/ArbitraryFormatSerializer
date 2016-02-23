@@ -16,6 +16,7 @@
 #define ArbitraryFormatSerializer_element_formatter_H
 
 #include "serialization_exceptions.h"
+#include "utility/compile_time_string.h"
 
 #include <string>
 #include <vector>
@@ -28,22 +29,22 @@ namespace arbitrary_format
 namespace xml
 {
 
-template<typename ValueFormatter = assign_text_content<>, bool Sequential = true>
-class element_formatter
+template<typename ValueFormatter, bool Sequential = true>
+class element_formatter_impl
 {
 private:
     boost::optional<std::string> name;
     ValueFormatter value_formatter;
 
 public:
-    explicit element_formatter(const boost::optional<std::string>& name = boost::none, ValueFormatter value_formatter = ValueFormatter())
+    explicit element_formatter_impl(const boost::optional<std::string>& name = boost::none, ValueFormatter value_formatter = ValueFormatter())
         : name(name)
         , value_formatter(value_formatter)
     {
     }
 
-    explicit element_formatter(const char* name, ValueFormatter value_formatter = ValueFormatter())
-        : element_formatter(std::string(name), value_formatter)
+    explicit element_formatter_impl(const char* name, ValueFormatter value_formatter = ValueFormatter())
+        : element_formatter_impl(std::string(name), value_formatter)
     {
     }
 
@@ -74,14 +75,37 @@ public:
     }
 };
 
-template<typename ValueFormatter = assign_text_content<>>
-element_formatter<ValueFormatter> create_element_formatter(const boost::optional<std::string>& name = boost::none, ValueFormatter value_formatter = ValueFormatter())
+template<typename CompileTimeString, typename ValueFormatter = assign_text_content<>, bool Sequential = true>
+class element_formatter
 {
-    return element_formatter<ValueFormatter>(name, value_formatter);
+private:
+    static const element_formatter_impl<ValueFormatter, Sequential> formatter;
+public:
+    template<typename T, typename XmlTree>
+    void save(XmlTree& xmlTree, const T& object) const
+    {
+        formatter.save(xmlTree, object);
+    }
+
+    template<typename T, typename XmlTree>
+    void load(XmlTree& xmlTree, T& object) const
+    {
+        formatter.load(xmlTree, object);
+    }
+};
+
+template<typename CompileTimeString, typename ValueFormatter = assign_text_content<>, bool Sequential = true>
+const element_formatter_impl<ValueFormatter, Sequential> element_formatter<CompileTimeString, ValueFormatter, Sequential>::formatter = 
+    element_formatter_impl<ValueFormatter, Sequential>( boost::optional<std::string>(!CompileTimeString::empty::value, compile_time_string_print<CompileTimeString>::str()) );
+
+template<typename ValueFormatter = assign_text_content<>>
+element_formatter_impl<ValueFormatter> create_element_formatter(const boost::optional<std::string>& name = boost::none, ValueFormatter value_formatter = ValueFormatter())
+{
+    return element_formatter_impl<ValueFormatter>(name, value_formatter);
 }
 
 template<typename ValueFormatter = assign_text_content<>>
-element_formatter<ValueFormatter> create_element_formatter(const char* name, ValueFormatter value_formatter = ValueFormatter())
+element_formatter_impl<ValueFormatter> create_element_formatter(const char* name, ValueFormatter value_formatter = ValueFormatter())
 {
     return create_element_formatter(std::string(name), value_formatter);
 }

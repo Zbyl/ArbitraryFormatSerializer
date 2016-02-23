@@ -33,13 +33,13 @@ namespace xml
 {
 
 template<typename ValueFormatter>
-class document_formatter
+class document_formatter_impl
 {
 private:
     ValueFormatter value_formatter;
 
 public:
-    explicit document_formatter(ValueFormatter value_formatter = ValueFormatter())
+    explicit document_formatter_impl(ValueFormatter value_formatter = ValueFormatter())
         : value_formatter(value_formatter)
     {
     }
@@ -75,10 +75,13 @@ public:
     }
 };
 
+template<typename CompileTimeString, typename ValueFormatter = assign_text_content<>>
+using document_formatter = document_formatter_impl< element_formatter<CompileTimeString, ValueFormatter> >;
+
 template<typename ValueFormatter>
-document_formatter<ValueFormatter> create_document_formatter(ValueFormatter value_formatter = ValueFormatter())
+document_formatter_impl<ValueFormatter> create_document_formatter(ValueFormatter value_formatter = ValueFormatter())
 {
-    return document_formatter<ValueFormatter>(value_formatter);
+    return document_formatter_impl<ValueFormatter>(value_formatter);
 }
 
 template<typename ValueFormatter>

@@ -12,8 +12,6 @@
 #include "xml_formatters/content_check.h"
 #include "xml_formatters/document_formatter.h"
 #include "xml_formatters/declaration_formatter.h"
-#include "xml_formatters/element_formatter_t.h"
-#include "xml_formatters/attribute_formatter_t.h"
 
 #include "formatters/vector_formatter.h"
 #include "formatters/optional_formatter.h"
@@ -36,9 +34,26 @@
 using namespace arbitrary_format;
 using namespace xml;
 
+template<const char* str>
+class A
+{
+};
 
 int main(int argc, char* argv[])
 {
+#if 0
+    constexpr str_const text("ala");
+    static_assert(text.data() == "ala", "Different!");
+    static const char bb[] = "ala";
+    struct cc
+    {
+        const char* ll = "ala";
+    }
+    constexpr ac = cc{};
+    A<ac.ll> xx;
+    A<bb> xx;
+    A<text.data()> xx;
+#endif
     RapidXmlSaveSerializer document("utf-8");
     RapidXmlDocument allDocument("utf-8");
 
@@ -74,10 +89,10 @@ int main(int argc, char* argv[])
 
     auto optionalFormatter = create_element_formatter("optional", create_optional_formatter(content_exists(), assign_text_content<>()));
 
-    declare_compile_time_string(optional, "optional");
-    declare_compile_time_string(initialized, "initialized");
-    declare_compile_time_string(value, "value");
-    using opt_format = element_formatter_t< optional, optional_formatter< attribute_formatter_t<initialized>, element_formatter_t<value> > >;
+    declare_compile_time_string(_optional_, "optional");
+    declare_compile_time_string(_initialized_, "initialized");
+    declare_compile_time_string(_value_, "value");
+    using opt_format = element_formatter< _optional_, optional_formatter< attribute_formatter<_initialized_>, element_formatter<_value_> > >;
 
     //auto doc_format = create_element_formatter< text_formatter<lexical_stringizer> >("myxml");
     //doc_format.save(document.getDocumentElement(), 6);
