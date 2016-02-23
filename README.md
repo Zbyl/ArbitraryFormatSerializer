@@ -361,6 +361,12 @@ serialize<vectorFormatter>(serializer, value);
 ```
 But in general stateful formatters are more powerful than stateless ones.
 
+Further reading
+===============
+
+Xml serialization is explained in more detail in this article:
+[Xml serialization](docs/XmlSerialization.md)
+
 Rationale
 =========
 
