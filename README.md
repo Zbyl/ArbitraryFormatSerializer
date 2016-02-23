@@ -6,6 +6,21 @@ ArbitraryFormatSerializer is a header only library for serializing data into arb
 Distributed under Apache License, Version 2.0 (http://www.apache.org/licenses/LICENSE-2.0)  
 (c) 2014-2016 Zbigniew Skowron, zbychs@gmail.com
 
+**Table of Contents**
+
+- [Five minutes introduction](#five-minutes-introduction)
+- [Serializers](#serializers)
+- [Formatters](#formatters)
+- [Writing a formatter for your type](#writing-a-formatter-for-your-type)
+- [Serializing to xml and binary formats](#serializing-to-xml-and-binary-formats)
+- [Stateful formatters](#stateful-formatters)
+- [Further reading](#further-reading)
+  - [Xml serialization](docs/XmlSerialization.md)
+- [Rationale](#rationale)
+- [Competition](#competition)
+- [Implementation notes](#implementation-notes)
+- [Possible additions](#possible-additions)
+
 Five minutes introduction
 =========================
 
