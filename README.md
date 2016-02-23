@@ -1,7 +1,7 @@
 ArbitraryFormatSerializer
-======================
+=========================
 
-ArbitraryFormatSerializer is a library for serializing data into arbitrary xml, binary and other formats.
+ArbitraryFormatSerializer is a header only library for serializing data into arbitrary xml, binary and other formats.
 
 Distributed under Apache License, Version 2.0 (http://www.apache.org/licenses/LICENSE-2.0)  
 (c) 2014-2016 Zbigniew Skowron, zbychs@gmail.com
@@ -305,7 +305,7 @@ But wait...
 We don't need to write a formatter class.
 We can just use a typedef!
 ```cpp
-using xml_person_formatter= element_formatter< _person_, person_format >;
+using xml_person_formatter = element_formatter< _person_, person_format >;
 serialize<xml_person_formatter>(document.getDocumentElement(), person);
 ```
 > **Note** Actually the proper way of serializing an xml document is this:
@@ -313,6 +313,53 @@ serialize<xml_person_formatter>(document.getDocumentElement(), person);
 >serialize< document_formatter<xml_person_formatter> >(document, person);
 >```
 >`document_formatter` adds an xml declaration (`<?xml version="1.0" encoding="utf-8"?>`) to the document.
+
+Stateful formatters
+===================
+
+Let's analyze this line of code:
+```cpp
+serialize< formatter >(serializer, value);
+```
+Here the type of the formatter is passed as a template parameter to the `serialize()` function.
+Inside, `serialize()` creates an object of this type (using default constructor) and then uses it to format `value`.
+This is enough for most purposes, because most formatters don't need any state. They just operate on the `serializer` and `value` that were passed to their `save()` and `load()` methods.
+Those are *stateless formatters*.
+
+But sometimes there is a need for formatters that actually need state: *stateful formatters*.
+If we have a *stateful formatter* it's not enough to pass the type of it to the `serialize()` function. We need to pass actual object of this type.
+Here's how it's done:
+```cpp
+serialize(serializer, value, formatterObject);
+```
+Obviously we can use the same syntax also for stateless formatters. The following invocations are equivalent:
+```cpp
+serialize< little_endian<1> >(serializer, value);
+serialize(serializer, value, little_endian<1>());
+```
+
+An example of a stateful formatter is an xml element formatter, where the name of the element is not known at compile time. The formatter itself must be initialized with a name of the element.
+As a convention most formatters in the library provide a `create` method to construct formatter objects.
+Here's an example:
+```cpp
+auto elementFormatter = create_element_formatter("element");
+serialize(serializer, value, elementFormatter);
+```
+A more complicated example:
+```cpp
+auto sizeFormatter = create_attribute_formatter("size");
+auto valueFormatter = create_element_formatter("value");
+auto vectorFormatter = create_vector_formatter(sizeFormatter, valueFormatter);
+serialize(serializer, value, vectorFormatter);
+```
+In this particular example the code above is equivalent to this one:
+```cpp
+using sizeFormatter = attribute_formatter<_size_>;
+using valueFormatter = element_formatter<_value_>;
+using vectorFormatter = vector_formatter<sizeFormatter, valueFormatter>;
+serialize<vectorFormatter>(serializer, value);
+```
+But in general stateful formatters are more powerful than stateless ones.
 
 Rationale
 =========
