@@ -24,6 +24,8 @@ Distributed under Apache License, Version 2.0 (http://www.apache.org/licenses/LI
 Five minutes introduction
 =========================
 
+> **Note** All types in the library are in `arbitrary_format`, `arbitrary_format::xml` and `arbitrary_format::binary` namespaces.
+
 Let's serialize a vector of pairs to both xml and binary formats:
 ```cpp
 std::vector< std::pair<std::string, int> > vec =
