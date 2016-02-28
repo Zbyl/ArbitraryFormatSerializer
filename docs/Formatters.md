@@ -70,6 +70,7 @@ Name | Types supported | Description
 
 ### String formatters (stringizers)
 Formatters that can be used to save and load data from a `std::string`.
+
 Name | Types supported | Description
 :---------|:---------|:-------------
 `lexical_stringizer` | *any type* | Formatter that uses `boost::lexical_cast` to convert data to and from an `std::string`.
