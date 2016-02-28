@@ -64,27 +64,27 @@ int main(int argc, char* argv[])
     boost::optional<std::string> optStr("A value!");
 
     auto numberFormatter = create_attribute_formatter("number");
-    auto sizeFormatter = attribute_counter("number");
+    auto sizeFormatter = create_attribute_counter("number");
     auto vectorFormatter = create_vector_formatter(sizeFormatter, numberFormatter);
     auto vectorElementFormatter = create_element_formatter("numbers", vectorFormatter);
 
     auto pairFormatter = create_tuple_formatter(assign_name<>(), assign_text_content<>());
     auto valueFormatter = create_attribute_formatter(boost::none, pairFormatter);
-    auto vectorFormatter2 = create_vector_formatter(attribute_counter(), valueFormatter);
+    auto vectorFormatter2 = create_vector_formatter(create_attribute_counter(), valueFormatter);
     auto vectorElementFormatter2 = create_element_formatter("nameToAgeVec", vectorFormatter2);
 
     auto kvFormatter = create_attribute_formatter(boost::none, create_tuple_formatter(assign_name<>(), assign_text_content<>()));
-    auto mapFormatter = create_collection_formatter(attribute_counter(), kvFormatter);
+    auto mapFormatter = create_collection_formatter(create_attribute_counter(), kvFormatter);
     auto mapElementFormatter = create_element_formatter("nameToAge", mapFormatter);
 
     auto k2Formatter = create_attribute_formatter("value");
     auto kvFormatter2 = create_element_formatter("key", create_tuple_formatter(k2Formatter, assign_text_content<>()));
-    auto mapFormatter2 = create_collection_formatter(element_counter(), kvFormatter2);
+    auto mapFormatter2 = create_collection_formatter(create_element_counter(), kvFormatter2);
     auto mapElementFormatter2 = create_element_formatter("nameToAge", mapFormatter2);
 
     auto k3Formatter = create_element_formatter("key");
     auto v3Formatter = create_element_formatter("value");
-    auto mapFormatter3 = create_map_formatter(element_counter("key"), k3Formatter, v3Formatter);
+    auto mapFormatter3 = create_map_formatter(create_element_counter("key"), k3Formatter, v3Formatter);
     auto mapElementFormatter3 = create_element_formatter("nameToAge", mapFormatter3);
 
     auto optionalFormatter = create_element_formatter("optional", create_optional_formatter(content_exists(), assign_text_content<>()));
