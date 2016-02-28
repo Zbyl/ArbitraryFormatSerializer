@@ -9,7 +9,7 @@
 #include "formatters/vector_formatter.h"
 #include "binary_formatters/endian_formatter.h"
 #include "formatters/const_formatter.h"
-#include "formatters/fixed_size_array_formatter.h"
+#include "formatters/array_formatter.h"
 #include "binary_formatters/inefficient_size_prefix_formatter.h"
 #include "formatters/type_formatter.h"
 #include "formatters/any_formatter.h"
@@ -119,7 +119,7 @@ int mainE(int argc, char* argv[])
     auto anyVectorWriter = AnySerializer<VectorSaveSerializer, ISlowSerializer>(vectorWriter);
     slow_serialize(anyVectorWriter, map, mapFormat2);
     slow_serialize(anyVectorWriter, map, mapFormat3);
-    serialize< const_formatter< fixed_size_array_formatter< little_endian<4> > > >(vectorWriter, "MAGIC_STRING");
+    serialize< const_formatter< array_formatter< little_endian<4> > > >(vectorWriter, "MAGIC_STRING");
     serialize< inefficient_size_prefix_formatter< little_endian<1>, little_endian<4> > >(vectorWriter, lola);
 
     MemoryLoadSerializer vectorReader(vectorWriter.getData());
@@ -127,7 +127,7 @@ int mainE(int argc, char* argv[])
     slow_serialize(anyVectorReader, map2, mapFormat3);
     serialize(vectorReader, map3, mapFormat);
     slow_serialize(anyVectorReader, map4, mapFormat2);
-    serialize< const_formatter< fixed_size_array_formatter< little_endian<4> > > >(vectorReader, "MAGIC_STRING");
+    serialize< const_formatter< array_formatter< little_endian<4> > > >(vectorReader, "MAGIC_STRING");
     serialize< inefficient_size_prefix_formatter< little_endian<1>, little_endian<4> > >(vectorReader, lola2);
 
     return 0;

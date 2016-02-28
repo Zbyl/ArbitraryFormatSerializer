@@ -16,7 +16,7 @@
 #include "formatters/vector_formatter.h"
 #include "formatters/optional_formatter.h"
 #include "formatters/map_formatter.h"
-#include "formatters/map_kv_formatter.h"
+#include "formatters/collection_formatter.h"
 #include "formatters/tuple_formatter.h"
 
 #include "xml_serializers/RapidXmlTree.h"
@@ -55,7 +55,7 @@ int main(int argc, char* argv[])
     A<text.data()> xx;
 #endif
     RapidXmlSaveSerializer document("utf-8");
-    RapidXmlDocument allDocument("utf-8");
+    RapidXmlSaveSerializer allDocument("utf-8");
 
     auto vec = std::vector<int> { 1, 2, 3, 4, 5 };
     auto nameToAge = std::map<std::string, int> { {"Ela", 5}, {"Ala", 6}, {"Ola", 7} };
@@ -74,12 +74,12 @@ int main(int argc, char* argv[])
     auto vectorElementFormatter2 = create_element_formatter("nameToAgeVec", vectorFormatter2);
 
     auto kvFormatter = create_attribute_formatter(boost::none, create_tuple_formatter(assign_name<>(), assign_text_content<>()));
-    auto mapFormatter = create_map_kv_formatter(attribute_counter(), kvFormatter);
+    auto mapFormatter = create_collection_formatter(attribute_counter(), kvFormatter);
     auto mapElementFormatter = create_element_formatter("nameToAge", mapFormatter);
 
     auto k2Formatter = create_attribute_formatter("value");
     auto kvFormatter2 = create_element_formatter("key", create_tuple_formatter(k2Formatter, assign_text_content<>()));
-    auto mapFormatter2 = create_map_kv_formatter(element_counter(), kvFormatter2);
+    auto mapFormatter2 = create_collection_formatter(element_counter(), kvFormatter2);
     auto mapElementFormatter2 = create_element_formatter("nameToAge", mapFormatter2);
 
     auto k3Formatter = create_element_formatter("key");
@@ -125,9 +125,9 @@ int main(int argc, char* argv[])
     std::string allDocumentText = allStr.str();
     std::cout << allDocumentText;
 
-    RapidXmlDocument document2(documentText, "utf-8");
+    RapidXmlLoadSerializer document2(documentText, "utf-8");
     std::cout << document2;
-    RapidXmlDocument allDocument2(allDocumentText, "utf-8");
+    RapidXmlLoadSerializer allDocument2(allDocumentText, "utf-8");
     std::cout << allDocument2;
 
     std::string encoding;
@@ -154,13 +154,15 @@ int main(int argc, char* argv[])
     std::vector<std::pair<std::string, int>> loadedNameToAgeVec2;
     std::map<std::string, int> loadedNameToAge4;
 
-    allFormatter.load(document2.getDocumentElement(), std::tie(loadedVec2, loadedNameToAgeVec2, loadedNameToAge4));
+    auto tiedValues = std::tie(loadedVec2, loadedNameToAgeVec2, loadedNameToAge4);
+    allFormatter.load(document2.getDocumentElement(), tiedValues);
 
     std::vector<int> loadedVec5;
     std::vector<std::pair<std::string, int>> loadedNameToAgeVec5;
     std::map<std::string, int> loadedNameToAge5;
 
-    docFormatter.load(allDocument2, std::tie(loadedVec5, loadedNameToAgeVec5, loadedNameToAge5));
+    auto tiedValues2 = std::tie(loadedVec5, loadedNameToAgeVec5, loadedNameToAge5);
+    docFormatter.load(allDocument2, tiedValues2);
 
     std::cout << "Eaten Xml: '"<< document2 << "'";
 
