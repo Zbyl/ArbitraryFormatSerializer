@@ -182,7 +182,7 @@ void save(TSerializer& serializer, const T& object);
 void load(TSerializer& serializer, T& object);
 ```
 
-Let's write a formatter a simple class `Person`.
+Let's write a formatter for a simple class `Person`.
 ```cpp
 struct Person {
     std::string name;
@@ -238,7 +238,7 @@ This is how we can use our new formatter in practice:
 void serializePerson(const Person& person)
 {
     using str_format = string_formatter< little_endian<1> >;
-    using age_format= little_endian<2>;
+    using age_format = little_endian<2>;
     using person_format = person_formatter<str_format, str_format, age_format>;
 
     VectorSaveSerializer serializer;

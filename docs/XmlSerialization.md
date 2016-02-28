@@ -70,8 +70,10 @@ declare_compile_time_string(_something_, "something");
 ```
 > **Note** It is also possible to use runtime created strings as element and attribute names.
 > Two ways to do this are:
+>
 > - using a stateful formatter, for example by calling `create_element_formatter(name)`,
 > - using a `assign_name` formatter.
+>
 > Those options will be discussed later.
 
 Example: formatting boost::optional
