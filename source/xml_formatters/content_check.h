@@ -68,19 +68,19 @@ using text_content_exists = text_content_check<true>;
 using text_content_not_exists = text_content_check<false>;
 
 template<bool TrueIfExists>
-class attribute_check
+class attribute_check_impl
 {
 private:
     boost::optional<std::string> name;
 
 public:
-    explicit attribute_check(const boost::optional<std::string>& name = boost::none)
+    explicit attribute_check_impl(const boost::optional<std::string>& name = boost::none)
         : name(name)
     {
     }
 
-    explicit attribute_check(const char* name)
-        : attribute_check(std::string(name))
+    explicit attribute_check_impl(const char* name)
+        : attribute_check_impl(std::string(name))
     {
     }
 
@@ -98,23 +98,20 @@ public:
     }
 };
 
-using attribute_exists = attribute_check<true>;
-using attribute_not_exists = attribute_check<false>;
-
 template<bool TrueIfExists>
-class element_check
+class element_check_impl
 {
 private:
     boost::optional<std::string> name;
 
 public:
-    explicit element_check(const boost::optional<std::string>& name = boost::none)
+    explicit element_check_impl(const boost::optional<std::string>& name = boost::none)
         : name(name)
     {
     }
 
-    explicit element_check(const char* name)
-        : element_check(std::string(name))
+    explicit element_check_impl(const char* name)
+        : element_check_impl(std::string(name))
     {
     }
 
@@ -132,8 +129,99 @@ public:
     }
 };
 
-using element_exists = element_check<true>;
-using element_not_exists = element_check<false>;
+template<typename CompileTimeString, bool TrueIfExists>
+class attribute_check
+{
+private:
+    static const attribute_check_impl<TrueIfExists> formatter;
+public:
+    template<typename T, typename XmlTree>
+    void save(XmlTree& xmlTree, const T& object) const
+    {
+        formatter.save(xmlTree, object);
+    }
+
+    template<typename T, typename XmlTree>
+    void load(XmlTree& xmlTree, T& object) const
+    {
+        formatter.load(xmlTree, object);
+    }
+};
+
+template<typename CompileTimeString, bool TrueIfExists>
+const attribute_check_impl<TrueIfExists> attribute_check<CompileTimeString, TrueIfExists>::formatter = attribute_check_impl( boost::optional<std::string>(!CompileTimeString::empty::value, compile_time_string_print<CompileTimeString>::str()) );
+
+template<typename CompileTimeString, bool TrueIfExists>
+class element_check
+{
+private:
+    static const element_check_impl<TrueIfExists> formatter;
+public:
+    template<typename T, typename XmlTree>
+    void save(XmlTree& xmlTree, const T& object) const
+    {
+        formatter.save(xmlTree, object);
+    }
+
+    template<typename T, typename XmlTree>
+    void load(XmlTree& xmlTree, T& object) const
+    {
+        formatter.load(xmlTree, object);
+    }
+};
+
+template<typename CompileTimeString, bool TrueIfExists>
+const element_check_impl<TrueIfExists> element_check<CompileTimeString, TrueIfExists>::formatter = element_check_impl( boost::optional<std::string>(!CompileTimeString::empty::value, compile_time_string_print<CompileTimeString>::str()) );
+
+template<typename CompileTimeString>
+using attribute_exists = attribute_check<CompileTimeString, true>;
+template<typename CompileTimeString>
+using attribute_not_exists = attribute_check<CompileTimeString, false>;
+
+template<typename CompileTimeString>
+using element_exists = element_check<CompileTimeString, true>;
+template<typename CompileTimeString>
+using element_not_exists = element_check<CompileTimeString, false>;
+
+attribute_check_impl<true> create_attribute_exists(const boost::optional<std::string>& name = boost::none)
+{
+    return attribute_check_impl<true>(name);
+}
+
+attribute_check_impl<true> create_attribute_exists(const char* name)
+{
+    return create_attribute_exists(std::string(name));
+}
+
+attribute_check_impl<false> create_attribute_not_exists(const boost::optional<std::string>& name = boost::none)
+{
+    return attribute_check_impl<false>(name);
+}
+
+attribute_check_impl<false> create_attribute_not_exists(const char* name)
+{
+    return create_attribute_not_exists(std::string(name));
+}
+
+element_check_impl<true> create_element_exists(const boost::optional<std::string>& name = boost::none)
+{
+    return element_check_impl<true>(name);
+}
+
+element_check_impl<true> create_element_exists(const char* name)
+{
+    return create_element_exists(std::string(name));
+}
+
+element_check_impl<false> create_element_not_exists(const boost::optional<std::string>& name = boost::none)
+{
+    return element_check_impl<false>(name);
+}
+
+element_check_impl<false> create_element_not_exists(const char* name)
+{
+    return create_element_not_exists(std::string(name));
+}
 
 } // namespace xml
 } // namespace arbitrary_format

@@ -24,19 +24,19 @@ namespace arbitrary_format
 namespace xml
 {
 
-class attribute_counter
+class attribute_counter_impl
 {
 private:
     boost::optional<std::string> name;
 
 public:
-    explicit attribute_counter(const boost::optional<std::string>& name = boost::none)
+    explicit attribute_counter_impl(const boost::optional<std::string>& name = boost::none)
         : name(name)
     {
     }
 
-    explicit attribute_counter(const char* name)
-        : attribute_counter(std::string(name))
+    explicit attribute_counter_impl(const char* name)
+        : attribute_counter_impl(std::string(name))
     {
     }
 
@@ -52,6 +52,38 @@ public:
         object = static_cast<T>(xmlTree.attributeCount(name));
     }
 };
+
+template<typename CompileTimeString>
+class attribute_counter
+{
+private:
+    static const attribute_counter_impl formatter;
+public:
+    template<typename T, typename XmlTree>
+    void save(XmlTree& xmlTree, const T& object) const
+    {
+        formatter.save(xmlTree, object);
+    }
+
+    template<typename T, typename XmlTree>
+    void load(XmlTree& xmlTree, T& object) const
+    {
+        formatter.load(xmlTree, object);
+    }
+};
+
+template<typename CompileTimeString>
+const attribute_counter_impl attribute_counter<CompileTimeString>::formatter = attribute_counter_impl( boost::optional<std::string>(!CompileTimeString::empty::value, compile_time_string_print<CompileTimeString>::str()) );
+
+attribute_counter_impl create_attribute_counter(const boost::optional<std::string>& name = boost::none)
+{
+    return attribute_counter_impl(name);
+}
+
+attribute_counter_impl create_attribute_counter(const char* name)
+{
+    return create_attribute_counter(std::string(name));
+}
 
 } // namespace xml
 } // namespace arbitrary_format
