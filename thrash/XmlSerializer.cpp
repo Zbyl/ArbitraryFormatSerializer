@@ -2,7 +2,6 @@
 //
 
 #include "xml_formatters/lexical_stringizer.h"
-#include "xml_formatters/text_formatter.h"
 #include "xml_formatters/attribute_formatter.h"
 #include "xml_formatters/element_formatter.h"
 #include "xml_formatters/element_counter.h"
