@@ -14,6 +14,7 @@
 #ifndef ArbitraryFormatSerializer_vector_formatter_H
 #define ArbitraryFormatSerializer_vector_formatter_H
 
+#include "serialize_buffer.h"
 #include "binary_formatters/verbatim_formatter.h"
 
 #include <vector>
@@ -36,49 +37,20 @@ public:
     }
 
     template<typename ValueType, typename TSerializer>
-    typename std::enable_if< !binary::is_verbatim_formatter<ValueFormatter, ValueType>::value >::type 
-    save(TSerializer& serializer, const std::vector<ValueType>& vector) const
+    void save(TSerializer& serializer, const std::vector<ValueType>& vector) const
     {
         size_formatter.save(serializer, vector.size());
-        for (const auto& value : vector)
-        {
-            value_formatter.save(serializer, value);
-        }
+        save_buffer(serializer, vector.size(), vector.data(), value_formatter);
     }
 
     template<typename ValueType, typename TSerializer>
-    typename std::enable_if< binary::is_verbatim_formatter<ValueFormatter, ValueType>::value >::type 
-    save(TSerializer& serializer, const std::vector<ValueType>& vector) const
-    {
-        size_formatter.save(serializer, vector.size());
-        serializer.saveData(reinterpret_cast<const boost::uint8_t*>(vector.data()), vector.size() * sizeof(ValueType));
-    }
-
-    template<typename ValueType, typename TSerializer>
-    typename std::enable_if< !binary::is_verbatim_formatter<ValueFormatter, ValueType>::value >::type 
-    load(TSerializer& serializer, std::vector<ValueType>& vector) const
+    void load(TSerializer& serializer, std::vector<ValueType>& vector) const
     {
         size_t vector_size;
         size_formatter.load(serializer, vector_size);
 
-        vector.clear();
-        for (size_t i = 0; i < vector_size; ++i)
-        {
-            vector.push_back(ValueType());
-            value_formatter.load(serializer, vector.back());
-        }
-    }
-
-    template<typename ValueType, typename TSerializer>
-    typename std::enable_if< binary::is_verbatim_formatter<ValueFormatter, ValueType>::value >::type 
-    load(TSerializer& serializer, std::vector<ValueType>& vector) const
-    {
-        size_t vector_size;
-        size_formatter.load(serializer, vector_size);
-
-        vector.clear();
         vector.resize(vector_size);
-        serializer.loadData(reinterpret_cast<boost::uint8_t*>(vector.data()), vector.size() * sizeof(ValueType));
+        load_buffer(serializer, vector_size, vector.data(), value_formatter);
     }
 };
 
