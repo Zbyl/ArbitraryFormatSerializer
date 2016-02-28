@@ -42,7 +42,7 @@ public:
 
     template<typename TSerializer, typename U>
     typename std::enable_if< !std::is_const<T>::value >::type
-    void load(TSerializer& serializer, U& value) const
+    load(TSerializer& serializer, U& value) const
     {
         value = ext_value;
     }
