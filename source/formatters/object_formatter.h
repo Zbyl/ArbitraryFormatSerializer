@@ -23,7 +23,7 @@ class object_formatter : public implement_save_load<object_formatter>
 {
 public:
     template<typename T, typename TSerializer>
-    void serialize(TSerializer& serializer, T& object)
+    void save_or_load(TSerializer& serializer, T& object)
     {
         object->serialize(serializer);
     }

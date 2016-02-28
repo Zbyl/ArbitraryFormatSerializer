@@ -52,7 +52,7 @@ public:
     }
 };
 
-template<typename ValueStringizer = lexical_stringizer<>>
+template<typename ValueStringizer = lexical_stringizer>
 text_formatter<ValueStringizer> create_text_formatter(ValueStringizer value_stringizer = ValueStringizer())
 {
     return text_formatter<ValueStringizer>(value_stringizer);

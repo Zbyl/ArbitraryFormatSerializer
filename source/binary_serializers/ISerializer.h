@@ -287,6 +287,8 @@ template<typename TSerializer, bool ForceCreate = false, typename PolymorphicSer
 class AnySeekableSerializer : public virtual AnySerializer<TSerializer, PolymorphicSerializer>, public virtual ISeekableSerializer<PolymorphicSerializer>
 {
 public:
+    using offset_t = typename ISeekableSerializer<PolymorphicSerializer>::offset_t;
+
     explicit AnySeekableSerializer(TSerializer& serializer)
         : AnySerializer<TSerializer, PolymorphicSerializer>(serializer)
         , serializer(serializer)

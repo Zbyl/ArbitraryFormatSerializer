@@ -33,7 +33,7 @@ struct compile_time_string_print;
 template <char... Cs>
 struct compile_time_string_print< compile_time_string<Cs...> >
 {
-    constexpr static std::string str()
+    static std::string str()
     {
         return {Cs...};
     }

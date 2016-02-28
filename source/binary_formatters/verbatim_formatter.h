@@ -47,7 +47,7 @@ public:
 
 /// @note is_verbatim_formatter type trait is intended to be specialized for other foratters. little_endian is also a verbatim_formatter.
 /// @brief is_verbatim_formatter is a false_type if formatter will serialize given type differently than verbatim_formatter<sizeof(T)>.
-/// @note Last type parameter is to allow for enable_if usage in specializations. See endian_formatter for an example.
+/// @note Last type parameter is to allow for enable_if usage in specializations.
 template<typename Formatter, typename T, typename = void>
 struct is_verbatim_formatter : public std::false_type
 {};

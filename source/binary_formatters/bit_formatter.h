@@ -26,7 +26,7 @@ template<boost::endian::order TargetOrder, int... Bits>
 class bit_formatter
 {
     using packer = bit_packer<Bits...>;
-    using value_formatter = endian_formatter<TargetOrder, sizeof(packer::packed_type)>;
+    using value_formatter = endian_formatter<TargetOrder, sizeof(typename packer::packed_type)>;
 
 public:
     template<typename TSerializer, typename... Ts>

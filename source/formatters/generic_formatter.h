@@ -4,7 +4,7 @@
 ///
 /// generic_formatter.h
 ///
-/// This file contains generic_formatter that formats a type using a serialize_serializable() function found using Argument Dependent Lookup.
+/// This file contains generic_formatter that formats a type using a save_or_load() function found using Argument Dependent Lookup.
 ///
 /// Distributed under Apache License, Version 2.0 (http://www.apache.org/licenses/LICENSE-2.0)
 /// (c) 2014 Zbigniew Skowron, zbychs@gmail.com
@@ -23,9 +23,9 @@ class generic_formatter : public implement_save_load<generic_formatter>
 {
 public:
     template<typename T, typename TSerializer>
-    void serialize(TSerializer& serializer, T& object) const
+    void save_or_load(TSerializer& serializer, T& object) const
     {
-        serialize_serializable(serializer, object);    // function found using Argument Dependent Lookup
+        save_or_load(serializer, object);    // function found using Argument Dependent Lookup
     }
 };
 

@@ -44,7 +44,7 @@ class tuple_formatter_impl<Idx, ValueFormatter, ValueFormatters...>
     tuple_formatter_impl<Idx + 1, ValueFormatters...> tail_formatter;
 
 public:
-    tuple_formatter_impl(ValueFormatter value_formatter = ValueFormatter(), ValueFormatters... value_formatters = ValueFormatters())
+    tuple_formatter_impl(ValueFormatter value_formatter = ValueFormatter(), ValueFormatters... value_formatters)
         : value_formatter(value_formatter)
         , tail_formatter(value_formatters...)
     {

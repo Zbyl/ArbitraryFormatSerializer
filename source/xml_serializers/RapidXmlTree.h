@@ -318,12 +318,12 @@ private:
 class RapidXmlDocument
 {
 public:
-    RapidXmlDocument(const std::string& encoding)
+    explicit RapidXmlDocument(const std::string& encoding)
         : m_encoding(encoding)
     {
     }
 
-    explicit RapidXmlDocument(const std::string& xml, const std::string& encoding)
+    RapidXmlDocument(const std::string& xml, const std::string& encoding)
         : m_xml(xml.c_str(), xml.c_str() + xml.length() + 1)
         , m_encoding(encoding)
     {
@@ -426,20 +426,33 @@ template<bool Saving>
 class RapidXmlDocumentSerializer : public RapidXmlDocument
 {
 public:
-    using RapidXmlDocument::RapidXmlDocument;
+    explicit RapidXmlDocumentSerializer(const std::string& encoding)
+        : RapidXmlDocument(encoding)
+        , documentElement(RapidXmlDocument::getDocumentElement())
+    {
+    }
+
+    RapidXmlDocumentSerializer(const std::string& xml, const std::string& encoding)
+        : RapidXmlDocument(xml, encoding)
+        , documentElement(RapidXmlDocument::getDocumentElement())
+    {
+    }
 
     using saving_serializer = std::bool_constant<Saving>;
     using loading_serializer = std::bool_constant<!Saving>;
 
-    RapidXmlTreeSerializer<Saving> getDocumentElement()
+    RapidXmlTreeSerializer<Saving>& getDocumentElement()
     {
-        return RapidXmlDocument::getDocumentElement();
+        return documentElement;
     }
 
-    operator RapidXmlTreeSerializer<Saving>()
+    operator RapidXmlTreeSerializer<Saving>& ()
     {
-        return getDocumentElement();
+        return documentElement;
     }
+
+private:
+    RapidXmlTreeSerializer<Saving> documentElement; ///< This is needed to return l-value from getDocumentElement(), to be able to use it directly as a Serializer.
 };
 
 using RapidXmlSaveSerializer = RapidXmlDocumentSerializer<true>;

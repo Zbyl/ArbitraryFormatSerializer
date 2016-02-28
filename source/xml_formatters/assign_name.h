@@ -50,7 +50,7 @@ public:
     }
 };
 
-template<typename ValueStringizer = lexical_stringizer<>>
+template<typename ValueStringizer = lexical_stringizer>
 assign_name<ValueStringizer> create_assign_name(ValueStringizer value_stringizer = ValueStringizer())
 {
     return assign_name<ValueStringizer>(value_stringizer);

@@ -94,7 +94,7 @@ public:
     }
 };
 
-template<typename CompileTimeString, typename ValueFormatter = assign_text_content<>, bool Sequential = true>
+template<typename CompileTimeString, typename ValueFormatter, bool Sequential>
 const element_formatter_impl<ValueFormatter, Sequential> element_formatter<CompileTimeString, ValueFormatter, Sequential>::formatter = 
     element_formatter_impl<ValueFormatter, Sequential>( boost::optional<std::string>(!CompileTimeString::empty::value, compile_time_string_print<CompileTimeString>::str()) );
 
