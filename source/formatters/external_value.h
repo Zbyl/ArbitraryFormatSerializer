@@ -16,6 +16,8 @@
 
 #include "serialization_exceptions.h"
 
+#include <type_traits>
+
 namespace arbitrary_format
 {
 
@@ -39,6 +41,7 @@ public:
     }
 
     template<typename TSerializer, typename U>
+    typename std::enable_if< !std::is_const<T>::value >::type
     void load(TSerializer& serializer, U& value) const
     {
         value = ext_value;

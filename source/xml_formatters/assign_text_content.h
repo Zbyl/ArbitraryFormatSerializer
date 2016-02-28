@@ -4,7 +4,7 @@
 ///
 /// assign_text_content.h
 ///
-/// This file contains assign_text_content that formats object as value of xml element.
+/// This file contains assign_text_content that formats object as text content of an xml element or attribute.
 ///
 /// Distributed under Apache License, Version 2.0 (http://www.apache.org/licenses/LICENSE-2.0)
 /// (c) 2016 Zbigniew Skowron, zbychs@gmail.com

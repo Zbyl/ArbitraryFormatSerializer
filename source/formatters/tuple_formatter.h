@@ -35,6 +35,13 @@ public:
     {
         // nothing to do
     }
+
+    /// @note This overload is to support std::tie seamlessly. This, unfortunately won't work if the tuple has to be passed from another formatter.
+    template<typename Tuple, typename TSerializer>
+    void load(TSerializer& serializer, const Tuple& tuple) const
+    {
+        // nothing to do
+    }
 };
 
 template<size_t Idx, typename ValueFormatter, typename... ValueFormatters>
@@ -59,6 +66,14 @@ public:
 
     template<typename Tuple, typename TSerializer>
     void load(TSerializer& serializer, Tuple& tuple) const
+    {
+        value_formatter.load(serializer, std::get<Idx>(tuple));
+        tail_formatter.load(serializer, tuple);
+    }
+
+    /// @note This overload is to support std::tie seamlessly. This, unfortunately won't work if the tuple has to be passed from another formatter.
+    template<typename Tuple, typename TSerializer>
+    void load(TSerializer& serializer, const Tuple& tuple) const
     {
         value_formatter.load(serializer, std::get<Idx>(tuple));
         tail_formatter.load(serializer, tuple);

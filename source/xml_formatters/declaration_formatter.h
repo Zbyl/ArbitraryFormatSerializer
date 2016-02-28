@@ -43,7 +43,7 @@ public:
     }
 
     template<typename T, typename XmlDocument>
-    void save(XmlDocument& xmlDocument, const T& object) const
+    void save(XmlDocument& xmlDocument, const T& encoding) const
     {
         auto docElement = xmlDocument.getDocumentElement();
         if (!docElement.isEmpty())
@@ -52,17 +52,17 @@ public:
         }
 
         std::string value;
-        value_stringizer.save(value, object);
+        value_stringizer.save(value, encoding);
 
         auto xmlDeclaration = docElement.addElement(boost::none, true);
         auto version = xmlDeclaration.addAttribute("version");
-        auto encoding = xmlDeclaration.addAttribute("encoding");
+        auto encodingAttrib = xmlDeclaration.addAttribute("encoding");
         version.setTextContent("1.0");
-        encoding.setTextContent(value);
+        encodingAttrib.setTextContent(value);
     }
 
     template<typename T, typename XmlDocument>
-    void load(XmlDocument& xmlDocument, T& object) const
+    void load(XmlDocument& xmlDocument, T& encoding) const
     {
         auto docElement = xmlDocument.getDocumentElement();
 
@@ -73,8 +73,8 @@ public:
         }
 
         auto encodingAttr = xmlDeclaration.eatAttribute("encoding", false);
-        auto encoding = encodingAttr.eatTextContent();
-        value_stringizer.load(encoding, object);
+        auto encodingText = encodingAttr.eatTextContent();
+        value_stringizer.load(encodingText, encoding);
     }
 };
 
