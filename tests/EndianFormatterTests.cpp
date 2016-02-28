@@ -306,4 +306,31 @@ TEST(EndianFormattersWork, Bool)
     load< const_formatter< big_endian<2> > >(vectorReader, bf);
 }
 
+TEST(EndianFormattersWork, NonPowerOfTwo)
+{
+    VectorSaveSerializer vectorWriter;
+
+    int valueUnderPos = 0x00223344;
+    int valueUnderNeg = 0xFFDDCCBB;
+    int valueOverPos = 0x11223344;
+    int valueOverNeg = 0x88223344;
+
+    save< little_endian<3> >(vectorWriter, valueUnderPos);
+    save< little_endian<3> >(vectorWriter, valueUnderNeg);
+    ASSERT_THROW( save< little_endian<3> >(vectorWriter, valueOverPos), lossy_conversion);
+    ASSERT_THROW( save< little_endian<3> >(vectorWriter, valueOverNeg), lossy_conversion);
+
+    save< big_endian<3> >(vectorWriter, valueUnderPos);
+    save< big_endian<3> >(vectorWriter, valueUnderNeg);
+    ASSERT_THROW( save< big_endian<3> >(vectorWriter, valueOverPos), lossy_conversion);
+    ASSERT_THROW( save< big_endian<3> >(vectorWriter, valueOverNeg), lossy_conversion);
+
+    const auto value = std::vector<uint8_t> { 0x44, 0x33, 0x22, 0xBB, 0xCC, 0xDD, 0x22, 0x33, 0x44, 0xDD, 0xCC, 0xBB };
+    MemoryLoadSerializer vectorReader(value);
+    load< const_formatter< little_endian<3> > >(vectorReader, valueUnderPos);
+    load< const_formatter< little_endian<3> > >(vectorReader, valueUnderNeg);
+    load< const_formatter< big_endian<3> > >(vectorReader, valueUnderPos);
+    load< const_formatter< big_endian<3> > >(vectorReader, valueUnderNeg);
+}
+
 }  // namespace
