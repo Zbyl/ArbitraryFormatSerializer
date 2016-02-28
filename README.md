@@ -16,6 +16,7 @@ Distributed under Apache License, Version 2.0 (http://www.apache.org/licenses/LI
 - [Stateful formatters](#stateful-formatters)
 - [Further reading](#further-reading)
   - [Xml serialization](docs/XmlSerialization.md)
+  - [Formatters quick reference](docs/Formatters.md)
 - [Rationale](#rationale)
 - [Competition](#competition)
 - [Implementation notes](#implementation-notes)
@@ -43,8 +44,8 @@ We want it to look like this in xml:
 And like this in binary format:
 
 vec.size() (2&nbsp;bytes)| name.length() (1&nbsp;byte) | name characters: 'B'&nbsp;'j'&nbsp;'a'&nbsp;'r'&nbsp;'n'&nbsp;'e' | level (1&nbsp;byte)| name.length() (1&nbsp;byte)| 'H'&nbsp;'e'&nbsp;... 
---------|--------|--------|--------|--------|--------
- `0x03`&nbsp;`0x00` | `0x6` | `0x42`&nbsp;`0x6A`&nbsp;`0x61`&nbsp;`0x72`&nbsp;`0x6E`&nbsp;`0x65` | `0x01` | `0x04` | `0x48`&nbsp;`0x65`&nbsp;... 
+-------------------------|-----------------------------|-------------------------------------------------------------------|--------------------|----------------------------|----------------------------
+ `0x03`&nbsp;`0x00`      |           `0x6`             | `0x42`&nbsp;`0x6A`&nbsp;`0x61`&nbsp;`0x72`&nbsp;`0x6E`&nbsp;`0x65`|       `0x01`       |           `0x04`           | `0x48`&nbsp;`0x65`&nbsp;... 
 
 Let's first see the code for serializing to binary format:
 ```cpp
@@ -261,9 +262,9 @@ We want it to look like this in xml:
 ```
 And like this in binary format:
 
-length of name | 'J' | 'o' | 'h' | 'n' |length of surname| 'D' | 'o' | 'e' | age (2&nbsp;bytes) 
---------|--------|--------|--------|--------|--------|--------|--------|--------|--------
- `0x04` | `0x4A` | `0x6F` | `0x68` | `0x6E` | `0x03` | `0x44` | `0x6F` | `0x65` | `0x21`&nbsp;`0x00` 
+length of name |  'J'   |  'o'   |  'h'   |  'n'   |length of surname|  'D'   |  'o'   |  'e'   | age (2&nbsp;bytes) 
+---------------|--------|--------|--------|--------|-----------------|--------|--------|--------|-------------------
+    `0x04`     | `0x4A` | `0x6F` | `0x68` | `0x6E` |      `0x03`     | `0x44` | `0x6F` | `0x65` | `0x21`&nbsp;`0x00` 
 
 We will of course use our `person_formatter` to do the job for us.
 
@@ -383,6 +384,9 @@ Further reading
 
 Xml serialization is explained in more detail in this article:
 [Xml serialization](docs/XmlSerialization.md)
+
+A list of all currently available formatters is in this article:
+[Formatters quick reference](docs/Formatters.md)
 
 Rationale
 =========
