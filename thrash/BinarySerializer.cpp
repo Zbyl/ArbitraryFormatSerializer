@@ -59,9 +59,9 @@ public:
 
 void example()
 {
-    static_assert(!has_save_or_load<int, VectorSaveSerializer, SimpleStruct>::type::value, "A<int> doesn't have serialize");
-    static_assert(has_save_or_load<simple_struct_formatter, VectorSaveSerializer, SimpleStruct>::value, "simple_struct_formatter doesn't have serialize");
-    static_assert(has_save_or_load<const simple_struct_formatter, VectorSaveSerializer, SimpleStruct>::value, "const simple_struct_formatter doesn't have serialize");
+    static_assert(!has_save_or_load<int, VectorSaveSerializer, SimpleStruct>::type::value, "int doesn't have save_or_load");
+    static_assert(has_save_or_load<simple_struct_formatter, VectorSaveSerializer, SimpleStruct>::value, "simple_struct_formatter doesn't have save_or_load");
+    static_assert(has_save_or_load<const simple_struct_formatter, VectorSaveSerializer, SimpleStruct>::value, "const simple_struct_formatter doesn't have save_or_load");
     static_assert(is_saving_serializer<VectorSaveSerializer>::value, "VectorSaveSerializer can't save");
     static_assert(!is_loading_serializer<VectorSaveSerializer>::value, "VectorSaveSerializer can load");
     static_assert(is_loading_serializer<MemoryLoadSerializer>::value, "MemoryLoadSerializer can't load");

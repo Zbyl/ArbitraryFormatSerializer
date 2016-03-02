@@ -73,7 +73,7 @@ public:
 };
 
 template<typename CompileTimeString>
-const element_counter_impl element_counter<CompileTimeString>::formatter = element_counter_impl( boost::optional<std::string>(!CompileTimeString::empty::value, compile_time_string_print<CompileTimeString>::str()) );
+const element_counter_impl element_counter<CompileTimeString>::formatter = element_counter_impl( boost::optional<std::string>(!compile_time_string_print<CompileTimeString>::str().empty(), compile_time_string_print<CompileTimeString>::str()) );
 
 element_counter_impl create_element_counter(const boost::optional<std::string>& name = boost::none)
 {

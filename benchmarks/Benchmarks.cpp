@@ -16,7 +16,7 @@ using namespace binary;
 static void BM_VectorVerbatim(benchmark::State& state) {
     VectorSaveSerializer vectorWriter;
 
-    std::vector<int16_t> ints(10'000, -2);
+    std::vector<int16_t> ints(10000, -2);
     using vector_verbatim = vector_formatter< little_endian<2>, little_endian<2> >;
 
     while (state.KeepRunning())
@@ -30,7 +30,7 @@ BENCHMARK(BM_VectorVerbatim);
 static void BM_VectorNonVerbatim(benchmark::State& state) {
     VectorSaveSerializer vectorWriter;
 
-    std::vector<int8_t> ints(10'000, -2);
+    std::vector<int8_t> ints(10000, -2);
     using vector_nonverbatim = vector_formatter< little_endian<2>, little_endian<2> >;
 
     while (state.KeepRunning())

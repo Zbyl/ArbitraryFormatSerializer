@@ -21,7 +21,7 @@
 #include "xml_serializers/RapidXmlTree.h"
 #include "binary_serializers/ISerializer.h"
 
-#include "utility/metaprogramming.h"
+//#include "utility/metaprogramming.h"
 
 #include <cstdint>
 #include <iostream>
@@ -33,10 +33,7 @@
 using namespace arbitrary_format;
 using namespace xml;
 
-template<const char* str>
-class A
-{
-};
+declare_compile_time_string(_optional_, "optional");
 
 int main(int argc, char* argv[])
 {
@@ -88,10 +85,12 @@ int main(int argc, char* argv[])
 
     auto optionalFormatter = create_element_formatter("optional", create_optional_formatter(content_exists(), assign_text_content<>()));
 
-    declare_compile_time_string(_optional_, "optional");
     declare_compile_time_string(_initialized_, "initialized");
     declare_compile_time_string(_value_, "value");
+
     using opt_format = element_formatter< _optional_, optional_formatter< attribute_formatter<_initialized_>, element_formatter<_value_> > >;
+    /// @note Code below works for clang and g++, but not for Visual C++
+    //using opt_format = element_formatter< compile_time_string("optional"), optional_formatter< attribute_formatter<compile_time_string("initialized")>, element_formatter<compile_time_string("value")> > >;
 
     //auto doc_format = create_element_formatter< text_formatter<lexical_stringizer> >("myxml");
     //doc_format.save(document.getDocumentElement(), 6);

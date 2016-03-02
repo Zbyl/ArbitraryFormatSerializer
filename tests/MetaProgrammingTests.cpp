@@ -1,6 +1,10 @@
 // MetaProgrammingTests.cpp - tests for meta programming helpers
 //
 
+#if defined(_MSC_VER) && (_MSC_VER < 1900)
+#pragma message("Microsoft Visual C++ older than 2015 cannot compile this code.")
+#else
+
 #include "utility/metaprogramming.h"
 
 #include <utility>
@@ -51,3 +55,5 @@ TEST(MetaProgrammingTests, StaticAsserts)
 } 
 
 }  // namespace
+
+#endif

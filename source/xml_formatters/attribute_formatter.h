@@ -17,6 +17,7 @@
 
 #include "assign_text_content.h"
 #include "utility/compile_time_string.h"
+#include "serialization_exceptions.h"
 
 #include <string>
 
@@ -94,7 +95,7 @@ public:
 
 template<typename CompileTimeString, typename ValueFormatter, bool Sequential>
 const attribute_formatter_impl<ValueFormatter, Sequential> attribute_formatter<CompileTimeString, ValueFormatter, Sequential>::formatter = 
-    attribute_formatter_impl<ValueFormatter, Sequential>( boost::optional<std::string>(!CompileTimeString::empty::value, compile_time_string_print<CompileTimeString>::str()) );
+    attribute_formatter_impl<ValueFormatter, Sequential>( boost::optional<std::string>(!compile_time_string_print<CompileTimeString>::str().empty(), compile_time_string_print<CompileTimeString>::str()) );
 
 template<typename ValueFormatter = assign_text_content<>>
 attribute_formatter_impl<ValueFormatter> create_attribute_formatter(const boost::optional<std::string>& name = boost::none, ValueFormatter value_formatter = ValueFormatter())

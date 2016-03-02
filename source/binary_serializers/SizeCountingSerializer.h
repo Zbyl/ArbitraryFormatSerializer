@@ -15,6 +15,7 @@
 #define ArbitraryFormatSerializer_SizeCountingSerializer_H
 
 #include <cstdint>
+#include <type_traits>
 
 namespace arbitrary_format
 {
@@ -38,17 +39,19 @@ public:
     }
 
 public:
-    using saving_serializer = std::bool_constant<Saving>;
-    using loading_serializer = std::bool_constant<!Saving>;
+    using saving_serializer = std::integral_constant<bool, Saving>;
+    using loading_serializer = std::integral_constant<bool, !Saving>;
 
-    template<typename T, std::enable_if_t<Saving && std::is_same<T, uint8_t>::value>* sfinae = nullptr>
-    void saveData(const T* data, size_t size)
+    template<typename T>
+    typename std::enable_if<Saving && std::is_same<T, uint8_t>::value>::type
+    saveData(const T* data, size_t size)
     {
         byteCount += size;
     }
 
-    template<typename T, std::enable_if_t<!Saving && std::is_same<T, uint8_t>::value>* sfinae = nullptr>
-    void loadData(T* data, size_t size)
+    template<typename T>
+    typename std::enable_if<!Saving && std::is_same<T, uint8_t>::value>::type
+    loadData(T* data, size_t size)
     {
         byteCount += size;
     }

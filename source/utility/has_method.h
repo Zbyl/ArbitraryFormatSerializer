@@ -23,8 +23,8 @@
 namespace arbitrary_format
 {
 
-#define GENERATE_HAS_METHOD(member, signature) \
-    template<typename T> \
+#define AFS_GENERATE_HAS_METHOD(member) \
+    template<typename T, typename Signature> \
     class has_method_impl_ ## member \
     { \
     private: \
@@ -37,7 +37,7 @@ namespace arbitrary_format
         template<typename U, U> class fail_when_member_ambiguity; \
      \
         template<typename U> \
-        static No& check(fail_when_member_ambiguity<int WithMember::*, (signature)&U::member> *); \
+        static No& check(fail_when_member_ambiguity<int WithMember::*, (Signature)&U::member> *); \
         template<typename U> \
         static Yes& check(...); \
      \
@@ -45,8 +45,8 @@ namespace arbitrary_format
         enum { value = (sizeof(check<MemberChecker>(0)) == sizeof(Yes)) }; \
     }; \
      \
-    template<typename T> \
-    class has_method_ ## member : public boost::integral_constant< bool, has_method_impl_ ## member <T>::value > {};
+    template<typename T, typename Signature> \
+    class has_method_ ## member : public boost::integral_constant< bool, has_method_impl_ ## member <T, Signature>::value > {};
 
 } // namespace arbitrary_format
 

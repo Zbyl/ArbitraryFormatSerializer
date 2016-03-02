@@ -21,7 +21,7 @@
 namespace arbitrary_format
 {
 
-#define GENERATE_HAS_MEMBER(member) \
+#define AFS_GENERATE_HAS_MEMBER(member) \
     template<typename T> \
     class has_member_impl_ ## member \
     { \

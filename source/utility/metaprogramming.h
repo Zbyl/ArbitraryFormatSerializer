@@ -17,6 +17,10 @@
 #include <type_traits>
 #include <utility>
 
+#if defined(_MSC_VER) && (_MSC_VER < 1900)
+#error Microsoft Visual C++ older than 2015 cannot compile this code.
+#endif
+
 namespace arbitrary_format
 {
 
@@ -110,7 +114,7 @@ struct to_values_impl< T, TypeList<Types...> >
 };
 
 template<typename TypeList>
-using to_values = typename to_values_impl<std::remove_cv_t<decltype(tsec::get_element<0, TypeList>::value)>, TypeList>::type;
+using to_values = typename to_values_impl<typename std::remove_cv<decltype(tsec::get_element<0, TypeList>::value)>::type, TypeList>::type;
 
 /////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
@@ -245,7 +249,7 @@ using reverse = typename reverse_impl<element_type<seq>, seq>::type;
 template<typename T, typename seq, T number>
 struct push_front_impl;
 
-template<typename T, template<typename T, T...> class seq, T number, T... numbers>
+template<typename T, template<typename U, U...> class seq, T number, T... numbers>
 struct push_front_impl<T, seq<T, numbers...>, number>
 {
     using type = seq<T, number, numbers...>;
@@ -299,7 +303,7 @@ using pop_back = reverse< pop_front< reverse<seq> > >;
 template<typename T, typename seq, T number>
 struct add_impl;
 
-template<typename T, template<typename T, T...> class seq, T number, T... numbers>
+template<typename T, template<typename U, U...> class seq, T number, T... numbers>
 struct add_impl<T, seq<T, numbers...>, number>
 {
     using type = seq<T, (number + numbers)...>;

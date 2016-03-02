@@ -86,6 +86,7 @@ document_formatter_impl<ValueFormatter> create_document_formatter(ValueFormatter
 
 template<typename ValueFormatter>
 auto create_document_formatter(const std::string& name, ValueFormatter value_formatter = ValueFormatter())
+    -> document_formatter_impl<element_formatter_impl<ValueFormatter>>
 {
     return create_document_formatter(create_element_formatter(name, value_formatter));
 }

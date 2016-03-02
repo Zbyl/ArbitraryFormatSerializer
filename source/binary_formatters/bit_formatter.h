@@ -32,21 +32,21 @@ public:
     template<typename TSerializer, typename... Ts>
     void save(TSerializer& serializer, Ts... vals) const
     {
-        packer::packed_type val = packer::pack(vals...);
+        typename packer::packed_type val = packer::pack(vals...);
         value_formatter().save(serializer, val);
     }
 
     template<typename TSerializer, typename... Ts>
     void load(TSerializer& serializer, Ts&... vals) const
     {
-        packer::packed_type val;
+        typename packer::packed_type val;
         value_formatter().load(serializer, val);
         packer::unpack(val, vals...);
     }
     template<typename TSerializer, typename... Ts>
     void save(TSerializer& serializer, const std::tuple<Ts...>& vals) const
     {
-        packer::packed_type val = packer::pack(vals);
+        typename packer::packed_type val = packer::pack(vals);
         value_formatter().save(serializer, val);
     }
 
@@ -54,7 +54,7 @@ public:
     template<typename TSerializer, typename... Ts>
     void load(TSerializer& serializer, const std::tuple<Ts&...>& vals) const
     {
-        packer::packed_type val;
+        typename packer::packed_type val;
         value_formatter().load(serializer, val);
         packer::unpack(val, vals);
     }
@@ -63,7 +63,7 @@ public:
     template<typename TSerializer, typename... Ts>
     void load(TSerializer& serializer, std::tuple<Ts...>& vals) const
     {
-        packer::packed_type val;
+        typename packer::packed_type val;
         value_formatter().load(serializer, val);
         packer::unpack(val, vals);
     }

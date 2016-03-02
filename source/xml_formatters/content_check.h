@@ -149,7 +149,7 @@ public:
 };
 
 template<typename CompileTimeString, bool TrueIfExists>
-const attribute_check_impl<TrueIfExists> attribute_check<CompileTimeString, TrueIfExists>::formatter = attribute_check_impl<TrueIfExists>( boost::optional<std::string>(!CompileTimeString::empty::value, compile_time_string_print<CompileTimeString>::str()) );
+const attribute_check_impl<TrueIfExists> attribute_check<CompileTimeString, TrueIfExists>::formatter = attribute_check_impl<TrueIfExists>( boost::optional<std::string>(!compile_time_string_print<CompileTimeString>::str().empty(), compile_time_string_print<CompileTimeString>::str()) );
 
 template<typename CompileTimeString, bool TrueIfExists>
 class element_check
@@ -171,7 +171,7 @@ public:
 };
 
 template<typename CompileTimeString, bool TrueIfExists>
-const element_check_impl<TrueIfExists> element_check<CompileTimeString, TrueIfExists>::formatter = element_check_impl<TrueIfExists>( boost::optional<std::string>(!CompileTimeString::empty::value, compile_time_string_print<CompileTimeString>::str()) );
+const element_check_impl<TrueIfExists> element_check<CompileTimeString, TrueIfExists>::formatter = element_check_impl<TrueIfExists>( boost::optional<std::string>(!compile_time_string_print<CompileTimeString>::str().empty(), compile_time_string_print<CompileTimeString>::str()) );
 
 template<typename CompileTimeString>
 using attribute_exists = attribute_check<CompileTimeString, true>;

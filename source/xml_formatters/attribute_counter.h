@@ -73,7 +73,7 @@ public:
 };
 
 template<typename CompileTimeString>
-const attribute_counter_impl attribute_counter<CompileTimeString>::formatter = attribute_counter_impl( boost::optional<std::string>(!CompileTimeString::empty::value, compile_time_string_print<CompileTimeString>::str()) );
+const attribute_counter_impl attribute_counter<CompileTimeString>::formatter = attribute_counter_impl( boost::optional<std::string>(!compile_time_string_print<CompileTimeString>::str().empty(), compile_time_string_print<CompileTimeString>::str()) );
 
 attribute_counter_impl create_attribute_counter(const boost::optional<std::string>& name = boost::none)
 {

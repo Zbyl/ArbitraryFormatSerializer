@@ -19,8 +19,8 @@
 #include <vector>
 #include <ostream>
 
-#include <rapidxml.hpp>
-#include <rapidxml_print.hpp>
+#include "../../third_party/rapidxml-1.13/rapidxml.hpp"
+#include "../../third_party/rapidxml-1.13/rapidxml_print.hpp"
 
 #include <boost/optional.hpp>
 
@@ -365,8 +365,8 @@ public:
     {
     }
 
-    using saving_serializer = std::bool_constant<Saving>;
-    using loading_serializer = std::bool_constant<!Saving>;
+    using saving_serializer = std::integral_constant<bool, Saving>;
+    using loading_serializer = std::integral_constant<bool, !Saving>;
 };
 
 template<bool Saving>
@@ -378,8 +378,8 @@ public:
     {
     }
 
-    using saving_serializer = std::bool_constant<Saving>;
-    using loading_serializer = std::bool_constant<!Saving>;
+    using saving_serializer = std::integral_constant<bool, Saving>;
+    using loading_serializer = std::integral_constant<bool, !Saving>;
 
     RapidXmlAttributeSerializer<Saving> addAttribute(const boost::optional<std::string>& name)
     {
@@ -438,8 +438,8 @@ public:
     {
     }
 
-    using saving_serializer = std::bool_constant<Saving>;
-    using loading_serializer = std::bool_constant<!Saving>;
+    using saving_serializer = std::integral_constant<bool, Saving>;
+    using loading_serializer = std::integral_constant<bool, !Saving>;
 
     RapidXmlTreeSerializer<Saving>& getDocumentElement()
     {

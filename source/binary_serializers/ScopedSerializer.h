@@ -78,15 +78,17 @@ public:
     using saving_serializer = is_saving_serializer<TSerializer>;
     using loading_serializer = is_loading_serializer<TSerializer>;
 
-    template<typename T, std::enable_if_t<saving_serializer::value && std::is_same<T, uint8_t>::value>* sfinae = nullptr>
-    void saveData(const T* data, size_t size)
+    template<typename T>
+    typename std::enable_if<saving_serializer::value && std::is_same<T, uint8_t>::value>::type
+    saveData(const T* data, size_t size)
     {
         countData(size);
         serializer.saveData(data, size);
     }
 
-    template<typename T, std::enable_if_t<loading_serializer::value && std::is_same<T, uint8_t>::value>* sfinae = nullptr>
-    void loadData(T* data, size_t size)
+    template<typename T>
+    typename std::enable_if<loading_serializer::value && std::is_same<T, uint8_t>::value>::type
+    loadData(T* data, size_t size)
     {
         countData(size);
         serializer.loadData(data, size);

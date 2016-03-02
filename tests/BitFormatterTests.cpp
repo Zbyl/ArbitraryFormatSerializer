@@ -1,6 +1,10 @@
 // BitFormatterTests.cpp - tests for bit_formatter
 //
 
+#if defined(_MSC_VER) && (_MSC_VER < 1900)
+#pragma message("Microsoft Visual C++ older than 2015 cannot compile this code.")
+#else
+
 #include "binary_serializers/VectorSaveSerializer.h"
 #include "binary_serializers/MemorySerializer.h"
 
@@ -392,3 +396,5 @@ TEST(BitFormatterWorks, Bools)
 }
 
 }  // namespace
+
+#endif

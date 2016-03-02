@@ -17,6 +17,7 @@
 #include "integer_of_size.h"
 #include "metaprogramming.h"
 
+#include <type_traits>
 #include <tuple>
 
 namespace arbitrary_format
@@ -24,15 +25,37 @@ namespace arbitrary_format
 namespace binary
 {
 
-template<int... Bits>
+template<int... BitsSeq>
 class bit_packer
 {
-    static constexpr int bits_size = isec::sum_args<int, Bits...>::value;
+    static constexpr int bits_size = isec::sum_args<int, BitsSeq...>::value;
     static_assert( (bits_size == 8) || (bits_size == 16) || (bits_size == 32) || (bits_size == 64), "Sum of bits must be a full 1, 2, 4 or 8 bytes.");
     static constexpr int byte_size = bits_size / 8;
 
+    /// @brief Negates the value. It is needed, since ~(unsigned char) == (int), and we want it to be (unsigned char).
+    template<typename T>
+    static constexpr T neg(T value)
+    {
+        return static_cast<T>(~value);
+    }
+
+    /// @brief Shifts the value left. It is needed, since (unsigned char) << Bits == (int), and we want it to be (unsigned char).
+    template<int Bits, typename T>
+    static constexpr T shl(T value)
+    {
+        return static_cast<T>(value << Bits);
+    }
+
+    /// @brief Returns value with Bits least significant bits set.
+    template<typename T, int Bits>
+    static constexpr T lsbMask()
+    {
+        static_assert(std::is_unsigned<T>::value, "Type must be unsigned.");
+        return neg( shl<Bits>(neg(T())) );
+    }
+
 public:
-    using packed_type = typename integer_of_size<false, byte_size>::type;
+    using packed_type = typename uint_of_size<byte_size>::type;
 
 private:
     template<typename T>
@@ -55,12 +78,12 @@ private:
     static T bitsToVal(packed_type val, T dummy)
     {
         static_assert(Bits > 0, "Number of bits for each component must be greater than 0");
-        constexpr packed_type mask = ~( (~packed_type()) << Bits );
+        constexpr packed_type mask = lsbMask<packed_type, Bits>();
         constexpr packed_type sign_mask = packed_type(1) << (Bits - 1);
         packed_type result = (val >> Shift) & mask;
         if ( std::is_signed<T>::value && (result & sign_mask) )
         {
-            result |= ~mask;
+            result |= neg(mask);
         }
 
         using resizedT = typename integer_of_size< std::is_signed<T>::value, byte_size>::type;
@@ -74,7 +97,7 @@ private:
     static bool bitsToVal(packed_type val, bool dummy)
     {
         static_assert(Bits > 0, "Number of bits for each component must be greater than 0");
-        constexpr packed_type mask = ~( (~packed_type()) << Bits );
+        constexpr packed_type mask = lsbMask<packed_type, Bits>();
         packed_type result = (val >> Shift) & mask;
 
         if (result == 0)
@@ -94,7 +117,8 @@ private:
     static packed_type valToBits(T val)
     {
         static_assert(Bits > 0, "Number of bits for each component must be greater than 0");
-        constexpr packed_type mask = ~( (~packed_type()) << Bits );
+
+        constexpr packed_type mask = lsbMask<packed_type, Bits>();
         using resizedT = typename integer_of_size< std::is_signed<T>::value, byte_size>::type;
         resizedT resized_value = static_cast<resizedT>(val);
         packed_type finalVal = static_cast<packed_type>(resized_value) & mask;
@@ -120,14 +144,14 @@ private:
     template<int... Shifts, typename... Ts>
     static packed_type pack(std::integer_sequence<int, Shifts...>, const Ts&... vals)
     {
-         return fsum( (valToBits<Bits>(vals) << Shifts ) ... );
+         return fsum( (valToBits<BitsSeq>(vals) << Shifts ) ... );
     }
     
     template<typename... Ts, int... Shifts>
     static void unpack(std::integer_sequence<int, Shifts...>, packed_type packed, Ts&... vals)
     {
         auto vars = std::tie(vals...);
-        auto values = std::make_tuple(bitsToVal<Bits, Shifts>(packed, Ts())...);
+        auto values = std::make_tuple(bitsToVal<BitsSeq, Shifts>(packed, Ts())...);
         vars = values;
     }
 
@@ -156,7 +180,7 @@ public:
     template<typename... Ts>
     static packed_type pack(Ts... vals)
     {
-        using bits_seq = std::integer_sequence<int, Bits...>;
+        using bits_seq = std::integer_sequence<int, BitsSeq...>;
         using shifts_seq = isec::push_front<int, isec::pop_back< isec::partial_sum<bits_seq> >, 0>;
         //TypeDisplayer<isec::push_front<int, isec::pop_back< isec::partial_sum<bits_seq> >, 0>> td;
 
@@ -167,7 +191,7 @@ public:
     template<typename... Ts>
     static void unpack(packed_type val, Ts&... vals)
     {
-        using bits_seq = std::integer_sequence<int, Bits...>;
+        using bits_seq = std::integer_sequence<int, BitsSeq...>;
         using shifts_seq = isec::push_front<int, isec::pop_back< isec::partial_sum<bits_seq> >, 0>;
         unpack(shifts_seq(), val, vals...);
     }

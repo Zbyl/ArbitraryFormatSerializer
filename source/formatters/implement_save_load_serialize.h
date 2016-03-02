@@ -15,6 +15,8 @@
 #ifndef ArbitraryFormatSerializer_implement_save_load_serialize_H
 #define ArbitraryFormatSerializer_implement_save_load_serialize_H
 
+#include "utility/has_method.h"
+
 #include <type_traits>
 
 namespace arbitrary_format
@@ -39,9 +41,16 @@ namespace arbitrary_format
 
 #else
 
-// no expression sfinae
-#define AFS_HAS_METHOD_0(objectType, method) void
-#define AFS_HAS_METHOD_2(objectType, method, arg1Type, arg2Type) void
+AFS_GENERATE_HAS_METHOD(save);
+AFS_GENERATE_HAS_METHOD(load);
+AFS_GENERATE_HAS_METHOD(save_or_load);
+AFS_GENERATE_HAS_METHOD(saving);
+
+#define AFS_HAS_METHOD_0(objectType, method) \
+    typename std::enable_if< has_method_ ## method <objectType, void() >::value>::type
+
+#define AFS_HAS_METHOD_2(objectType, method, arg1Type, arg2Type) \
+    typename std::enable_if< has_method_ ## method <objectType, void(arg1Type, arg2Type) >::value>::type
 
 #endif
 
@@ -141,14 +150,14 @@ template<typename Derived>
 class implement_save_load
 {
 public:
-    /// @note has_save_or_load is used below to limit specialization only for types supported by underlying serializer and formatter.
+    /// @note has_save_or_load was used below to generate const methods only where underlying formatter has a const method. But the compiler errors were not very good then.
 
     template<typename T, typename TSerializer>
     void save(TSerializer& serializer, const T& object)
     {
         static_assert(is_saving_serializer<TSerializer>::value || !is_loading_serializer<TSerializer>::value, "Can't save to a loading serializer.");
-        static_assert(has_save_or_load<Derived, TSerializer, std::remove_cv_t<T>>::value, "Formatter can't save given type to given serializer.");
-        static_cast<Derived*>(this)->save_or_load(serializer, const_cast<std::remove_cv_t<T>&>(object));
+        static_assert(has_save_or_load<Derived, TSerializer, typename std::remove_cv<T>::type>::value, "Formatter can't save given type to given serializer.");
+        static_cast<Derived*>(this)->save_or_load(serializer, const_cast<typename std::remove_cv<T>::type&>(object));
     }
 
     template<typename T, typename TSerializer>
@@ -159,45 +168,51 @@ public:
         static_cast<Derived*>(this)->save_or_load(serializer, object);
     }
 
-    template<typename T, typename TSerializer, std::enable_if_t< has_save_or_load<Derived, TSerializer, std::remove_cv_t<T>>::value >* = nullptr>
+    template<typename T, typename TSerializer>
+    // typename std::enable_if< has_save_or_load<Derived, TSerializer, typename std::remove_cv<T>::type>::value >::type
     void save(TSerializer& serializer, const T& object) const
     {
         static_assert(is_saving_serializer<TSerializer>::value || !is_loading_serializer<TSerializer>::value, "Can't save to a loading serializer.");
-        static_assert(has_save_or_load<const Derived, TSerializer, std::remove_cv_t<T>>::value, "Only non-const formatter can save given type to given serializer.");
-        static_cast<const Derived*>(this)->save_or_load(serializer, const_cast<std::remove_cv_t<T>&>(object));
+        static_assert(has_save_or_load<const Derived, TSerializer, typename std::remove_cv<T>::type>::value, "Const formatter can't save given type to given serializer.");
+        static_cast<const Derived*>(this)->save_or_load(serializer, const_cast<typename std::remove_cv<T>::type&>(object));
     }
 
-    template<typename T, typename TSerializer, std::enable_if_t< has_save_or_load<Derived, TSerializer, T>::value >* = nullptr>
+    template<typename T, typename TSerializer>
+    // typename std::enable_if< has_save_or_load<Derived, TSerializer, T>::value >::type
     void load(TSerializer& serializer, T& object) const
     {
         static_assert(is_loading_serializer<TSerializer>::value || !is_saving_serializer<TSerializer>::value, "Can't load from a saving serializer.");
-        static_assert(has_save_or_load<const Derived, TSerializer, T>::value, "Only non-const formatter can load given type from given serializer.");
+        static_assert(has_save_or_load<const Derived, TSerializer, T>::value, "Const formatter can't load given type from given serializer.");
         static_cast<const Derived*>(this)->save_or_load(serializer, object);
     }
 };
 
 /////////////////////////////////////////////////////////////////////////////
 
-template<typename TSerializer, std::enable_if_t< is_saving_serializer<TSerializer>::value && !is_loading_serializer<TSerializer>::value >* = nullptr>
-bool is_serializer_saving(TSerializer& serializer)
+template<typename TSerializer>
+typename std::enable_if< is_saving_serializer<TSerializer>::value && !is_loading_serializer<TSerializer>::value, bool >::type
+is_serializer_saving(TSerializer& serializer)
 {
     return true;
 }
 
-template<typename TSerializer, std::enable_if_t< is_loading_serializer<TSerializer>::value && !is_saving_serializer<TSerializer>::value>* = nullptr>
-bool is_serializer_saving(TSerializer& serializer)
+template<typename TSerializer>
+typename std::enable_if< is_loading_serializer<TSerializer>::value && !is_saving_serializer<TSerializer>::value, bool>::type
+is_serializer_saving(TSerializer& serializer)
 {
     return false;
 }
 
-template<typename TSerializer, std::enable_if_t< !is_saving_serializer<TSerializer>::value && !is_loading_serializer<TSerializer>::value >* = nullptr>
-bool is_serializer_saving(TSerializer& serializer)
+template<typename TSerializer>
+typename std::enable_if< !is_saving_serializer<TSerializer>::value && !is_loading_serializer<TSerializer>::value, bool >::type
+is_serializer_saving(TSerializer& serializer)
 {
-    static_assert(false, "Serializer isn't specifically a loading or saving serializer.");
+    static_assert(false && (sizeof(TSerializer) > 0), "Serializer isn't specifically a loading or saving serializer.");
 }
 
-template<typename TSerializer, std::enable_if_t< is_saving_serializer<TSerializer>::value && is_loading_serializer<TSerializer>::value >* = nullptr>
-bool is_serializer_saving(TSerializer& serializer)
+template<typename TSerializer>
+typename std::enable_if< is_saving_serializer<TSerializer>::value && is_loading_serializer<TSerializer>::value, bool >::type
+is_serializer_saving(TSerializer& serializer)
 {
     static_assert(has_saving<const TSerializer>::value, "Formatter that is both saving and loading must have an instance, const saving() method.");
     return serializer.saving();

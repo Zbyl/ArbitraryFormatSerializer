@@ -12,7 +12,7 @@
 //#include "formatters/any_formatter.h"
 #include "formatters/vector_formatter.h"
 #include "formatters/const_formatter.h"
-#include "binary_formatters/bit_formatter.h"
+//#include "binary_formatters/bit_formatter.h"
 
 #include "binary_serializers/VectorSaveSerializer.h"
 #include "binary_serializers/MemorySerializer.h"
@@ -28,18 +28,18 @@ void ela()
     using namespace binary;
 
     VectorSaveSerializer vectorWriter;
-    bit_formatter<boost::endian::order::little, 1, 7>().save(vectorWriter, 1, 0xFF);
+    //bit_formatter<boost::endian::order::little, 1, 7>().save(vectorWriter, 1, 0xFF);
 }
 
 #include "utility/has_member.h"
 
 struct WithX { int X; };
 struct WithoutX { int Y; };
-GENERATE_HAS_MEMBER(X);
+AFS_GENERATE_HAS_MEMBER(X);
 
 struct Pos1 { int position; };
 struct Pos2 { int position(int); };
-GENERATE_HAS_MEMBER(position);
+AFS_GENERATE_HAS_MEMBER(position);
 
 void ala()
 {

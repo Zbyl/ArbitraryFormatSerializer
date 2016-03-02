@@ -15,8 +15,36 @@
 #ifndef ArbitraryFormatSerializer_compile_time_string_H
 #define ArbitraryFormatSerializer_compile_time_string_H
 
-#include <string>
-#include <type_traits>
+#if defined(_MSC_VER) && (_MSC_VER < 1900)
+
+namespace arbitrary_format
+{
+
+template <const char* Str>
+struct compile_time_string
+{
+};
+
+template <typename str>
+struct compile_time_string_print;
+
+template <const char* Str>
+struct compile_time_string_print< compile_time_string<Str> >
+{
+    static std::string str()
+    {
+        return Str;
+    }
+};
+
+/// @note This version must be used at global scope.
+#define declare_compile_time_string(name, str) \
+    extern const char declare_compile_time_string_ ## name [] = str; \
+    using name = compile_time_string<declare_compile_time_string_ ## name>;
+
+} // namespace arbitrary_format
+
+#elif defined(_MSC_VER)
 
 namespace arbitrary_format
 {
@@ -24,14 +52,14 @@ namespace arbitrary_format
 template <const char... Cs>
 struct compile_time_string
 {
-    using empty = std::bool_constant<sizeof...(Cs) == 0>;
+    //using empty = std::integral_constant<bool, sizeof...(Cs) == 0>;
 };
 
 template <typename str>
 struct compile_time_string_print;
 
-template <char... Cs>
-struct compile_time_string_print< compile_time_string<Cs...> >
+template <template<char...> class CTString, char... Cs>
+struct compile_time_string_print< CTString<Cs...> >
 {
     static std::string str()
     {
@@ -57,11 +85,45 @@ struct make_compile_time_string1
 #define declare_compile_time_string(name, str) \
     struct declare_compile_time_string_ ## name \
     { \
-        struct constexpr_string_type { const char * chars = str; }; \
-        auto strFunc() { return make_compile_time_string1<sizeof(str) - 1, constexpr_string_type>::type(); } \
+        static auto make_string() \
+        { \
+            struct c_string \
+            { \
+                const char * chars = str; \
+            }; \
+            return make_compile_time_string1<sizeof(str) - 1, c_string>::type{}; \
+        } \
     }; \
-    using name = decltype(declare_compile_time_string_ ## name {}.strFunc())
+    using name = decltype( declare_compile_time_string_ ## name ::make_string() );
 
 } // namespace arbitrary_format
+
+#else
+
+#include "../third_party/typestring/typestring.hh"
+
+namespace arbitrary_format
+{
+
+template <typename str>
+struct compile_time_string_print;
+
+template <template<char...> class CTString, char... Cs>
+struct compile_time_string_print< CTString<Cs...> >
+{
+    static std::string str()
+    {
+        return {Cs...};
+    }
+};
+
+#define declare_compile_time_string(name, str) \
+    using name = typestring_is(str)
+
+#define compile_time_string(str) typestring_is(str)
+
+} // namespace arbitrary_format
+
+#endif
 
 #endif // ArbitraryFormatSerializer_compile_time_string_H

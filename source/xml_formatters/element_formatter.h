@@ -96,7 +96,7 @@ public:
 
 template<typename CompileTimeString, typename ValueFormatter, bool Sequential>
 const element_formatter_impl<ValueFormatter, Sequential> element_formatter<CompileTimeString, ValueFormatter, Sequential>::formatter = 
-    element_formatter_impl<ValueFormatter, Sequential>( boost::optional<std::string>(!CompileTimeString::empty::value, compile_time_string_print<CompileTimeString>::str()) );
+    element_formatter_impl<ValueFormatter, Sequential>( boost::optional<std::string>(!compile_time_string_print<CompileTimeString>::str().empty(), compile_time_string_print<CompileTimeString>::str()) );
 
 template<typename ValueFormatter = assign_text_content<>>
 element_formatter_impl<ValueFormatter> create_element_formatter(const boost::optional<std::string>& name = boost::none, ValueFormatter value_formatter = ValueFormatter())

@@ -45,40 +45,45 @@ void load(TSerializer& serializer, T&& object, Formatter&& formatter = Formatter
 
 /// @brief Serializes given object using specified serializer and formatter.
 ///        Calls save() or load() depending on whether serializer if a saving or loading serializer.
-template<typename Formatter, typename T, typename TSerializer, std::enable_if_t< is_saving_serializer<TSerializer>::value && !is_loading_serializer<TSerializer>::value >* = nullptr>
-void serialize(TSerializer& serializer, T&& object, Formatter&& formatter = Formatter())
+template<typename Formatter, typename T, typename TSerializer>
+typename std::enable_if< is_saving_serializer<TSerializer>::value && !is_loading_serializer<TSerializer>::value >::type
+serialize(TSerializer& serializer, T&& object, Formatter&& formatter = Formatter())
 {
     std::forward<Formatter>(formatter).save(serializer, std::forward<T>(object));
 }
 
 /// @brief Serializes given object using specified serializer and formatter.
 ///        Calls save() or load() depending on whether serializer if a saving or loading serializer.
-template<typename Formatter, typename T, typename TSerializer, std::enable_if_t< is_loading_serializer<TSerializer>::value && !is_saving_serializer<TSerializer>::value >* = nullptr>
-void serialize(TSerializer& serializer, T&& object, Formatter&& formatter = Formatter())
+template<typename Formatter, typename T, typename TSerializer>
+typename std::enable_if< is_loading_serializer<TSerializer>::value && !is_saving_serializer<TSerializer>::value >::type
+serialize(TSerializer& serializer, T&& object, Formatter&& formatter = Formatter())
 {
     std::forward<Formatter>(formatter).load(serializer, std::forward<T>(object));
 }
 
 /// @brief Serializes given object using specified serializer and formatter.
 ///        Calls save() or load() depending on whether serializer if a saving or loading serializer.
-template<typename Formatter, typename T, typename TSerializer, std::enable_if_t< !is_saving_serializer<TSerializer>::value && !is_loading_serializer<TSerializer>::value >* = nullptr>
-void serialize(TSerializer& serializer, T&& object, Formatter&& formatter = Formatter())
+template<typename Formatter, typename T, typename TSerializer>
+typename std::enable_if< !is_saving_serializer<TSerializer>::value && !is_loading_serializer<TSerializer>::value >::type
+serialize(TSerializer& serializer, T&& object, Formatter&& formatter = Formatter())
 {
-    static_assert(false, "Can't call serialize() function for a serializer that isn't specifically loading or saving serializer.");
+    static_assert(false && (sizeof(TSerializer) > 0), "Can't call serialize() function for a serializer that isn't specifically loading or saving serializer.");
 }
 
 /// @brief Serializes given object using specified serializer and formatter.
 ///        Calls save() or load() depending on whether serializer if a saving or loading serializer.
-template<typename Formatter, typename T, typename TSerializer, std::enable_if_t< is_saving_serializer<TSerializer>::value && is_loading_serializer<TSerializer>::value >* = nullptr>
-void serialize(TSerializer& serializer, T&& object, Formatter&& formatter = Formatter())
+template<typename Formatter, typename T, typename TSerializer>
+typename std::enable_if< is_saving_serializer<TSerializer>::value && is_loading_serializer<TSerializer>::value >::type
+serialize(TSerializer& serializer, T&& object, Formatter&& formatter = Formatter())
 {
-    static_assert(false, "Can't call serialize() function for a serializer that is both loading and saving serializer. Use slow_serialize() to serialize with runtime check.");
+    static_assert(false && (sizeof(TSerializer) > 0), "Can't call serialize() function for a serializer that is both loading and saving serializer. Use slow_serialize() to serialize with runtime check.");
 }
 
 /// @brief Serializes given object using specified serializer and formatter.
 ///        Calls save() or load() depending on whether serializer if a saving or loading serializer.
-template<typename Formatter, typename T, typename TSerializer, std::enable_if_t< is_saving_serializer<TSerializer>::value && is_loading_serializer<TSerializer>::value >* = nullptr>
-void slow_serialize(TSerializer& serializer, T&& object, Formatter&& formatter = Formatter())
+template<typename Formatter, typename T, typename TSerializer>
+typename std::enable_if< is_saving_serializer<TSerializer>::value && is_loading_serializer<TSerializer>::value >::type
+slow_serialize(TSerializer& serializer, T&& object, Formatter&& formatter = Formatter())
 {
     static_assert(has_saving<TSerializer>::value, "Formatter that is both saving and loading must have an instance, const saving() method.");
     if (serializer.saving())
@@ -177,14 +182,14 @@ struct CantMakePolymorphicSerializer
 {
     CantMakePolymorphicSerializer()
     {
-        static_assert(false, "Can't make a polymorphic serializer from a serializer that isn't a loading nor a saving serializer.");
+        static_assert(false && (sizeof(TSerializer) > 0), "Can't make a polymorphic serializer from a serializer that isn't a loading nor a saving serializer.");
     }
 };
 
 template<typename TSerializer>
-using polymorphic_serializer_t = std::conditional_t<is_saving_serializer<TSerializer>::value,
-                                                        std::conditional_t<is_loading_serializer<TSerializer>::value, ISlowSerializer, ISaveSerializer>,
-                                                        std::conditional_t<is_loading_serializer<TSerializer>::value, ILoadSerializer, CantMakePolymorphicSerializer<TSerializer>> >;
+using polymorphic_serializer_t = typename std::conditional<is_saving_serializer<TSerializer>::value,
+                                                        typename std::conditional<is_loading_serializer<TSerializer>::value, ISlowSerializer, ISaveSerializer>::type,
+                                                        typename std::conditional<is_loading_serializer<TSerializer>::value, ILoadSerializer, CantMakePolymorphicSerializer<TSerializer>>::type >::type;
 
 template<typename PolymorphicSerializer>
 class ISeekableSerializer : public virtual PolymorphicSerializer
@@ -227,31 +232,31 @@ private:
         return doLoadData<TSerializer>(data, size);
     }
 
-    template<typename T, std::enable_if_t< is_saving_serializer<T>::value && !is_loading_serializer<T>::value >* sfinae = nullptr>
+    template<typename T, typename std::enable_if< is_saving_serializer<T>::value && !is_loading_serializer<T>::value >::type* sfinae = nullptr>
     void doSaveData(const uint8_t* data, size_t size)
     {
         return serializer.saveData(data, size);
     }
 
-    template<typename T, std::enable_if_t< is_saving_serializer<T>::value && !is_loading_serializer<T>::value >* sfinae = nullptr>
+    template<typename T, typename std::enable_if< is_saving_serializer<T>::value && !is_loading_serializer<T>::value >::type* sfinae = nullptr>
     void doLoadData(uint8_t* data, size_t size)
     {
         BOOST_THROW_EXCEPTION(serialization_exception() << detail::errinfo_description("Can't load from a saving serializer."));
     }
 
-    template<typename T, std::enable_if_t< is_loading_serializer<T>::value && !is_saving_serializer<T>::value >* sfinae = nullptr>
+    template<typename T, typename std::enable_if< is_loading_serializer<T>::value && !is_saving_serializer<T>::value >::type* sfinae = nullptr>
     void doSaveData(const uint8_t* data, size_t size)
     {
         BOOST_THROW_EXCEPTION(serialization_exception() << detail::errinfo_description("Can't save to a loading serializer."));
     }
 
-    template<typename T, std::enable_if_t< is_loading_serializer<T>::value && !is_saving_serializer<T>::value >* sfinae = nullptr>
+    template<typename T, typename std::enable_if< is_loading_serializer<T>::value && !is_saving_serializer<T>::value >::type* sfinae = nullptr>
     void doLoadData(uint8_t* data, size_t size)
     {
         return serializer.loadData(data, size);
     }
 
-    template<typename T, std::enable_if_t< is_saving_serializer<T>::value && is_loading_serializer<T>::value >* sfinae = nullptr>
+    template<typename T, typename std::enable_if< is_saving_serializer<T>::value && is_loading_serializer<T>::value >::type* sfinae = nullptr>
     void doSaveData(const uint8_t* data, size_t size)
     {
         if (!saving())
@@ -262,10 +267,10 @@ private:
         return serializer.saveData(data, size);
     }
 
-    template<typename T, std::enable_if_t< is_saving_serializer<T>::value && is_loading_serializer<T>::value >* sfinae = nullptr>
+    template<typename T, typename std::enable_if< is_saving_serializer<T>::value && is_loading_serializer<T>::value >::type* sfinae = nullptr>
     void doLoadData(uint8_t* data, size_t size)
     {
-        if (!loading())
+        if (!this->loading())
         {
             BOOST_THROW_EXCEPTION(serialization_exception() << detail::errinfo_description("Can't load from a saving serializer."));
         }
@@ -277,8 +282,8 @@ private:
     TSerializer& serializer;
 };
 
-GENERATE_HAS_MEMBER(position);
-GENERATE_HAS_MEMBER(seek);
+AFS_GENERATE_HAS_MEMBER(position);
+AFS_GENERATE_HAS_MEMBER(seek);
 
 /// @brief AnySerializer is a decorator, that converts a non-polymorphic serializer into a polymorphic serializer.
 /// @param ForceCreate  If true, then type will be created, but missing methods in TSerializer will result in generation of methods that throw not_implemented exception.
@@ -307,30 +312,30 @@ private:
     }
 
 private:
-    template<typename TSerializer>
-    typename std::enable_if<has_member_position<TSerializer>::value, offset_t>::type
-    position_impl(TSerializer* dummy) const
+    template<typename ASerializer>
+    typename std::enable_if<has_member_position<ASerializer>::value, offset_t>::type
+    position_impl(ASerializer* dummy) const
     {
         return serializer.position();
     }
 
-    template<typename TSerializer>
-    typename std::enable_if<!has_member_position<TSerializer>::value && ForceCreate, offset_t>::type
-    position_impl(TSerializer* dummy) const
+    template<typename ASerializer>
+    typename std::enable_if<!has_member_position<ASerializer>::value && ForceCreate, offset_t>::type
+    position_impl(ASerializer* dummy) const
     {
         BOOST_THROW_EXCEPTION(not_implemented());
     }
 
-    template<typename TSerializer>
-    typename std::enable_if<has_member_seek<TSerializer>::value, void>::type
-    seek_impl(offset_t position, TSerializer* dummy)
+    template<typename ASerializer>
+    typename std::enable_if<has_member_seek<ASerializer>::value, void>::type
+    seek_impl(offset_t position, ASerializer* dummy)
     {
         return serializer.seek(position);
     }
 
-    template<typename TSerializer>
-    typename std::enable_if<!has_member_seek<TSerializer>::value && ForceCreate, void>::type
-    seek_impl(offset_t position, TSerializer* dummy)
+    template<typename ASerializer>
+    typename std::enable_if<!has_member_seek<ASerializer>::value && ForceCreate, void>::type
+    seek_impl(offset_t position, ASerializer* dummy)
     {
         BOOST_THROW_EXCEPTION(not_implemented());
     }
