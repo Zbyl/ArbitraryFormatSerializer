@@ -1,9 +1,10 @@
 // BinarySerializer.cpp : Defines the entry point for the console application.
 //
 
+#include "serialize.h"
 #include "binary_serializers/ISerializer.h"
 
-#include "formatters/implement_save_load_serialize.h"
+#include "implement_save_load_serialize.h"
 #include "binary_formatters/string_formatter.h"
 #include "formatters/map_formatter.h"
 #include "formatters/vector_formatter.h"

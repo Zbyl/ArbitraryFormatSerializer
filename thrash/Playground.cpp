@@ -3,6 +3,7 @@
 
 // TODO: Base 128 Varint formatter and all of Google protocol buffers
 
+#include "serialize.h"
 #include "binary_serializers/ISerializer.h"
 
 #include "binary_formatters/string_formatter.h"

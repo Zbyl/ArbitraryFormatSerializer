@@ -14,7 +14,7 @@
 #ifndef ArbitraryFormatSerializer_ISerializer_H
 #define ArbitraryFormatSerializer_ISerializer_H
 
-#include "formatters/implement_save_load_serialize.h"
+#include "implement_save_load_serialize.h"
 #include "serialization_exceptions.h"
 #include "utility/has_member.h"
 
@@ -26,75 +26,6 @@ namespace arbitrary_format
 {
 namespace binary
 {
-
-/// @brief Saves given object using specified serializer and formatter.
-template<typename Formatter, typename T, typename TSerializer>
-void save(TSerializer& serializer, const T& object, Formatter&& formatter = Formatter())
-{
-    static_assert(is_saving_serializer<TSerializer>::value || !is_loading_serializer<TSerializer>::value, "Can't save to a loading serializer.");
-    std::forward<Formatter>(formatter).save(serializer, object);
-}
-
-/// @brief Loads given object using specified serializer and formatter.
-template<typename Formatter, typename T, typename TSerializer>
-void load(TSerializer& serializer, T&& object, Formatter&& formatter = Formatter())
-{
-    static_assert(is_loading_serializer<TSerializer>::value || !is_saving_serializer<TSerializer>::value, "Can't load from a saving serializer.");
-    std::forward<Formatter>(formatter).load(serializer, std::forward<T>(object));
-}
-
-/// @brief Serializes given object using specified serializer and formatter.
-///        Calls save() or load() depending on whether serializer if a saving or loading serializer.
-template<typename Formatter, typename T, typename TSerializer>
-typename std::enable_if< is_saving_serializer<TSerializer>::value && !is_loading_serializer<TSerializer>::value >::type
-serialize(TSerializer& serializer, T&& object, Formatter&& formatter = Formatter())
-{
-    std::forward<Formatter>(formatter).save(serializer, std::forward<T>(object));
-}
-
-/// @brief Serializes given object using specified serializer and formatter.
-///        Calls save() or load() depending on whether serializer if a saving or loading serializer.
-template<typename Formatter, typename T, typename TSerializer>
-typename std::enable_if< is_loading_serializer<TSerializer>::value && !is_saving_serializer<TSerializer>::value >::type
-serialize(TSerializer& serializer, T&& object, Formatter&& formatter = Formatter())
-{
-    std::forward<Formatter>(formatter).load(serializer, std::forward<T>(object));
-}
-
-/// @brief Serializes given object using specified serializer and formatter.
-///        Calls save() or load() depending on whether serializer if a saving or loading serializer.
-template<typename Formatter, typename T, typename TSerializer>
-typename std::enable_if< !is_saving_serializer<TSerializer>::value && !is_loading_serializer<TSerializer>::value >::type
-serialize(TSerializer& serializer, T&& object, Formatter&& formatter = Formatter())
-{
-    static_assert(false && (sizeof(TSerializer) > 0), "Can't call serialize() function for a serializer that isn't specifically loading or saving serializer.");
-}
-
-/// @brief Serializes given object using specified serializer and formatter.
-///        Calls save() or load() depending on whether serializer if a saving or loading serializer.
-template<typename Formatter, typename T, typename TSerializer>
-typename std::enable_if< is_saving_serializer<TSerializer>::value && is_loading_serializer<TSerializer>::value >::type
-serialize(TSerializer& serializer, T&& object, Formatter&& formatter = Formatter())
-{
-    static_assert(false && (sizeof(TSerializer) > 0), "Can't call serialize() function for a serializer that is both loading and saving serializer. Use slow_serialize() to serialize with runtime check.");
-}
-
-/// @brief Serializes given object using specified serializer and formatter.
-///        Calls save() or load() depending on whether serializer if a saving or loading serializer.
-template<typename Formatter, typename T, typename TSerializer>
-typename std::enable_if< is_saving_serializer<TSerializer>::value && is_loading_serializer<TSerializer>::value >::type
-slow_serialize(TSerializer& serializer, T&& object, Formatter&& formatter = Formatter())
-{
-    static_assert(has_saving<TSerializer>::value, "Formatter that is both saving and loading must have an instance, const saving() method.");
-    if (serializer.saving())
-    {
-        std::forward<Formatter>(formatter).save(serializer, std::forward<T>(object));
-    }
-    else
-    {
-        std::forward<Formatter>(formatter).load(serializer, std::forward<T>(object));
-    }
-}
 
 /// @brief ISaveSerializer is a base class for polymorphic saving binary serializers.
 ///        It's slow, because serialization of every chunk is a virtual function call.

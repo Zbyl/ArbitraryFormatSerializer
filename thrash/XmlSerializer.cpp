@@ -1,6 +1,7 @@
 // XmlSerializer.cpp : Defines the entry point for the console application.
 //
 
+#include "serialize.h"
 #include "xml_formatters/lexical_stringizer.h"
 #include "xml_formatters/attribute_formatter.h"
 #include "xml_formatters/element_formatter.h"
@@ -19,7 +20,6 @@
 #include "formatters/tuple_formatter.h"
 
 #include "xml_serializers/RapidXmlTree.h"
-#include "binary_serializers/ISerializer.h"
 
 //#include "utility/metaprogramming.h"
 
@@ -104,7 +104,7 @@ int main(int argc, char* argv[])
     optionalFormatter.save(document.getDocumentElement(), optNone);
     optionalFormatter.save(document.getDocumentElement(), optStr);
     boost::optional<std::string> a("ala");
-    binary::serialize<opt_format>(document.getDocumentElement(), a);
+    serialize<opt_format>(document.getDocumentElement(), a);
 
     auto allFormatter = create_element_formatter("all", create_tuple_formatter(vectorElementFormatter, vectorElementFormatter2, mapElementFormatter));
 
@@ -146,7 +146,7 @@ int main(int argc, char* argv[])
     optionalFormatter.load(document2.getDocumentElement(), optNone2);
     optionalFormatter.load(document2.getDocumentElement(), optStr2);
     boost::optional<std::string> b;
-    binary::load<opt_format>(document2.getDocumentElement(), b);
+    load<opt_format>(document2.getDocumentElement(), b);
 
     std::vector<int> loadedVec2;
     std::vector<std::pair<std::string, int>> loadedNameToAgeVec2;

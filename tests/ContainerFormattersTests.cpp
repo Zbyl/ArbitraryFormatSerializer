@@ -1,6 +1,7 @@
 // VariousTests.cpp - tests for BinaryFormatSerializer
 //
 
+#include "serialize.h"
 #include "binary_serializers/VectorSaveSerializer.h"
 #include "binary_serializers/MemorySerializer.h"
 

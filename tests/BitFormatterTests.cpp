@@ -5,6 +5,7 @@
 #pragma message("Microsoft Visual C++ older than 2015 cannot compile this code.")
 #else
 
+#include "serialize.h"
 #include "binary_serializers/VectorSaveSerializer.h"
 #include "binary_serializers/MemorySerializer.h"
 
