@@ -8,6 +8,7 @@ Distributed under Apache License, Version 2.0 (http://www.apache.org/licenses/LI
 
 **Table of Contents**
 
+- [Compilation instructions](#compilation-instructions)
 - [Five minutes introduction](#five-minutes-introduction)
 - [Serializers](#serializers)
 - [Formatters](#formatters)
@@ -22,10 +23,34 @@ Distributed under Apache License, Version 2.0 (http://www.apache.org/licenses/LI
 - [Implementation notes](#implementation-notes)
 - [Possible additions](#possible-additions)
 
-Five minutes introduction
-=========================
+Compilation instructions
+========================
+
+The code has been tested on the following compilers:
+
+Compiler        | Mode        | Notes
+:---------------|:------------|:------------------------------------------------------------------------------------------------------------------
+Visual C++ 2015 |             | `compile_time_string` doesn't work, use `declare_compile_time_string`
+Visual C++ 2013 |             | `bit_formatter` is unsupported<br/>`compile_time_string` doesn't work, use `declare_compile_time_string` at **global scope**
+clang 3.7       | --std=c++11 | Fully supported
+g++ 5.2.1       | --std=c++11 | Fully supported
 
 > **Note** All types in the library are in `arbitrary_format`, `arbitrary_format::xml` and `arbitrary_format::binary` namespaces.
+
+> **Note** Please add ArbitraryFormatSerializer folder to the include directories of your project.
+> You will then be able to use includes like this:
+> ```cpp
+> #include "arbitrary_format/serialize.h"
+> #include "arbitrary_format/binary_serializers/VectorSaveSerializer.h"
+> #include "arbitrary_format/binary_serializers/MemorySerializer.h"
+> #include "arbitrary_format/binary_formatters/endian_formatter.h"
+> #include "arbitrary_format/binary_formatters/string_formatter.h"
+> ```
+
+See an example here: [Example-Person.cpp](thrash/Example-Person.cpp)
+
+Five minutes introduction
+=========================
 
 Let's serialize a vector of pairs to both xml and binary formats:
 ```cpp
@@ -132,7 +157,7 @@ So serializer can load and store data. But we still need to define how to transf
 *Formatters* are used for that.
 
 Formatters
-=========
+==========
 
 A *formatter* is an object that knows how to convert some specific type into data that serializer can store.
 It also knows how to convert data read from serializer into this type.
@@ -220,7 +245,7 @@ Let's notice, that save() and load() methods have exactly the same content!
 We can rewrite the same formatter in a shorter way, using a helper class `implement_save_load`:
 ```cpp
 template<typename name_formatter, typename surname_formatter, typename age_formatter>
-struct person_formatter : public implement_save_load<person_formatter>
+struct person_formatter : public implement_save_load< person_formatter<name_formatter, surname_formatter, age_formatter> >
 {
     template<typename TSerializer>
     void save_or_load(TSerializer& serializer, Person& person) const
@@ -248,6 +273,8 @@ void serializePerson(const Person& person)
     serialize<person_format>(serializer, person);
 }
 ```
+
+See full example here: [Example-Person.cpp](thrash/Example-Person.cpp)
 
 Serializing to xml and binary formats
 =====================================
