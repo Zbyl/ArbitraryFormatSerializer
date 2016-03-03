@@ -40,7 +40,7 @@ struct compile_time_string_print< compile_time_string<Str> >
 /// @note This version must be used at global scope.
 #define declare_compile_time_string(name, str) \
     extern const char declare_compile_time_string_ ## name [] = str; \
-    using name = compile_time_string<declare_compile_time_string_ ## name>;
+    using name = arbitrary_format::compile_time_string<declare_compile_time_string_ ## name>;
 
 } // namespace arbitrary_format
 
@@ -91,7 +91,7 @@ struct make_compile_time_string1
             { \
                 const char * chars = str; \
             }; \
-            return make_compile_time_string1<sizeof(str) - 1, c_string>::type{}; \
+            return arbitrary_format::make_compile_time_string1<sizeof(str) - 1, c_string>::type{}; \
         } \
     }; \
     using name = decltype( declare_compile_time_string_ ## name ::make_string() );
