@@ -31,18 +31,18 @@ set(CommonLibraries "")
 
 add_definitions(${CommonCompilerFlags})
 
-file(GLOB_RECURSE ALL_INCLUDES "../source/*.h")
+file(GLOB_RECURSE ALL_INCLUDES "../arbitrary_format/*.h")
 
 add_library(ArbitraryHeaders STATIC ${ALL_INCLUDES})
 set_target_properties(ArbitraryHeaders PROPERTIES LINKER_LANGUAGE CXX)
 
 
 add_executable(BinarySerializer BinarySerializer.cpp Playground.cpp)
-include_directories("../source")
+include_directories("../arbitrary_format")
 #target_compile_options(BinarySerializer ${CommonCompilerFlags})
 target_link_libraries(BinarySerializer ${CommonLibraries})
 
 add_executable(XmlSerializer XmlSerializer.cpp)
-include_directories("../source")
+include_directories("../arbitrary_format")
 #target_compile_options(XmlSerializer ${CommonCompilerFlags})
 target_link_libraries(XmlSerializer ${CommonLibraries})
