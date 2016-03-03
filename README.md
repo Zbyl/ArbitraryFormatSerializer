@@ -26,6 +26,7 @@ Distributed under Apache License, Version 2.0 (http://www.apache.org/licenses/LI
 Compilation instructions
 ========================
 
+#### Compilers
 The code has been tested on the following compilers:
 
 Compiler        | Mode        | Notes
@@ -35,17 +36,34 @@ Visual C++ 2013 |             | `bit_formatter` is unsupported<br/>`compile_time
 clang 3.7       | --std=c++11 | Fully supported
 g++ 5.2.1       | --std=c++11 | Fully supported
 
-> **Note** All types in the library are in `arbitrary_format`, `arbitrary_format::xml` and `arbitrary_format::binary` namespaces.
+#### Includes
 
-> **Note** Please add ArbitraryFormatSerializer folder to the include directories of your project.
-> You will then be able to use includes like this:
-> ```cpp
-> #include "arbitrary_format/serialize.h"
-> #include "arbitrary_format/binary_serializers/VectorSaveSerializer.h"
-> #include "arbitrary_format/binary_serializers/MemorySerializer.h"
-> #include "arbitrary_format/binary_formatters/endian_formatter.h"
-> #include "arbitrary_format/binary_formatters/string_formatter.h"
-> ```
+Please add `ArbitraryFormatSerializer` folder to the include directories of your project.
+You will then be able to use includes like this:
+
+```cpp
+#include "arbitrary_format/serialize.h"
+#include "arbitrary_format/binary_serializers/VectorSaveSerializer.h"
+#include "arbitrary_format/binary_serializers/MemorySerializer.h"
+#include "arbitrary_format/binary_formatters/endian_formatter.h"
+#include "arbitrary_format/binary_formatters/string_formatter.h"
+```
+
+> **Note** This is a header only library, so you don't need to link to it. Just include the headers.
+
+> **Note** This library uses boost, so you need to add boost to your include directories also.
+> The library was tested on boost version 1.59, but most versions of boost should work.
+
+#### Namespaces
+
+All types in the library are in `arbitrary_format`, `arbitrary_format::xml` and `arbitrary_format::binary` namespaces.
+You can use them like this:
+
+```cpp
+using namespace arbitrary_format;
+using namespace arbitrary_format::binary;
+using namespace arbitrary_format::xml;
+```
 
 See an example here: [Example-Person.cpp](thrash/Example-Person.cpp)
 
