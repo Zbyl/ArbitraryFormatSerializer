@@ -15,7 +15,7 @@
 #ifndef ArbitraryFormatSerializer_buffer_formatter_H
 #define ArbitraryFormatSerializer_buffer_formatter_H
 
-#include "binary_formatters/verbatim_formatter.h"
+#include <arbitrary_format/binary_formatters/verbatim_formatter.h>
 
 #include <boost/utility/enable_if.hpp>
 

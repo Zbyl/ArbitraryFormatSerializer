@@ -38,12 +38,12 @@ set_target_properties(ArbitraryHeaders PROPERTIES LINKER_LANGUAGE CXX)
 
 
 add_executable(BinarySerializer BinarySerializer.cpp Playground.cpp)
-include_directories("../arbitrary_format")
+include_directories("../")
 #target_compile_options(BinarySerializer ${CommonCompilerFlags})
 target_link_libraries(BinarySerializer ${CommonLibraries})
 
 add_executable(XmlSerializer XmlSerializer.cpp)
-include_directories("../arbitrary_format")
+include_directories("../")
 #target_compile_options(XmlSerializer ${CommonCompilerFlags})
 target_link_libraries(XmlSerializer ${CommonLibraries})
 

@@ -14,9 +14,9 @@
 #ifndef ArbitraryFormatSerializer_ISerializer_H
 #define ArbitraryFormatSerializer_ISerializer_H
 
-#include "implement_save_load_serialize.h"
-#include "serialization_exceptions.h"
-#include "utility/has_member.h"
+#include <arbitrary_format/implement_save_load_serialize.h>
+#include <arbitrary_format/serialization_exceptions.h>
+#include <arbitrary_format/utility/has_member.h>
 
 #include <utility>
 

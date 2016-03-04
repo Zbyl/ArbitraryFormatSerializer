@@ -17,8 +17,8 @@
 #ifndef ArbitraryFormatSerializer_inefficient_size_prefix_formatter_H
 #define ArbitraryFormatSerializer_inefficient_size_prefix_formatter_H
 
-#include "binary_serializers/SizeCountingSerializer.h"
-#include "binary_serializers/ScopedSerializer.h"
+#include <arbitrary_format/binary_serializers/SizeCountingSerializer.h>
+#include <arbitrary_format/binary_serializers/ScopedSerializer.h>
 
 namespace arbitrary_format
 {

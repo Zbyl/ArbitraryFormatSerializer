@@ -1,27 +1,27 @@
 // XmlSerializer.cpp : Defines the entry point for the console application.
 //
 
-#include "serialize.h"
-#include "xml_formatters/lexical_stringizer.h"
-#include "xml_formatters/attribute_formatter.h"
-#include "xml_formatters/element_formatter.h"
-#include "xml_formatters/element_counter.h"
-#include "xml_formatters/attribute_counter.h"
-#include "xml_formatters/assign_name.h"
-#include "xml_formatters/assign_text_content.h"
-#include "xml_formatters/content_check.h"
-#include "xml_formatters/document_formatter.h"
-#include "xml_formatters/declaration_formatter.h"
+#include <arbitrary_format/serialize.h>
+#include <arbitrary_format/xml_formatters/lexical_stringizer.h>
+#include <arbitrary_format/xml_formatters/attribute_formatter.h>
+#include <arbitrary_format/xml_formatters/element_formatter.h>
+#include <arbitrary_format/xml_formatters/element_counter.h>
+#include <arbitrary_format/xml_formatters/attribute_counter.h>
+#include <arbitrary_format/xml_formatters/assign_name.h>
+#include <arbitrary_format/xml_formatters/assign_text_content.h>
+#include <arbitrary_format/xml_formatters/content_check.h>
+#include <arbitrary_format/xml_formatters/document_formatter.h>
+#include <arbitrary_format/xml_formatters/declaration_formatter.h>
 
-#include "formatters/vector_formatter.h"
-#include "formatters/optional_formatter.h"
-#include "formatters/map_formatter.h"
-#include "formatters/collection_formatter.h"
-#include "formatters/tuple_formatter.h"
+#include <arbitrary_format/formatters/vector_formatter.h>
+#include <arbitrary_format/formatters/optional_formatter.h>
+#include <arbitrary_format/formatters/map_formatter.h>
+#include <arbitrary_format/formatters/collection_formatter.h>
+#include <arbitrary_format/formatters/tuple_formatter.h>
 
-#include "xml_serializers/RapidXmlTree.h"
+#include <arbitrary_format/xml_serializers/RapidXmlTree.h>
 
-//#include "utility/metaprogramming.h"
+//#include <arbitrary_format/utility/metaprogramming.h>
 
 #include <cstdint>
 #include <iostream>

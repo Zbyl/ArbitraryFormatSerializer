@@ -15,8 +15,8 @@
 #ifndef ArbitraryFormatSerializer_const_formatter_H
 #define ArbitraryFormatSerializer_const_formatter_H
 
-#include "serialization_exceptions.h"
-#include "binary_formatters/verbatim_formatter.h"
+#include <arbitrary_format/serialization_exceptions.h>
+#include <arbitrary_format/binary_formatters/verbatim_formatter.h>
 
 #include <boost/type_traits/remove_const.hpp>
 #include <boost/range/algorithm/equal.hpp>

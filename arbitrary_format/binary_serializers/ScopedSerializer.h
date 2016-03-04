@@ -15,9 +15,8 @@
 #ifndef ArbitraryFormatSerializer_ScopedSerializer_H
 #define ArbitraryFormatSerializer_ScopedSerializer_H
 
-#include "ISerializer.h"
-
-#include "serialization_exceptions.h"
+#include <arbitrary_format/binary_serializers/ISerializer.h>
+#include <arbitrary_format/serialization_exceptions.h>
 
 #include <cstdint>
 

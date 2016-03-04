@@ -15,9 +15,9 @@
 #ifndef ArbitraryFormatSerializer_attribute_formatter_H
 #define ArbitraryFormatSerializer_attribute_formatter_H
 
-#include "assign_text_content.h"
-#include "utility/compile_time_string.h"
-#include "serialization_exceptions.h"
+#include <arbitrary_format/xml_formatters/assign_text_content.h>
+#include <arbitrary_format/utility/compile_time_string.h>
+#include <arbitrary_format/serialization_exceptions.h>
 
 #include <string>
 

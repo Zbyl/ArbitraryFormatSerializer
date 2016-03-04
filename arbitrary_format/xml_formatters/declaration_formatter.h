@@ -14,9 +14,8 @@
 #ifndef ArbitraryFormatSerializer_declaration_formatter_H
 #define ArbitraryFormatSerializer_declaration_formatter_H
 
-#include "lexical_stringizer.h"
-
-#include "serialization_exceptions.h"
+#include <arbitrary_format/xml_formatters/lexical_stringizer.h>
+#include <arbitrary_format/serialization_exceptions.h>
 
 #include <string>
 #include <vector>

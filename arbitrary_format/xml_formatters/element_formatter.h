@@ -15,8 +15,8 @@
 #ifndef ArbitraryFormatSerializer_element_formatter_H
 #define ArbitraryFormatSerializer_element_formatter_H
 
-#include "serialization_exceptions.h"
-#include "utility/compile_time_string.h"
+#include <arbitrary_format/serialization_exceptions.h>
+#include <arbitrary_format/utility/compile_time_string.h>
 
 #include <string>
 #include <vector>

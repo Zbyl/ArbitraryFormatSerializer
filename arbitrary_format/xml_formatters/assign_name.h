@@ -14,7 +14,7 @@
 #ifndef ArbitraryFormatSerializer_assign_name_H
 #define ArbitraryFormatSerializer_assign_name_H
 
-#include "lexical_stringizer.h"
+#include <arbitrary_format/xml_formatters/lexical_stringizer.h>
 
 #include <string>
 

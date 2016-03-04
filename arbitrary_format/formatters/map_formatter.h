@@ -14,8 +14,8 @@
 #ifndef ArbitraryFormatSerializer_map_formatter_H
 #define ArbitraryFormatSerializer_map_formatter_H
 
-#include "collection_formatter.h"
-#include "pair_formatter.h"
+#include <arbitrary_format/formatters/collection_formatter.h>
+#include <arbitrary_format/formatters/pair_formatter.h>
 
 namespace arbitrary_format
 {

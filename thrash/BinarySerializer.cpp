@@ -1,24 +1,24 @@
 // BinarySerializer.cpp : Defines the entry point for the console application.
 //
 
-#include "serialize.h"
-#include "binary_serializers/ISerializer.h"
+#include <arbitrary_format/serialize.h>
+#include <arbitrary_format/binary_serializers/ISerializer.h>
 
-#include "implement_save_load_serialize.h"
-#include "binary_formatters/string_formatter.h"
-#include "formatters/map_formatter.h"
-#include "formatters/vector_formatter.h"
-#include "binary_formatters/endian_formatter.h"
-#include "formatters/const_formatter.h"
-#include "formatters/array_formatter.h"
-#include "binary_formatters/inefficient_size_prefix_formatter.h"
-#include "formatters/type_formatter.h"
-#include "formatters/any_formatter.h"
+#include <arbitrary_format/implement_save_load_serialize.h>
+#include <arbitrary_format/binary_formatters/string_formatter.h>
+#include <arbitrary_format/formatters/map_formatter.h>
+#include <arbitrary_format/formatters/vector_formatter.h>
+#include <arbitrary_format/binary_formatters/endian_formatter.h>
+#include <arbitrary_format/formatters/const_formatter.h>
+#include <arbitrary_format/formatters/array_formatter.h>
+#include <arbitrary_format/binary_formatters/inefficient_size_prefix_formatter.h>
+#include <arbitrary_format/formatters/type_formatter.h>
+#include <arbitrary_format/formatters/any_formatter.h>
 
-#include "binary_serializers/VectorSaveSerializer.h"
-#include "binary_serializers/CoutSerializer.h"
-#include "binary_serializers/SizeCountingSerializer.h"
-#include "binary_serializers/MemorySerializer.h"
+#include <arbitrary_format/binary_serializers/VectorSaveSerializer.h>
+#include <arbitrary_format/binary_serializers/CoutSerializer.h>
+#include <arbitrary_format/binary_serializers/SizeCountingSerializer.h>
+#include <arbitrary_format/binary_serializers/MemorySerializer.h>
 
 #include <cstdint>
 #include <string>

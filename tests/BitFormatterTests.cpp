@@ -5,12 +5,12 @@
 #pragma message("Microsoft Visual C++ older than 2015 cannot compile this code.")
 #else
 
-#include "serialize.h"
-#include "binary_serializers/VectorSaveSerializer.h"
-#include "binary_serializers/MemorySerializer.h"
+#include <arbitrary_format/serialize.h>
+#include <arbitrary_format/binary_serializers/VectorSaveSerializer.h>
+#include <arbitrary_format/binary_serializers/MemorySerializer.h>
 
-#include "binary_formatters/bit_formatter.h"
-#include "formatters/const_formatter.h"
+#include <arbitrary_format/binary_formatters/bit_formatter.h>
+#include <arbitrary_format/formatters/const_formatter.h>
 
 #include "gtest/gtest.h"
 

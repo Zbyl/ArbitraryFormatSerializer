@@ -16,7 +16,7 @@
 #ifndef ArbitraryFormatSerializer_has_method_H
 #define ArbitraryFormatSerializer_has_method_H
 
-#include "serialization_exceptions.h"
+#include <arbitrary_format/serialization_exceptions.h>
 
 #include <boost/type_traits/integral_constant.hpp>
 

@@ -14,8 +14,8 @@
 #ifndef ArbitraryFormatSerializer_array_formatter_H
 #define ArbitraryFormatSerializer_array_formatter_H
 
-#include "serialize_buffer.h"
-#include "binary_formatters/verbatim_formatter.h"
+#include <arbitrary_format/formatters/serialize_buffer.h>
+#include <arbitrary_format/binary_formatters/verbatim_formatter.h>
 
 #include <array>
 

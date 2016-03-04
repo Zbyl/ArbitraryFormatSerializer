@@ -1,11 +1,11 @@
 // Benchmarks.cpp - benchmarks for BinaryFormatSerializer
 //
 
-#include "serialize.h"
-#include "binary_serializers/VectorSaveSerializer.h"
+#include <arbitrary_format/serialize.h>
+#include <arbitrary_format/binary_serializers/VectorSaveSerializer.h>
 
-#include "binary_formatters/endian_formatter.h"
-#include "formatters/vector_formatter.h"
+#include <arbitrary_format/binary_formatters/endian_formatter.h>
+#include <arbitrary_format/formatters/vector_formatter.h>
 
 #include "benchmark/benchmark.h"
 

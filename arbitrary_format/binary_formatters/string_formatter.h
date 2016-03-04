@@ -14,8 +14,8 @@
 #ifndef ArbitraryFormatSerializer_string_formatter_H
 #define ArbitraryFormatSerializer_string_formatter_H
 
-#include "formatters/serialize_buffer.h"
-#include "binary_formatters/endian_formatter.h"
+#include <arbitrary_format/formatters/serialize_buffer.h>
+#include <arbitrary_format/binary_formatters/endian_formatter.h>
 
 #include <string>
 

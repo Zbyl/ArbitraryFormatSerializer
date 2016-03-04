@@ -15,7 +15,7 @@
 #ifndef ArbitraryFormatSerializer_implement_save_load_serialize_H
 #define ArbitraryFormatSerializer_implement_save_load_serialize_H
 
-#include "utility/has_method.h"
+#include <arbitrary_format/utility/has_method.h>
 
 #include <type_traits>
 

@@ -14,13 +14,13 @@
 #ifndef ArbitraryFormatSerializer_XmlTree_H
 #define ArbitraryFormatSerializer_XmlTree_H
 
-#include "serialization_exceptions.h"
+#include <arbitrary_format/serialization_exceptions.h>
 
 #include <vector>
 #include <ostream>
 
-#include "../../third_party/rapidxml-1.13/rapidxml.hpp"
-#include "../../third_party/rapidxml-1.13/rapidxml_print.hpp"
+#include <arbitrary_format/../third_party/rapidxml-1.13/rapidxml.hpp>
+#include <arbitrary_format/../third_party/rapidxml-1.13/rapidxml_print.hpp>
 
 #include <boost/optional.hpp>
 

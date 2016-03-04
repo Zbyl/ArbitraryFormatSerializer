@@ -100,7 +100,7 @@ struct make_compile_time_string1
 
 #else
 
-#include "../third_party/typestring/typestring.hh"
+#include <arbitrary_format/../third_party/typestring/typestring.hh>
 
 namespace arbitrary_format
 {

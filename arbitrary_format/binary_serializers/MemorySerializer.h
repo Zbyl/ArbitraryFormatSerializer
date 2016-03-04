@@ -14,9 +14,9 @@
 #ifndef ArbitraryFormatSerializer_MemorySerializer_H
 #define ArbitraryFormatSerializer_MemorySerializer_H
 
-#include "ISerializer.h"
+#include <arbitrary_format/binary_serializers/ISerializer.h>
 
-#include "serialization_exceptions.h"
+#include <arbitrary_format/serialization_exceptions.h>
 
 #include <cstdint>
 #include <type_traits>

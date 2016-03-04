@@ -3,20 +3,20 @@
 
 // TODO: Base 128 Varint formatter and all of Google protocol buffers
 
-#include "serialize.h"
-#include "binary_serializers/ISerializer.h"
+#include <arbitrary_format/serialize.h>
+#include <arbitrary_format/binary_serializers/ISerializer.h>
 
-#include "binary_formatters/string_formatter.h"
-#include "formatters/map_formatter.h"
-#include "binary_formatters/endian_formatter.h"
-//#include "formatters/type_formatter.h"
-//#include "formatters/any_formatter.h"
-#include "formatters/vector_formatter.h"
-#include "formatters/const_formatter.h"
-//#include "binary_formatters/bit_formatter.h"
+#include <arbitrary_format/binary_formatters/string_formatter.h>
+#include <arbitrary_format/formatters/map_formatter.h>
+#include <arbitrary_format/binary_formatters/endian_formatter.h>
+//#include <arbitrary_format/formatters/type_formatter.h>
+//#include <arbitrary_format/formatters/any_formatter.h>
+#include <arbitrary_format/formatters/vector_formatter.h>
+#include <arbitrary_format/formatters/const_formatter.h>
+//#include <arbitrary_format/binary_formatters/bit_formatter.h>
 
-#include "binary_serializers/VectorSaveSerializer.h"
-#include "binary_serializers/MemorySerializer.h"
+#include <arbitrary_format/binary_serializers/VectorSaveSerializer.h>
+#include <arbitrary_format/binary_serializers/MemorySerializer.h>
 
 #include <cstdint>
 #include <string>
@@ -32,7 +32,7 @@ void ela()
     //bit_formatter<boost::endian::order::little, 1, 7>().save(vectorWriter, 1, 0xFF);
 }
 
-#include "utility/has_member.h"
+#include <arbitrary_format/utility/has_member.h>
 
 struct WithX { int X; };
 struct WithoutX { int Y; };

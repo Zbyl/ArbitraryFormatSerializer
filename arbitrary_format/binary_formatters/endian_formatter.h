@@ -15,10 +15,10 @@
 #ifndef ArbitraryFormatSerializer_endian_formatter_H
 #define ArbitraryFormatSerializer_endian_formatter_H
 
-#include "utility/integer_for_size.h"
-#include "utility/integer_of_size.h"
-#include "serialization_exceptions.h"
-#include "verbatim_formatter.h"
+#include <arbitrary_format/utility/integer_for_size.h>
+#include <arbitrary_format/utility/integer_of_size.h>
+#include <arbitrary_format/serialization_exceptions.h>
+#include <arbitrary_format/binary_formatters/verbatim_formatter.h>
 
 #include <type_traits>
 

@@ -14,11 +14,10 @@
 #ifndef ArbitraryFormatSerializer_document_formatter_H
 #define ArbitraryFormatSerializer_document_formatter_H
 
-#include "declaration_formatter.h"
-#include "element_formatter.h"
-#include "serialization_exceptions.h"
-
-#include "formatters/const_formatter.h"
+#include <arbitrary_format/xml_formatters/declaration_formatter.h>
+#include <arbitrary_format/xml_formatters/element_formatter.h>
+#include <arbitrary_format/formatters/const_formatter.h>
+#include <arbitrary_format/serialization_exceptions.h>
 
 #include <string>
 #include <vector>

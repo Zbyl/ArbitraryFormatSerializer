@@ -14,7 +14,7 @@
 #ifndef ArbitraryFormatSerializer_content_check_H
 #define ArbitraryFormatSerializer_content_check_H
 
-#include "lexical_stringizer.h"
+#include <arbitrary_format/xml_formatters/lexical_stringizer.h>
 
 #include <string>
 

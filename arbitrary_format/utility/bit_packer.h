@@ -14,8 +14,8 @@
 #ifndef ArbitraryFormatSerializer_bit_packer_H
 #define ArbitraryFormatSerializer_bit_packer_H
 
-#include "integer_of_size.h"
-#include "metaprogramming.h"
+#include <arbitrary_format/utility/integer_of_size.h>
+#include <arbitrary_format/utility/metaprogramming.h>
 
 #include <type_traits>
 #include <tuple>

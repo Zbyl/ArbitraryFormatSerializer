@@ -14,7 +14,7 @@
 #ifndef ArbitraryFormatSerializer_CoutSerializer_H
 #define ArbitraryFormatSerializer_CoutSerializer_H
 
-#include "ISerializer.h"
+#include <arbitrary_format/binary_serializers/ISerializer.h>
 
 #include <iostream>
 #include <cstdint>

@@ -14,7 +14,7 @@
 #ifndef ArbitraryFormatSerializer_object_formatter_H
 #define ArbitraryFormatSerializer_object_formatter_H
 
-#include "implement_save_load_serialize.h"
+#include <arbitrary_format/implement_save_load_serialize.h>
 
 namespace arbitrary_format
 {

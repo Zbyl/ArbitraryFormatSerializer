@@ -14,12 +14,11 @@
 #ifndef ArbitraryFormatSerializer_serialization_exceptions_H
 #define ArbitraryFormatSerializer_serialization_exceptions_H
 
+#include <cstdint>
 #include <exception>
 
-#include <boost/exception/exception.hpp>
 #include <boost/exception/all.hpp>
 #include <boost/throw_exception.hpp>
-#include <boost/cstdint.hpp>
 
 namespace arbitrary_format
 {
@@ -57,7 +56,7 @@ class not_implemented : public virtual serialization_exception
 namespace detail
 {
     typedef boost::error_info<struct tag_description, const char*> errinfo_description;
-    typedef boost::error_info<struct tag_requested_this_many_bytes_more, boost::uintmax_t> errinfo_requested_this_many_bytes_more;
+    typedef boost::error_info<struct tag_requested_this_many_bytes_more, uintmax_t> errinfo_requested_this_many_bytes_more;
 } // namespace detail
 
 } // namespace arbitrary_format

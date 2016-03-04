@@ -14,10 +14,9 @@
 #ifndef ArbitraryFormatSerializer_ZeroCopyVectorSerializer_H
 #define ArbitraryFormatSerializer_ZeroCopyVectorSerializer_H
 
-#include "ISerializer.h"
-#include "IZeroCopySerializer.h"
-
-#include "serialization_exceptions.h"
+#include <arbitrary_format/binary_serializers/ISerializer.h>
+#include <arbitrary_format/binary_serializers/IZeroCopySerializer.h>
+#include <arbitrary_format/serialization_exceptions.h>
 
 #include <vector>
 

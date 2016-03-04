@@ -14,8 +14,8 @@
 #ifndef ArbitraryFormatSerializer_bit_formatter_H
 #define ArbitraryFormatSerializer_bit_formatter_H
 
-#include "endian_formatter.h"
-#include "utility/bit_packer.h"
+#include <arbitrary_format/binary_formatters/endian_formatter.h>
+#include <arbitrary_format/utility/bit_packer.h>
 
 namespace arbitrary_format
 {
