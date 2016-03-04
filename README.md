@@ -18,6 +18,7 @@ Distributed under Apache License, Version 2.0 (http://www.apache.org/licenses/LI
 - [Further reading](#further-reading)
   - [Xml serialization](docs/XmlSerialization.md)
   - [Formatters quick reference](docs/Formatters.md)
+- [Third-party libraries](#third-party-libraries)
 - [Rationale](#rationale)
 - [Competition](#competition)
 - [Implementation notes](#implementation-notes)
@@ -42,11 +43,11 @@ Please add `ArbitraryFormatSerializer` folder to the include directories of your
 You will then be able to use includes like this:
 
 ```cpp
-#include "arbitrary_format/serialize.h"
-#include "arbitrary_format/binary_serializers/VectorSaveSerializer.h"
-#include "arbitrary_format/binary_serializers/MemorySerializer.h"
-#include "arbitrary_format/binary_formatters/endian_formatter.h"
-#include "arbitrary_format/binary_formatters/string_formatter.h"
+#include <arbitrary_format/serialize.h>
+#include <arbitrary_format/binary_serializers/VectorSaveSerializer.h>
+#include <arbitrary_format/binary_serializers/MemorySerializer.h>
+#include <arbitrary_format/binary_formatters/endian_formatter.h>
+#include <arbitrary_format/binary_formatters/string_formatter.h>
 ```
 
 > **Note** This is a header only library, so you don't need to link to it. Just include the headers.
@@ -432,6 +433,19 @@ Xml serialization is explained in more detail in this article:
 
 A list of all currently available formatters is in this article:
 [Formatters quick reference](docs/Formatters.md)
+
+Third-party libraries
+=====================
+
+Xml serialization is built using "RapidXml" library by Marcin Kalicinski.
+RapidXml is licensed under two licenses: "Boost Software License - Version 1.0" and "The MIT License"
+See: http://rapidxml.sourceforge.net/
+
+Compile time string types are built on top of "typestring" library by George Makrydakis.
+Typestring is licensed under "Mozilla Public Licence 2.0".
+See: https://github.com/irrequietus/typestring
+
+Both of those libraries are provided in "third_party" directory.
 
 Rationale
 =========
