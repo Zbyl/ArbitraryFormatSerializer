@@ -18,7 +18,7 @@
 
 #include <arbitrary_format/serialization_exceptions.h>
 
-#include <boost/type_traits/integral_constant.hpp>
+#include <type_traits>
 
 namespace arbitrary_format
 {
@@ -46,7 +46,7 @@ namespace arbitrary_format
     }; \
      \
     template<typename T, typename Signature> \
-    class has_method_ ## member : public boost::integral_constant< bool, has_method_impl_ ## member <T, Signature>::value > {};
+    class has_method_ ## member : public std::integral_constant< bool, has_method_impl_ ## member <T, Signature>::value > {};
 
 } // namespace arbitrary_format
 

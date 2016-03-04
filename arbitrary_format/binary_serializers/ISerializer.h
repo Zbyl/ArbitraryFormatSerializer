@@ -113,7 +113,7 @@ struct CantMakePolymorphicSerializer
 {
     CantMakePolymorphicSerializer()
     {
-        static_assert(false && (sizeof(TSerializer) > 0), "Can't make a polymorphic serializer from a serializer that isn't a loading nor a saving serializer.");
+        static_assert(false && (sizeof(TSerializer) >= 0), "Can't make a polymorphic serializer from a serializer that isn't a loading nor a saving serializer.");
     }
 };
 

@@ -207,7 +207,7 @@ template<typename TSerializer>
 typename std::enable_if< !is_saving_serializer<TSerializer>::value && !is_loading_serializer<TSerializer>::value, bool >::type
 is_serializer_saving(TSerializer& serializer)
 {
-    static_assert(false && (sizeof(TSerializer) > 0), "Serializer isn't specifically a loading or saving serializer.");
+    static_assert(false && (sizeof(TSerializer) >= 0), "Serializer isn't specifically a loading or saving serializer.");
 }
 
 template<typename TSerializer>

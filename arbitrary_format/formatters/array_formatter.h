@@ -18,9 +18,7 @@
 #include <arbitrary_format/binary_formatters/verbatim_formatter.h>
 
 #include <array>
-
-#include <boost/static_assert.hpp>
-#include <boost/utility/enable_if.hpp>
+#include <type_traits>
 
 namespace arbitrary_format
 {
@@ -39,14 +37,14 @@ public:
     template<typename ValueType, typename TSerializer>
     void save(TSerializer& serializer, const ValueType *const array) const
     {
-        BOOST_STATIC_ASSERT(ArraySize >= 0);
+        static_assert(ArraySize >= 0, "Array size must not be negative.");
         save_buffer(serializer, ArraySize, array, value_formatter);
     }
 
     template<typename ValueType, typename TSerializer>
     void load(TSerializer& serializer, ValueType *const array) const
     {
-        BOOST_STATIC_ASSERT(ArraySize >= 0);
+        static_assert(ArraySize >= 0, "Array size must not be negative.");
         load_buffer(serializer, ArraySize, array, value_formatter);
     }
 };

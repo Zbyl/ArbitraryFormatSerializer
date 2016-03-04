@@ -16,7 +16,7 @@
 #ifndef ArbitraryFormatSerializer_has_member_H
 #define ArbitraryFormatSerializer_has_member_H
 
-#include <boost/type_traits/integral_constant.hpp>
+#include <type_traits>
 
 namespace arbitrary_format
 {
@@ -44,7 +44,7 @@ namespace arbitrary_format
     }; \
      \
     template<typename T> \
-    class has_member_ ## member : public boost::integral_constant< bool, has_member_impl_ ## member <T>::value > {}
+    class has_member_ ## member : public std::integral_constant< bool, has_member_impl_ ## member <T>::value > {}
 
 } // namespace arbitrary_format
 

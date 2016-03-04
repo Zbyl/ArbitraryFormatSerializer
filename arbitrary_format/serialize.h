@@ -63,7 +63,7 @@ template<typename Formatter, typename T, typename TSerializer>
 typename std::enable_if< !is_saving_serializer<TSerializer>::value && !is_loading_serializer<TSerializer>::value >::type
 serialize(TSerializer& serializer, T&& object, Formatter&& formatter = Formatter())
 {
-    static_assert(false && (sizeof(TSerializer) > 0), "Can't call serialize() function for a serializer that isn't specifically loading or saving serializer.");
+    static_assert(false && (sizeof(TSerializer) >= 0), "Can't call serialize() function for a serializer that isn't specifically loading or saving serializer.");
 }
 
 /// @brief Serializes given object using specified serializer and formatter.
@@ -72,7 +72,7 @@ template<typename Formatter, typename T, typename TSerializer>
 typename std::enable_if< is_saving_serializer<TSerializer>::value && is_loading_serializer<TSerializer>::value >::type
 serialize(TSerializer& serializer, T&& object, Formatter&& formatter = Formatter())
 {
-    static_assert(false && (sizeof(TSerializer) > 0), "Can't call serialize() function for a serializer that is both loading and saving serializer. Use slow_serialize() to serialize with runtime check.");
+    static_assert(false && (sizeof(TSerializer) >= 0), "Can't call serialize() function for a serializer that is both loading and saving serializer. Use slow_serialize() to serialize with runtime check.");
 }
 
 /// @brief Serializes given object using specified serializer and formatter.

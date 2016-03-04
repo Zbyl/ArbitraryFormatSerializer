@@ -17,7 +17,7 @@
 
 #include <arbitrary_format/binary_formatters/verbatim_formatter.h>
 
-#include <boost/utility/enable_if.hpp>
+#include <type_traits>
 
 namespace arbitrary_format
 {
@@ -36,7 +36,7 @@ template<typename ValueFormatter, typename ValueType, typename TSerializer, type
 typename std::enable_if< binary::is_verbatim_formatter<ValueFormatter, ValueType>::value >::type 
 save_buffer(TSerializer& serializer, SizeType size, const ValueType *const array, ValueFormatter&& value_formatter)
 {
-    serializer.saveData(reinterpret_cast<const boost::uint8_t*>(array), size * sizeof(ValueType));
+    serializer.saveData(reinterpret_cast<const uint8_t*>(array), size * sizeof(ValueType));
 }
 
 template<typename ValueFormatter, typename ValueType, typename TSerializer, typename SizeType>
@@ -53,7 +53,7 @@ template<typename ValueFormatter, typename ValueType, typename TSerializer, type
 typename std::enable_if< binary::is_verbatim_formatter<ValueFormatter, ValueType>::value >::type 
 load_buffer(TSerializer& serializer, SizeType size, ValueType *const array, ValueFormatter&& value_formatter)
 {
-    serializer.loadData(reinterpret_cast<boost::uint8_t*>(array), size * sizeof(ValueType));
+    serializer.loadData(reinterpret_cast<uint8_t*>(array), size * sizeof(ValueType));
 }
 
 } // namespace arbitrary_format

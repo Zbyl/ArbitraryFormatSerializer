@@ -77,7 +77,7 @@ public:
         // we save only Size most significant bytes
         static const size_t saveOffset = (boost::endian::order::little == TargetOrder) ? (sizeof(SizedInt) - Size) : 0;
         SizedInt endian_shuffled_value = boost::endian::conditional_reverse<boost::endian::order::native, TargetOrder>(resized_value); 
-        serializer.saveData(reinterpret_cast<boost::uint8_t*>(&endian_shuffled_value) + saveOffset, Size);
+        serializer.saveData(reinterpret_cast<uint8_t*>(&endian_shuffled_value) + saveOffset, Size);
     }
 
     /// @brief Loads given pod from TargetOrder byte order.
@@ -111,7 +111,7 @@ public:
 
         // we load only Size most significant bytes
         static const size_t loadOffset = (boost::endian::order::little == TargetOrder) ? (sizeof(SizedInt) - Size) : 0;
-        serializer.loadData(reinterpret_cast<boost::uint8_t*>(&endian_shuffled_value) + loadOffset, Size);
+        serializer.loadData(reinterpret_cast<uint8_t*>(&endian_shuffled_value) + loadOffset, Size);
         SizedInt resized_value = boost::endian::conditional_reverse<TargetOrder, boost::endian::order::native>(endian_shuffled_value); 
 
         resized_value >>= (sizeof(SizedInt) - Size) * 8;
@@ -145,12 +145,12 @@ private:
 
         if (TargetOrder == boost::endian::order::native)
         {
-            serializer.saveData(reinterpret_cast<const boost::uint8_t*>(&pod), Size);
+            serializer.saveData(reinterpret_cast<const uint8_t*>(&pod), Size);
         }
         else
         {
             uint8_t rawValue[Size];
-            auto begin = reinterpret_cast<const boost::uint8_t*>(&pod);
+            auto begin = reinterpret_cast<const uint8_t*>(&pod);
             std::reverse_copy(begin, begin + Size, rawValue);
             serializer.saveData(rawValue, Size);
         }
@@ -165,13 +165,13 @@ private:
 
         if (TargetOrder == boost::endian::order::native)
         {
-            serializer.loadData(reinterpret_cast<boost::uint8_t*>(&pod), Size);
+            serializer.loadData(reinterpret_cast<uint8_t*>(&pod), Size);
         }
         else
         {
             uint8_t rawValue[Size];
             serializer.loadData(rawValue, Size);
-            auto begin = reinterpret_cast<boost::uint8_t*>(&pod);
+            auto begin = reinterpret_cast<uint8_t*>(&pod);
             std::reverse_copy(rawValue, rawValue + Size, begin);
         }
     }

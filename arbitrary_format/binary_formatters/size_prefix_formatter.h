@@ -29,7 +29,7 @@ namespace binary
 ///        Overload this function to provide more meaningful semantics.
 ///        Overloads of this function will be found using Argument Dependent Lookup.
 template<typename Formatter>
-const Formatter& sized_formatter(const Formatter& formatter, boost::uintmax_t byteCount)
+const Formatter& sized_formatter(const Formatter& formatter, uintmax_t byteCount)
 {
     return formatter;
 }

@@ -41,7 +41,7 @@ public:
     }
 
     template<typename TSerializer, typename U>
-    typename std::enable_if< !std::is_const<T>::value >::type
+    typename std::enable_if< !std::is_const<T>::value && (sizeof(TSerializer) >= 0) >::type
     load(TSerializer& serializer, U& value) const
     {
         value = ext_value;

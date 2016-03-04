@@ -18,7 +18,8 @@
 #include <arbitrary_format/serialization_exceptions.h>
 #include <arbitrary_format/binary_formatters/verbatim_formatter.h>
 
-#include <boost/type_traits/remove_const.hpp>
+#include <type_traits>
+
 #include <boost/range/algorithm/equal.hpp>
 
 namespace arbitrary_format
@@ -71,7 +72,7 @@ public:
     template<typename ValueType, typename TSerializer>
     void load(TSerializer& serializer, const ValueType& expected_value) const
     {
-        typename boost::remove_const<ValueType>::type loaded_value;
+        typename std::remove_cv<ValueType>::type loaded_value;
         value_formatter.load(serializer, loaded_value);
         if (!detail::const_formatter_equals(loaded_value, expected_value))
         {

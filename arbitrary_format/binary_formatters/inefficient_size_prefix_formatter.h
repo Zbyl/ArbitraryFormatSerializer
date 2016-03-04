@@ -44,7 +44,7 @@ public:
         SizeCountingSerializer sizeCountingSerializer;
         value_formatter.save(sizeCountingSerializer, value);
 
-        boost::uintmax_t byteCount = sizeCountingSerializer.getByteCount();
+        uintmax_t byteCount = sizeCountingSerializer.getByteCount();
         size_formatter.save(serializer, byteCount);
 
         value_formatter.save(serializer, value);
@@ -55,7 +55,7 @@ public:
     template<typename ValueType, typename TSerializer>
     void load(TSerializer& serializer, ValueType& value) const
     {
-        boost::uintmax_t byteCount;
+        uintmax_t byteCount;
         size_formatter.load(serializer, byteCount);
 
         ScopedSerializer<TSerializer> scopedSerializer(serializer, byteCount);
