@@ -6,7 +6,7 @@ compiler:
   - gcc
 before_script:
   - sudo apt-get update -qq -y
-  - sudo apt-get install libboost-all-dev -y
+  - sudo apt-get install libboost1.58-dev -y
 script:
   - mkdir build-zz
   - cd build-zz
