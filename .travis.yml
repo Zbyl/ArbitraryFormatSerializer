@@ -1,0 +1,14 @@
+language: cpp
+sudo: required
+dist: trusty
+before_script:
+  - sudo apt-get update -qq
+  - sudo apt-get install libboost-all-dev
+script:
+  - mkdir build-zz
+  - cd build-zz
+  - cmake ../thrash
+  - make
+compiler:
+  - clang
+  - gcc
