@@ -1,7 +1,7 @@
 cmake_minimum_required (VERSION 3.0)
 project (ArbitraryThrash)
 
-find_package(Boost 1.59.0)
+find_package(Boost 1.58.0)
 if(Boost_FOUND)
   include_directories(${Boost_INCLUDE_DIRS})
 else()
