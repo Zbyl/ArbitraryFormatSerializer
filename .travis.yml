@@ -17,8 +17,8 @@ addons:
 env:
   - BOOST_BRANCH=boost-1.58.0
 before_script:
-  - sudo apt-get update -qq -y
-  - sudo apt-get install clang-3.7 -y
+  #- sudo apt-get update -qq -y
+  #- sudo apt-get install clang-3.7 -y
   #- sudo apt-get install libboost1.58-dev -y
   # From this point and below code is same for all the Boost libs
   # Cloning Boost libraries (fast nondeep cloning)
