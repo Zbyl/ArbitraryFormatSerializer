@@ -1,9 +1,19 @@
 language: cpp
-sudo: required
-dist: trusty
+sudo: false
+#sudo: required
+#dist: trusty
 #compiler:
 #  - clang
 #  - gcc
+addons:
+    apt:
+        sources:
+            - llvm-toolchain-precise
+            - ubuntu-toolchain-r-test
+        packages:
+            - clang-3.7
+            #- g++-5
+            #- gcc-5
 env:
   - BOOST_BRANCH=boost-1.58.0
 before_script:
