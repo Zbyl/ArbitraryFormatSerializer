@@ -6,7 +6,8 @@ ArbitraryFormatSerializer is a header only library for serializing data into arb
 Distributed under Apache License, Version 2.0 (http://www.apache.org/licenses/LICENSE-2.0)  
 (c) 2014-2016 Zbigniew Skowron, zbychs@gmail.com
 
-[![Build Status](https://travis-ci.org/Zbyl/ArbitraryFormatSerializer.svg?branch=master)](https://travis-ci.org/Zbyl/ArbitraryFormatSerializer)
+[![Travis CI Status](https://travis-ci.org/Zbyl/ArbitraryFormatSerializer.svg?branch=master)](https://travis-ci.org/Zbyl/ArbitraryFormatSerializer)
+[![Coverity Status](https://img.shields.io/coverity/scan/8206.svg)](https://scan.coverity.com/projects/zbyl-arbitraryformatserializer)
 
 **Table of Contents**
 
