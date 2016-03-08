@@ -1,13 +1,14 @@
 language: cpp
 sudo: required
 dist: trusty
-compiler:
-  - clang
-  - gcc
+#compiler:
+#  - clang
+#  - gcc
 env:
   - BOOST_BRANCH=boost-1.58.0
 before_script:
-  #- sudo apt-get update -qq -y
+  - sudo apt-get update -qq -y
+  - sudo apt-get install clang-3.7 -y
   #- sudo apt-get install libboost1.58-dev -y
   # From this point and below code is same for all the Boost libs
   # Cloning Boost libraries (fast nondeep cloning)
@@ -19,10 +20,11 @@ before_script:
   - git submodule update --init --merge
   - ./bootstrap.sh
   - ./b2 headers
-  - export BOOST_ROOT=$BOOST
   - cd $PROJECT_DIR
   - mkdir build-zz
   - cd build-zz
+  - export BOOST_ROOT=$BOOST
+  - export CXX=/usr/bin/clang++-3.7
   - cmake ../thrash
   - make
 after_success:
