@@ -19,6 +19,7 @@ before_script:
   - git submodule update --init --merge
   - ./bootstrap.sh
   - ./b2 headers
+  - export BOOST_ROOT=$BOOST
   - cd $PROJECT_DIR
   - mkdir build-zz
   - cd build-zz
