@@ -1,11 +1,12 @@
 cmake_minimum_required (VERSION 2.8)
 project (ArbitraryThrash)
 
-find_package(Boost 1.58.0)
+find_package(Boost 1.56.0)
 if(Boost_FOUND)
   include_directories(${Boost_INCLUDE_DIRS})
 else()
-  include_directories("../../boost_1_59_0")
+  #include_directories("../../boost_1_57_0")
+  message(FATAL_ERROR "Boost libraries not found.")
 endif()
 
 set(CommonCompilerFlags "")
