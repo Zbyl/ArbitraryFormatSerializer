@@ -11,7 +11,8 @@ pushd `pwd`
 
 ./ci-builds/prepare-build.sh
 
-echo "Building..."
+cd build-zz
+echo "Building in `pwd`..."
 make
 echo "Compilation done."
 

@@ -7,6 +7,8 @@
 # quit on errors
 set -e
 
+pushd `pwd`
+
 echo "Running CMake with COMPILER=$COMPILER and BOOST_ROOT=$BOOST_ROOT"
 
 export CXX="$COMPILER"
@@ -16,3 +18,5 @@ mkdir build-zz
 cd build-zz
 
 cmake ../thrash
+
+popd

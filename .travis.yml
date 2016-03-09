@@ -19,7 +19,7 @@ addons:
       name: "Zbyl/ArbitraryFormatSerializer"
       description: "Build submitted via Travis CI"
     notification_email: zbychs@gmail.com
-    build_command_prepend: "./ci-builds/prepare-build.sh"
+    build_command_prepend: "./ci-builds/prepare-build.sh; cd build-zz"
     build_command:   "make"
     branch_pattern: coverity_scan
     
@@ -62,7 +62,7 @@ before_install:
   #- pip install --user cpp-coveralls
 
 before_script:
-  - ./ci-builds/download-boost.sh $BOOST_VER
+  - . ./ci-builds/download-boost.sh $BOOST_VER
 
 script:
   - if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then ./ci-builds/build.sh ; fi
