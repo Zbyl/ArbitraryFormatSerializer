@@ -11,7 +11,7 @@ pushd %cd%
 mkdir build-zz
 cd build-zz
 
-cmake -G %GENERATOR% ..\thrash
+cmake -G "%GENERATOR%" ..\thrash
 if %errorlevel% neq 0 exit /b 1
 
 popd
