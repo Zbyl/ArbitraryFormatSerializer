@@ -6,7 +6,7 @@ set -e
 pushd `pwd`
 
 echo "Testing..."
-./Example-Person
+./build-zz/Example-Person
 echo "Testing done."
 
 popd

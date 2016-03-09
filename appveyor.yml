@@ -3,20 +3,21 @@ version: '{build}'
 configuration:
   - Debug
 
+os: Visual Studio 2015
+
+environment:
+  matrix:
+    - BOOST_ROOT: C:\Libraries\boost_1_59_0
+      BOOST_VER: 59
+      GENERATOR: "Visual Studio 14 2015 Win64"
+    - BOOST_ROOT: C:\Libraries\boost
+      BOOST_VER: 56
+      GENERATOR: "Visual Studio 12 2013 Win64"
+      #BOOST_LIBRARYDIR: c:\Libraries\boost\stage\lib
+  
 matrix:
   fast_finish: true
-  - os: Visual Studio 2015
-    environment:
-      - BOOST_ROOT: C:\Libraries\boost_1_59_0
-        BOOST_VER: 59
-        GENERATOR: "Visual Studio 14 2015 Win64"
-  - os: Windows Server 2012 R2
-    environment:
-      - BOOST_ROOT: C:\Libraries\boost
-        BOOST_VER: 56
-        GENERATOR: "Visual Studio 12 2013 Win64"
-        #BOOST_LIBRARYDIR: c:\Libraries\boost\stage\lib
-  
+
 install:
   - cinst cmake
 

@@ -9,12 +9,12 @@ set -e
 
 pushd `pwd`
 
-./prepare-build.sh
+./ci-builds/prepare-build.sh
 
 echo "Building..."
 make
 echo "Compilation done."
 
-./test.sh
-
 popd
+
+./ci-builds/test.sh
