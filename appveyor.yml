@@ -1,0 +1,30 @@
+version: '{build}'
+
+configuration:
+  - Debug
+
+matrix:
+  fast_finish: true
+  - os: Visual Studio 2015
+    environment:
+      - BOOST_ROOT: C:\Libraries\boost_1_59_0
+        BOOST_VER: 59
+        GENERATOR: "Visual Studio 14 2015 Win64"
+  - os: Windows Server 2012 R2
+    environment:
+      - BOOST_ROOT: C:\Libraries\boost
+        BOOST_VER: 56
+        GENERATOR: "Visual Studio 12 2013 Win64"
+        #BOOST_LIBRARYDIR: c:\Libraries\boost\stage\lib
+  
+install:
+  - cinst cmake
+
+before_build:
+  - .\ci-builds\prepare-build.bat
+
+build:
+  project: .\build-zz.\ArbitraryThrash.sln
+
+test_script:
+  - .\ci-builds\test.bat
