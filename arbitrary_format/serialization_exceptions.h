@@ -53,8 +53,8 @@ class not_implemented : public virtual serialization_exception
 {
 };
 
-using errinfo_description = typedef boost::error_info<struct tag_description, const char*>;
-using errinfo_requested_this_many_bytes_more = typedef boost::error_info<struct tag_requested_this_many_bytes_more, uintmax_t>;
+using errinfo_description = boost::error_info<struct tag_description, const char*>;
+using errinfo_requested_this_many_bytes_more = boost::error_info<struct tag_requested_this_many_bytes_more, uintmax_t>;
 
 } // namespace arbitrary_format
 
