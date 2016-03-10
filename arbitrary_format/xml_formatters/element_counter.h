@@ -51,6 +51,13 @@ public:
     {
         object = static_cast<T>(xmlTree.elementCount(name));
     }
+
+    /// @brief Special overload for bools to avoid warnings in this common case.
+    template<typename XmlTree>
+    void load(XmlTree& xmlTree, bool& object) const
+    {
+        object = (xmlTree.elementCount(name) > 0);
+    }
 };
 
 template<typename CompileTimeString>
