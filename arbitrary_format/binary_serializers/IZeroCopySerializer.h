@@ -38,11 +38,11 @@ public:
             {
                 if (saving())
                 {
-                    BOOST_THROW_EXCEPTION(end_of_space() << detail::errinfo_requested_this_many_bytes_more(size));
+                    BOOST_THROW_EXCEPTION(end_of_space() << errinfo_requested_this_many_bytes_more(size));
                 }
                 else
                 {
-                    BOOST_THROW_EXCEPTION(end_of_input() << detail::errinfo_requested_this_many_bytes_more(size));
+                    BOOST_THROW_EXCEPTION(end_of_input() << errinfo_requested_this_many_bytes_more(size));
                 }
             }
 

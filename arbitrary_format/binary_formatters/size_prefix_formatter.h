@@ -67,7 +67,7 @@ public:
         byteCount = static_cast<uintmax_t>(endPosition - dataPosition);
         if (byteCount < 0)
         {
-            BOOST_THROW_EXCEPTION(serialization_exception() << detail::errinfo_description("Data size cannot be less than zero."));
+            BOOST_THROW_EXCEPTION(serialization_exception() << errinfo_description("Data size cannot be less than zero."));
         }
 
         serializer.seek(initialPosition);
@@ -77,7 +77,7 @@ public:
 
         if (afterSizePosition != dataPosition)
         {
-            BOOST_THROW_EXCEPTION(serialization_exception() << detail::errinfo_description("size_formatter must always store the same number of bytes."));
+            BOOST_THROW_EXCEPTION(serialization_exception() << errinfo_description("size_formatter must always store the same number of bytes."));
         }
     }
 
@@ -90,7 +90,7 @@ public:
         size_formatter.load(serializer, byteCount);
         if (byteCount < 0)
         {
-            BOOST_THROW_EXCEPTION(serialization_exception() << detail::errinfo_description("Data size cannot be less than zero."));
+            BOOST_THROW_EXCEPTION(serialization_exception() << errinfo_description("Data size cannot be less than zero."));
         }
 
         ScopedSerializer<TSerializer> scopedSerializer(serializer, byteCount);

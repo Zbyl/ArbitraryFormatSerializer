@@ -64,7 +64,7 @@ public:
     {
         if (bytesProcessed < byteLimit)
         {
-            BOOST_THROW_EXCEPTION(invalid_data() << detail::errinfo_requested_this_many_bytes_more(byteLimit - bytesProcessed));
+            BOOST_THROW_EXCEPTION(invalid_data() << errinfo_requested_this_many_bytes_more(byteLimit - bytesProcessed));
         }
     }
 
@@ -101,11 +101,11 @@ private:
         {
             if (saving())
             {
-                BOOST_THROW_EXCEPTION(end_of_space() << detail::errinfo_requested_this_many_bytes_more(bytesProcessed - byteLimit));
+                BOOST_THROW_EXCEPTION(end_of_space() << errinfo_requested_this_many_bytes_more(bytesProcessed - byteLimit));
             }
             else
             {
-                BOOST_THROW_EXCEPTION(end_of_input() << detail::errinfo_requested_this_many_bytes_more(bytesProcessed - byteLimit));
+                BOOST_THROW_EXCEPTION(end_of_input() << errinfo_requested_this_many_bytes_more(bytesProcessed - byteLimit));
             }
         }
     }

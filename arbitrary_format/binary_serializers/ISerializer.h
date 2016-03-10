@@ -91,20 +91,20 @@ protected:
     {
         if (!saving())
         {
-            BOOST_THROW_EXCEPTION(serialization_exception() << detail::errinfo_description("Can't save to a loading serializer."));
+            BOOST_THROW_EXCEPTION(serialization_exception() << errinfo_description("Can't save to a loading serializer."));
         }
 
-        BOOST_THROW_EXCEPTION(serialization_exception() << detail::errinfo_description("Function should be implemented by subclass."));
+        BOOST_THROW_EXCEPTION(serialization_exception() << errinfo_description("Function should be implemented by subclass."));
     }
 
     void loadDataImpl(uint8_t* data, size_t size) override
     {
         if (!loading())
         {
-            BOOST_THROW_EXCEPTION(serialization_exception() << detail::errinfo_description("Can't load from a saving serializer."));
+            BOOST_THROW_EXCEPTION(serialization_exception() << errinfo_description("Can't load from a saving serializer."));
         }
 
-        BOOST_THROW_EXCEPTION(serialization_exception() << detail::errinfo_description("Function should be implemented by subclass."));
+        BOOST_THROW_EXCEPTION(serialization_exception() << errinfo_description("Function should be implemented by subclass."));
     }
 };    
 
@@ -172,13 +172,13 @@ private:
     template<typename T, typename std::enable_if< is_saving_serializer<T>::value && !is_loading_serializer<T>::value >::type* sfinae = nullptr>
     void doLoadData(uint8_t* data, size_t size)
     {
-        BOOST_THROW_EXCEPTION(serialization_exception() << detail::errinfo_description("Can't load from a saving serializer."));
+        BOOST_THROW_EXCEPTION(serialization_exception() << errinfo_description("Can't load from a saving serializer."));
     }
 
     template<typename T, typename std::enable_if< is_loading_serializer<T>::value && !is_saving_serializer<T>::value >::type* sfinae = nullptr>
     void doSaveData(const uint8_t* data, size_t size)
     {
-        BOOST_THROW_EXCEPTION(serialization_exception() << detail::errinfo_description("Can't save to a loading serializer."));
+        BOOST_THROW_EXCEPTION(serialization_exception() << errinfo_description("Can't save to a loading serializer."));
     }
 
     template<typename T, typename std::enable_if< is_loading_serializer<T>::value && !is_saving_serializer<T>::value >::type* sfinae = nullptr>
@@ -192,7 +192,7 @@ private:
     {
         if (!saving())
         {
-            BOOST_THROW_EXCEPTION(serialization_exception() << detail::errinfo_description("Can't save to a loading serializer."));
+            BOOST_THROW_EXCEPTION(serialization_exception() << errinfo_description("Can't save to a loading serializer."));
         }
 
         return serializer.saveData(data, size);
@@ -203,7 +203,7 @@ private:
     {
         if (!this->loading())
         {
-            BOOST_THROW_EXCEPTION(serialization_exception() << detail::errinfo_description("Can't load from a saving serializer."));
+            BOOST_THROW_EXCEPTION(serialization_exception() << errinfo_description("Can't load from a saving serializer."));
         }
 
         return serializer.loadData(data, size);

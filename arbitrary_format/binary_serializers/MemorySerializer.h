@@ -69,7 +69,7 @@ public:
     {
         if (pos > bufferSize)
         {
-            BOOST_THROW_EXCEPTION(serialization_exception() << detail::errinfo_description("Requested position is greater than size."));
+            BOOST_THROW_EXCEPTION(serialization_exception() << errinfo_description("Requested position is greater than size."));
         }
         bufferPosition = pos;
     }
@@ -81,7 +81,7 @@ public:
     {
         if (bufferPosition + size > bufferSize)
         {
-            BOOST_THROW_EXCEPTION(serialization_exception() << detail::errinfo_description("No space in buffer."));
+            BOOST_THROW_EXCEPTION(serialization_exception() << errinfo_description("No space in buffer."));
         }
         
         std::copy_n(data, size, buffer + bufferPosition);
@@ -126,7 +126,7 @@ public:
     {
         if (pos > bufferSize)
         {
-            BOOST_THROW_EXCEPTION(end_of_input() << detail::errinfo_requested_this_many_bytes_more(pos - bufferSize));
+            BOOST_THROW_EXCEPTION(end_of_input() << errinfo_requested_this_many_bytes_more(pos - bufferSize));
         }
         bufferPosition = pos;
     }
@@ -138,7 +138,7 @@ public:
     {
         if (bufferPosition + size > bufferSize)
         {
-            BOOST_THROW_EXCEPTION(end_of_input() << detail::errinfo_requested_this_many_bytes_more(bufferPosition + size - bufferSize));
+            BOOST_THROW_EXCEPTION(end_of_input() << errinfo_requested_this_many_bytes_more(bufferPosition + size - bufferSize));
         }
 
         std::copy_n(buffer + bufferPosition, size, data);
