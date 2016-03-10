@@ -44,7 +44,7 @@ public:
     {
         if (hasName())
         {
-            BOOST_THROW_EXCEPTION(serialization_exception() << detail::errinfo_description("Attribute already has a name."));
+            BOOST_THROW_EXCEPTION(serialization_exception() << errinfo_description("Attribute already has a name."));
         }
 
         auto doc = attribute.document();
@@ -56,7 +56,7 @@ public:
     {
         if (!hasName())
         {
-            BOOST_THROW_EXCEPTION(serialization_exception() << detail::errinfo_description("Attribute must have a name."));
+            BOOST_THROW_EXCEPTION(serialization_exception() << errinfo_description("Attribute must have a name."));
         }
 
         auto name = attribute.name();
@@ -75,7 +75,7 @@ public:
     {
         if (hasTextContent())
         {
-            BOOST_THROW_EXCEPTION(serialization_exception() << detail::errinfo_description("Attribute already has a value."));
+            BOOST_THROW_EXCEPTION(serialization_exception() << errinfo_description("Attribute already has a value."));
         }
 
         auto doc = attribute.document();
@@ -136,11 +136,11 @@ public:
         auto attr = node.first_attribute(attr_name);
         if (!attr)
         {
-            BOOST_THROW_EXCEPTION(invalid_data() << detail::errinfo_description("Attribute not found."));
+            BOOST_THROW_EXCEPTION(invalid_data() << errinfo_description("Attribute not found."));
         }
         if (sequential && name && (attr->name() != *name))
         {
-            BOOST_THROW_EXCEPTION(invalid_data() << detail::errinfo_description("Attribute has unexpected name."));
+            BOOST_THROW_EXCEPTION(invalid_data() << errinfo_description("Attribute has unexpected name."));
         }
 
         node.remove_attribute(attr);
@@ -157,7 +157,7 @@ public:
     {
         if (declaration && name)
         {
-            BOOST_THROW_EXCEPTION(serialization_exception() << detail::errinfo_description("Declaration must not have a name."));
+            BOOST_THROW_EXCEPTION(serialization_exception() << errinfo_description("Declaration must not have a name."));
         }
 
         auto doc = node.document();
@@ -184,11 +184,11 @@ public:
         auto element = node.first_node(node_name);
         if (!element)
         {
-            BOOST_THROW_EXCEPTION(invalid_data() << detail::errinfo_description("Element not found."));
+            BOOST_THROW_EXCEPTION(invalid_data() << errinfo_description("Element not found."));
         }
         if (sequential && name && (element->name() != *name))
         {
-            BOOST_THROW_EXCEPTION(invalid_data() << detail::errinfo_description("Element has unexpected name."));
+            BOOST_THROW_EXCEPTION(invalid_data() << errinfo_description("Element has unexpected name."));
         }
 
         node.remove_node(element);
@@ -208,7 +208,7 @@ public:
     {
         if (hasName())
         {
-            BOOST_THROW_EXCEPTION(serialization_exception() << detail::errinfo_description("Element already has a name."));
+            BOOST_THROW_EXCEPTION(serialization_exception() << errinfo_description("Element already has a name."));
         }
 
         auto doc = node.document();
@@ -220,7 +220,7 @@ public:
     {
         if (!hasName())
         {
-            BOOST_THROW_EXCEPTION(serialization_exception() << detail::errinfo_description("Element must have a name."));
+            BOOST_THROW_EXCEPTION(serialization_exception() << errinfo_description("Element must have a name."));
         }
 
         auto name = node.name();
@@ -239,7 +239,7 @@ public:
     {
         if (hasTextContent())
         {
-            BOOST_THROW_EXCEPTION(serialization_exception() << detail::errinfo_description("Element already has text content."));
+            BOOST_THROW_EXCEPTION(serialization_exception() << errinfo_description("Element already has text content."));
         }
 
         auto doc = node.document();

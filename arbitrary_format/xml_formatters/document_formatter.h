@@ -52,11 +52,11 @@ public:
         value_formatter.save(element, object);
         if (element.hasName())
         {
-            BOOST_THROW_EXCEPTION(serialization_exception() << detail::errinfo_description("Document must not be named."));
+            BOOST_THROW_EXCEPTION(serialization_exception() << errinfo_description("Document must not be named."));
         }
         if (element.attributeCount() > 0)
         {
-            BOOST_THROW_EXCEPTION(serialization_exception() << detail::errinfo_description("Document must not have attributes."));
+            BOOST_THROW_EXCEPTION(serialization_exception() << errinfo_description("Document must not have attributes."));
         }
     }
 
@@ -69,7 +69,7 @@ public:
         value_formatter.load(element, object);
         if (!element.isEmpty())
         {
-            BOOST_THROW_EXCEPTION(serialization_exception() << detail::errinfo_description("Document not consumed completely."));
+            BOOST_THROW_EXCEPTION(serialization_exception() << errinfo_description("Document not consumed completely."));
         }
     }
 };

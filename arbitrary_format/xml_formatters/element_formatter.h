@@ -55,7 +55,7 @@ public:
         value_formatter.save(element, object);
         if (!element.hasName())
         {
-            BOOST_THROW_EXCEPTION(serialization_exception() << detail::errinfo_description("Element must be named."));
+            BOOST_THROW_EXCEPTION(serialization_exception() << errinfo_description("Element must be named."));
         }
     }
 
@@ -66,11 +66,11 @@ public:
         value_formatter.load(element, object);
         if (!element.isEmpty())
         {
-            BOOST_THROW_EXCEPTION(serialization_exception() << detail::errinfo_description("Element not consumed completely."));
+            BOOST_THROW_EXCEPTION(serialization_exception() << errinfo_description("Element not consumed completely."));
         }
         if (!name && element.hasName())
         {
-            BOOST_THROW_EXCEPTION(serialization_exception() << detail::errinfo_description("Element name must be consumed."));
+            BOOST_THROW_EXCEPTION(serialization_exception() << errinfo_description("Element name must be consumed."));
         }
     }
 };

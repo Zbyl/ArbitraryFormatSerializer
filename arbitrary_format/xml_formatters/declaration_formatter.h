@@ -47,7 +47,7 @@ public:
         auto docElement = xmlDocument.getDocumentElement();
         if (!docElement.isEmpty())
         {
-            BOOST_THROW_EXCEPTION(serialization_exception() << detail::errinfo_description("xml declaration must be the first node of the document."));
+            BOOST_THROW_EXCEPTION(serialization_exception() << errinfo_description("xml declaration must be the first node of the document."));
         }
 
         std::string value;
@@ -68,7 +68,7 @@ public:
         auto xmlDeclaration = docElement.eatElement(boost::none, true);
         if (!xmlDeclaration.isDeclaration())
         {
-            BOOST_THROW_EXCEPTION(serialization_exception() << detail::errinfo_description("Document should start with an xml declaration."));
+            BOOST_THROW_EXCEPTION(serialization_exception() << errinfo_description("Document should start with an xml declaration."));
         }
 
         auto encodingAttr = xmlDeclaration.eatAttribute("encoding", false);

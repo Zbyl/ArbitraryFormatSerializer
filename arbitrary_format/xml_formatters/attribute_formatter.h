@@ -54,7 +54,7 @@ public:
         value_formatter.save(attribute, object);
         if (!attribute.hasName())
         {
-            BOOST_THROW_EXCEPTION(serialization_exception() << detail::errinfo_description("Attribute must be named."));
+            BOOST_THROW_EXCEPTION(serialization_exception() << errinfo_description("Attribute must be named."));
         }
     }
 
@@ -65,11 +65,11 @@ public:
         value_formatter.load(attribute, object);
         if (attribute.hasTextContent())
         {
-            BOOST_THROW_EXCEPTION(serialization_exception() << detail::errinfo_description("Attribute value not consumed."));
+            BOOST_THROW_EXCEPTION(serialization_exception() << errinfo_description("Attribute value not consumed."));
         }
         if (!name && attribute.hasName())
         {
-            BOOST_THROW_EXCEPTION(serialization_exception() << detail::errinfo_description("Attribute name must be consumed."));
+            BOOST_THROW_EXCEPTION(serialization_exception() << errinfo_description("Attribute name must be consumed."));
         }
     }
 };
