@@ -9,6 +9,7 @@
 #include <arbitrary_format/formatters/const_formatter.h>
 #include <arbitrary_format/binary_formatters/size_prefix_formatter.h>
 #include <arbitrary_format/formatters/vector_formatter.h>
+#include <arbitrary_format/formatters/array_formatter.h>
 #include <arbitrary_format/formatters/external_value.h>
 
 #include "gtest/gtest.h"
@@ -37,6 +38,32 @@ TEST(ConstFormatterWorks, SavingAndLoading)
         std::vector<uint8_t> data { 0x12, 0x34, 0x56, 0x78 };
         MemoryLoadSerializer vectorReader(data);
         ASSERT_THROW(load< const_formatter< little_endian<4> > >(vectorReader, 0), invalid_data);
+    }
+}
+
+TEST(ConstFormatterWorks, SavingAndLoadingArrayOfConsts)
+{
+    static_assert(is_verbatim_formatter< const_formatter<little_endian<1>>, uint8_t >::value, "const_formatter<verbatim formatter> should be a verbatim formatter.");
+    static_assert(is_verbatim_formatter< const const_formatter<little_endian<1>>&, uint8_t >::value, "const_formatter<verbatim formatter> should be a verbatim formatter.");
+    {
+        VectorSaveSerializer vectorWriter;
+        save< array_formatter< const_formatter<little_endian<1>> > >(vectorWriter, std::array<uint8_t, 3> { 0x01, 0x02, 0x03 });
+        const auto value = std::vector<uint8_t> { 0x01, 0x02, 0x03 };
+        EXPECT_EQ(vectorWriter.getData(), value);
+    }
+
+    {
+        std::vector<uint8_t> data { 0x01, 0x02, 0x03 };
+        MemoryLoadSerializer vectorReader(data);
+        std::array<uint8_t, 3> value { 0x01, 0x02, 0x03 };
+        EXPECT_NO_THROW(( load< array_formatter< const_formatter<little_endian<1>> > >(vectorReader, value) ));
+    }
+
+    {
+        std::vector<uint8_t> data { 0x01, 0x02, 0x04 };
+        MemoryLoadSerializer vectorReader(data);
+        std::array<uint8_t, 3> value { 0x01, 0x02, 0x03 };
+        ASSERT_THROW( (load< array_formatter< const_formatter<little_endian<1>> > >(vectorReader, value)), invalid_data );
     }
 }
 

@@ -22,7 +22,7 @@ using namespace binary;
 
 TEST(EndianFormattersWork, AreVerbatim)
 {
-    if (boost::endian::order::native == boost::endian::order::little)
+    if (arbitrary_format_endian::order::native == arbitrary_format_endian::order::little)
     {
         ASSERT_TRUE((is_verbatim_formatter< little_endian<4>, uint32_t >::value));
         ASSERT_FALSE((is_verbatim_formatter< big_endian<4>, uint32_t >::value));
