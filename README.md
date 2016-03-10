@@ -7,8 +7,8 @@ Distributed under Apache License, Version 2.0 (http://www.apache.org/licenses/LI
 (c) 2014-2016 Zbigniew Skowron, zbychs@gmail.com
 
 [![Travis CI Status](https://travis-ci.org/Zbyl/ArbitraryFormatSerializer.svg?branch=master)](https://travis-ci.org/Zbyl/ArbitraryFormatSerializer)
-[![Coverity Status](https://img.shields.io/coverity/scan/8206.svg)](https://scan.coverity.com/projects/zbyl-arbitraryformatserializer)
 [![AppVeyor Status](https://ci.appveyor.com/api/projects/status/yy0alijr3yobem79?svg=true)](https://ci.appveyor.com/project/Zbyl/arbitraryformatserializer)
+[![Coverity Status](https://img.shields.io/coverity/scan/8206.svg)](https://scan.coverity.com/projects/zbyl-arbitraryformatserializer)
 
 **Table of Contents**
 

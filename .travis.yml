@@ -32,6 +32,14 @@ matrix:
             - ubuntu-toolchain-r-test
           packages:
             - g++-5
+        coverity_scan:
+          project:
+          name: "Zbyl/ArbitraryFormatSerializer"
+          description: "Build submitted via Travis CI"
+          notification_email: zbychs@gmail.com
+          build_command_prepend: "./ci-builds/prepare-build.sh; cd build-zz"
+          build_command:   "make"
+          branch_pattern: coverity_scan
       env:
         - COMPILER=g++-5
         - BOOST_VER=58
@@ -43,14 +51,6 @@ matrix:
             - llvm-toolchain-precise-3.7
           packages:
             - clang-3.7
-          coverity_scan:
-            project:
-              name: "Zbyl/ArbitraryFormatSerializer"
-              description: "Build submitted via Travis CI"
-            notification_email: zbychs@gmail.com
-            build_command_prepend: "./ci-builds/prepare-build.sh; cd build-zz"
-            build_command:   "make"
-            branch_pattern: coverity_scan
       env:
         - COMPILER=clang++-3.7
         - BOOST_VER=58
