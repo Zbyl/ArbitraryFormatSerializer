@@ -22,7 +22,7 @@ namespace arbitrary_format
 namespace binary
 {
 
-template<boost::endian::order TargetOrder, int... Bits>
+template<arbitrary_format_endian::order TargetOrder, int... Bits>
 class bit_formatter
 {
     using packer = bit_packer<Bits...>;
