@@ -14,6 +14,7 @@
 #include <arbitrary_format/formatters/vector_formatter.h>
 #include <arbitrary_format/formatters/const_formatter.h>
 //#include <arbitrary_format/binary_formatters/bit_formatter.h>
+#include <arbitrary_format/binary_formatters/inefficient_size_prefix_formatter.h>
 
 #include <arbitrary_format/binary_serializers/VectorSaveSerializer.h>
 #include <arbitrary_format/binary_serializers/MemorySerializer.h>
@@ -29,7 +30,7 @@ void ela()
     using namespace binary;
 
     VectorSaveSerializer vectorWriter;
-    //bit_formatter<boost::endian::order::little, 1, 7>().save(vectorWriter, 1, 0xFF);
+    //bit_formatter<arbitrary_format_endian::order::little, 1, 7>().save(vectorWriter, 1, 0xFF);
 }
 
 #include <arbitrary_format/utility/has_member.h>
@@ -57,11 +58,63 @@ void ala()
 using namespace arbitrary_format;
 using namespace binary;
 
+struct weird_size_formatter
+{
+    little_endian<1> byte_format;
+
+    template<typename TSerializer>
+    void save(TSerializer& serializer, uintmax_t size) const
+    {
+        while (size > 0x7Fu)
+        {
+            uint8_t part = size & 0x7Fu;
+            part |= 0x80u;
+            size >>= 7;
+            byte_format.save(serializer, part);
+        }
+        byte_format.save(serializer, size);
+    }
+
+    template<typename TSerializer>
+    void load(TSerializer& serializer, uintmax_t& size) const
+    {
+        size = 0;
+        while (true)
+        {
+            uint8_t part;
+            byte_format.load(serializer, part);
+            size <<= 7;
+            size |= part & 0x7Fu;
+
+            if (part < 0x80u)
+                break;
+        }
+    }
+};
+
+struct MyDescriptor
+{
+    int bla_bla_bla_my_data;
+    std::vector<int> bla_bla_bla_my_children;
+};
+
+struct my_descriptor_payload_formatter : public implement_save_load<my_descriptor_payload_formatter>
+{
+    template<typename TSerializer>
+    void save_or_load(TSerializer& serializer, MyDescriptor& myDescriptor) const
+    {
+        serialize< little_endian<1> >(serializer, myDescriptor.bla_bla_bla_my_data);
+        serialize< vector_formatter<little_endian<1>, little_endian<2>> >(serializer, myDescriptor.bla_bla_bla_my_children);
+    }
+};
+
+using my_descriptor_formatter = inefficient_size_prefix_formatter<weird_size_formatter, my_descriptor_payload_formatter>;
+
 class TempVectorSaveSerializer
 {
-    std::vector<boost::uint8_t> buffer;
+    std::vector<uint8_t> buffer;
 public:
-    const std::vector<boost::uint8_t>& getData()
+    const std::vector<uint8_t>& getData()
     {
         return buffer;
     }
@@ -69,7 +122,7 @@ public:
 public:
     using saving_serializer = std::true_type;
 
-    void saveData(const boost::uint8_t* data, size_t size)
+    void saveData(const uint8_t* data, size_t size)
     {
         buffer.insert(buffer.end(), data, data + size);
     }
@@ -77,6 +130,18 @@ public:
 
 int main(int argc, char* argv[])
 {
+    {
+        VectorSaveSerializer vectorWriter;
+        MyDescriptor myDescriptor;
+        myDescriptor.bla_bla_bla_my_data = 7;
+        myDescriptor.bla_bla_bla_my_children.assign(128, 5);
+    
+        serialize<my_descriptor_formatter>(vectorWriter, myDescriptor);
+
+        MemoryLoadSerializer vectorReader(vectorWriter.getData());
+        serialize<my_descriptor_formatter>(vectorReader, myDescriptor);
+    }
+
     map_formatter< little_endian<4>, little_endian<1>, string_formatter< little_endian<4> > > mapFormat;
 
     std::map<int, std::string> map;
