@@ -13,6 +13,16 @@ env:
    #   via the "travis encrypt" command using the project repo's public key
    - secure: "dM/Hc5Eua/BOCYoaS7wgXocOMQzrjqv60VzGYbkDDO0UcA6dNLl3AUpHCH4hIb63PubcL5vkwEy4JxevYAQgN2n3AVzzWvNbtFO+KRMJ/ShV23ylpoFqrkkSnRnFl1eP7K+YVE6crPG5zEYHMPDOhL7+7WWBSbBnV3fP712Ol1hEy0mWnJVsrrl/A0RhFAT+EFmWbYszT4MFJSLRmJ3WFVH51v8S4ngOha+JW3VHnoo5lKMLEpVpZTGIGan7ydMDt4f/IASCo8L/z+4H7QHZtZEU1gYbYlR08j04NUHZ9LxxFbvwJWcFmo1ek8eHmNEdd2SUMnOHbbBq1xyaiyuGCuKmRY7CaOdo3WVab4EkJgefs+F0rmle/eAwjEF7pVTGpDXxUTX5epe3EgaNdNP/gUW121iNu+sLBo9Nbv66QtHZf6FVZ8Yi5FMgQcu2tYBF/9r5AUDtYuPXtbkYBk9s4S2dH0W6zMFvUpxYVzGLrhIRxAsDgBEujjujErQs/MFvIX1E3VekDAp/ociGqAzA0ojsDBDKu8qWqgDeJvnjjQhBer/b4EtsdYFpnrzvHfauiQDIb5t7aBDg5Zhtkpxcvwaj37quDhREY6Lpn8Xo6HkJwQX/qqa9IREDW+BLzZ1KHQAnSvDlvlKVQrgSae0TvGUk2a427fRmYr6wjMIJerk="
 
+addons:
+  coverity_scan:
+    project:
+    name: "Zbyl/ArbitraryFormatSerializer"
+    description: "Build submitted via Travis CI"
+    notification_email: zbychs@gmail.com
+    build_command_prepend: "./ci-builds/prepare-build.sh; cd build-zz"
+    build_command:   "if [ "${COMPILER}" == "g++-5" ]; then make; else exit 1; fi"
+    branch_pattern: coverity_scan
+
 matrix:
   include:
     - compiler: gcc
@@ -32,14 +42,6 @@ matrix:
             - ubuntu-toolchain-r-test
           packages:
             - g++-5
-        coverity_scan:
-          project:
-          name: "Zbyl/ArbitraryFormatSerializer"
-          description: "Build submitted via Travis CI"
-          notification_email: zbychs@gmail.com
-          build_command_prepend: "./ci-builds/prepare-build.sh; cd build-zz"
-          build_command:   "make"
-          branch_pattern: coverity_scan
       env:
         - COMPILER=g++-5
         - BOOST_VER=58
