@@ -16,8 +16,8 @@ env:
 addons:
   coverity_scan:
     project:
-    name: "Zbyl/ArbitraryFormatSerializer"
-    description: "Build submitted via Travis CI"
+      name: "Zbyl/ArbitraryFormatSerializer"
+      description: "Build submitted via Travis CI"
     notification_email: zbychs@gmail.com
     build_command_prepend: "./ci-builds/prepare-build.sh; cd build-zz"
     build_command:   "if [ "${COMPILER}" == "g++-5" ]; then make; else exit 1; fi"
