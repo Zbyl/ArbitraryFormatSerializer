@@ -4,8 +4,7 @@
 ///
 /// implement_save_load_serialize.h
 ///
-/// This file contains implement_save_load mixin class that provides save() and load() by the means of the serialize() method,
-/// and implementserialize mixin class that provides serialize() by the means of the save() and load() methods.
+/// This file contains implement_save_load mixin class that provides save() and load() by the means of the save_or_load() method
 ///
 /// Distributed under Apache License, Version 2.0 (http://www.apache.org/licenses/LICENSE-2.0)
 /// (c) 2014 Zbigniew Skowron, zbychs@gmail.com

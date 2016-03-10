@@ -114,7 +114,10 @@ struct is_verbatim_formatter< array_formatter<ValueFormatter, ArraySize>, std::a
 {};
 
 static_assert(is_verbatim_formatter< array_formatter< verbatim_formatter<2>, 10 >, uint16_t[10] >::value, "array_formatter<verbatim formatter> should be a verbatim formatter.");
+#ifndef __COVERITY__
+/// @note For some reason CoverityScan doesn't like this assert.
 static_assert(is_verbatim_formatter< array_formatter< verbatim_formatter<2>, 10 >, std::array<uint16_t, 10> >::value, "array_formatter<verbatim formatter> should be a verbatim formatter.");
+#endif
 static_assert(!is_verbatim_formatter< array_formatter< int, 10 >, uint16_t[10] >::value, "array_formatter<non-verbatim formatter> should not be a verbatim formatter.");
 static_assert(!is_verbatim_formatter< array_formatter< verbatim_formatter<2>, 5 >, uint16_t[10] >::value, "array_formatter<verbatim formatter> should not be a verbatim formatter if we format part of the array.");
 static_assert(!is_verbatim_formatter< array_formatter< int, 5 >, uint16_t[10] >::value, "array_formatter<non-verbatim formatter> should not be a verbatim formatter.");

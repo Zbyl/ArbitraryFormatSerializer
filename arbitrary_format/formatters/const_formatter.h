@@ -35,14 +35,14 @@ struct loaded_value_different_from_expected_value
     typedef boost::error_info<struct tag_from_expected_value, T> errinfo_expected;
 };
 
-template<typename T>
-bool const_formatter_equals(const T& value0, const T& value1)
+template<typename T, typename U>
+bool const_formatter_equals(const T& value0, const U& value1)
 {
     return value0 == value1;
 }
 
-template<typename T, int Size>
-bool const_formatter_equals(const T (&array0)[Size], const T (&array1)[Size])
+template<typename T, typename U, int Size>
+bool const_formatter_equals(const T (&array0)[Size], const U (&array1)[Size])
 {
     return boost::equal(array0, array1);
 }
@@ -94,6 +94,8 @@ const_formatter<ValueFormatter> create_const_formatter(ValueFormatter value_form
     return const_formatter<ValueFormatter>(value_formatter);
 }
 
+#if 0
+/// @note const_formatter is a verbatim formatter only when saving
 namespace binary
 {
 
@@ -106,6 +108,7 @@ static_assert(is_verbatim_formatter< const_formatter< verbatim_formatter<4> >, u
 static_assert(!is_verbatim_formatter< const_formatter< int >, uint32_t >::value, "const_formatter<non-verbatim formatter> should not be a verbatim formatter.");
 
 } // namespace binary
+#endif
 
 } // namespace arbitrary_format
 

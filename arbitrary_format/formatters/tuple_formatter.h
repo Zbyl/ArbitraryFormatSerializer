@@ -71,7 +71,10 @@ public:
         tail_formatter.load(serializer, tuple);
     }
 
-    /// @note This overload is to support std::tie seamlessly. This, unfortunately won't work if the tuple has to be passed from another formatter.
+    /// @note This overload is to support std::tie seamlessly.
+    ///       This unfortunately won't work if the tuple has to be passed from another formatter.
+    ///       Perfect forwarding should be used to achieve this goal, but it would complicate the rest of the library needlessly.
+    ///       So this semi-solution will have to do.
     template<typename Tuple, typename TSerializer>
     void load(TSerializer& serializer, const Tuple& tuple) const
     {
