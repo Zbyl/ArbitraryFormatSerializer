@@ -34,6 +34,8 @@ using namespace arbitrary_format;
 using namespace xml;
 
 declare_compile_time_string(_optional_, "optional");
+declare_compile_time_string(_initialized_, "initialized");
+declare_compile_time_string(_value_, "value");
 
 int main(int argc, char* argv[])
 {
@@ -84,9 +86,6 @@ int main(int argc, char* argv[])
     auto mapElementFormatter3 = create_element_formatter("nameToAge", mapFormatter3);
 
     auto optionalFormatter = create_element_formatter("optional", create_optional_formatter(content_exists(), assign_text_content<>()));
-
-    declare_compile_time_string(_initialized_, "initialized");
-    declare_compile_time_string(_value_, "value");
 
     using opt_format = element_formatter< _optional_, optional_formatter< attribute_formatter<_initialized_>, element_formatter<_value_> > >;
     /// @note Code below works for clang and g++, but not for Visual C++
