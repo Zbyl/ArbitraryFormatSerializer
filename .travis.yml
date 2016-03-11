@@ -11,7 +11,7 @@ env:
   global:
    # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
    #   via the "travis encrypt" command using the project repo's public key
-   - secure: "dM/Hc5Eua/BOCYoaS7wgXocOMQzrjqv60VzGYbkDDO0UcA6dNLl3AUpHCH4hIb63PubcL5vkwEy4JxevYAQgN2n3AVzzWvNbtFO+KRMJ/ShV23ylpoFqrkkSnRnFl1eP7K+YVE6crPG5zEYHMPDOhL7+7WWBSbBnV3fP712Ol1hEy0mWnJVsrrl/A0RhFAT+EFmWbYszT4MFJSLRmJ3WFVH51v8S4ngOha+JW3VHnoo5lKMLEpVpZTGIGan7ydMDt4f/IASCo8L/z+4H7QHZtZEU1gYbYlR08j04NUHZ9LxxFbvwJWcFmo1ek8eHmNEdd2SUMnOHbbBq1xyaiyuGCuKmRY7CaOdo3WVab4EkJgefs+F0rmle/eAwjEF7pVTGpDXxUTX5epe3EgaNdNP/gUW121iNu+sLBo9Nbv66QtHZf6FVZ8Yi5FMgQcu2tYBF/9r5AUDtYuPXtbkYBk9s4S2dH0W6zMFvUpxYVzGLrhIRxAsDgBEujjujErQs/MFvIX1E3VekDAp/ociGqAzA0ojsDBDKu8qWqgDeJvnjjQhBer/b4EtsdYFpnrzvHfauiQDIb5t7aBDg5Zhtkpxcvwaj37quDhREY6Lpn8Xo6HkJwQX/qqa9IREDW+BLzZ1KHQAnSvDlvlKVQrgSae0TvGUk2a427fRmYr6wjMIJerk="
+   - secure: "gHPBb6h78cvF5nQ1sH8mv7C8ZDHmZNHF0CIwfmAlYVqT/MHcG0v+whz2X82bvmwceLA5qMrP8okq1MmO4cP1H3dVd53u7r9gx1SXvXJ96CnjGwOshVCZQ04dIqVJb0UIU4RpJ9dIMiC2TtstDkB2BQufQjuZtW+R3BpbyHzpIHgX7FVG549mdjFbqQQCov3cjvgNGM1Luh3Jn0WFQQqzshyRR+fnuKYAEm7TI+DA5+PtrF2X0Z3R1BQXhZ0W3XQKwzFQGOSLSMTP6LVPWpSNrVWp7KViAeLUM26KNL8333reptBhFsQNmjzV4a7fdlTRpT/7Zvu4mKRXj5VtDQ6vH051YWvrnbdn8ctSg+oO9zKMQnhlwEYk5FppunHE2mqqOEATHdD6c8irf2JMFU4NMJ6CUuex8+De/spsvsIYkC7bb8zcFYfmmeOa1xfu5vKb/E8U9kH0LKSwQ5eD0XJM9WMAoDbIxp2OjPpcc8/13GYNUSIpB/giWyUztSspclm2ckaQDIjHM+t8wLnOz8PUoU8ufxpb4Lg7f1wWogtCptk4FXRHz7qQkQ2ApPVa26xOKnVeJQI4otMWLUrMbeKlCaEuhTUY1EAxf9gbVjB/Rf7ezpeG/Wz5ET5cjgytvP2TlgciXTtlFk9zeVV3Kuu0OSxBd4A7mDTEHXeonAVxP9E="
 
 addons:
   coverity_scan:
@@ -20,7 +20,7 @@ addons:
       description: "Build submitted via Travis CI"
     notification_email: zbychs@gmail.com
     build_command_prepend: "./ci-builds/prepare-build.sh; cd build-zz"
-    build_command:   "if [ "${COMPILER}" == "g++-5" ]; then make; else exit 1; fi"
+    build_command:   "if [ ${COMPILER} == g++-5 ]; then make; else exit 1; fi"
     branch_pattern: coverity_scan
 
 matrix:
