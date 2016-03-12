@@ -41,6 +41,12 @@ Visual C++ 2013 |             | `bit_formatter` is unsupported<br/>`compile_time
 clang 3.7       | --std=c++11 | Fully supported
 g++ 5.2.1       | --std=c++11 | Fully supported
 
+Boost           | Notes
+:---------------|:--------------------------------------------------
+1.58 and newer  | Everything supported
+1.57 and older  | `endian_formatter` assumes a little endian machine
+
+
 #### Includes
 
 Please add `ArbitraryFormatSerializer` folder to the include directories of your project.
@@ -57,7 +63,7 @@ You will then be able to use includes like this:
 > **Note** This is a header only library, so you don't need to link to it. Just include the headers.
 
 > **Note** This library uses boost, so you need to add boost to your include directories also.
-> The library was tested on boost version 1.59, but most versions of boost should work.
+> The library was tested on boost version 1.56, 1.57, 1.58 and 1.59, but newer versions of boost should work too.
 
 #### Namespaces
 

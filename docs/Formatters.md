@@ -37,9 +37,9 @@ Formatters that can be used with binary serializers.
 Name | Types supported | Description
 :---------|:---------|:-------------
 `bit_formatter` | sequences of integers, `std::tuple` | Packs individual values or tuples of values in bitfields.
-`endian_formatter` | `int`, `short`, `char`, `uint64_t`, integral types, enums, pods... | Formats given value on specified number of bytes, with specified endianness.
-`little_endian` | `int`, `short`, `char`, `uint64_t`, integral types, enums, pods... | Formats given value on specified number of bytes, using little endian byte order.
-`big_endian` | `int`, `short`, `char`, `uint64_t`, integral types, enums, pods... | Formats given value on specified number of bytes, using big endian byte order.
+`endian_formatter` | `int`, `short`, `char`, `uint64_t`, integral types, enums, pods... | Formats given value on specified number of bytes, with specified endianness.<br/>It will throw `lossy_conversion` if the value can not be losslessly represented on given number of bytes.
+`little_endian` | `int`, `short`, `char`, `uint64_t`, integral types, enums, pods... | Typedef for `endian_formatter` with little endian byte order.
+`big_endian` | `int`, `short`, `char`, `uint64_t`, integral types, enums, pods... | Typedef for `endian_formatter` with big endian byte order.
 `inefficient_size_prefix_formatter` | *any type* | Formats value as it's serialized size followed by it's value. It's inefficient, because it serializes the value twice. (It can lead to exponential time complexity when used for trees.)<br/>Use `size_prefix_formatter` instead.
 `size_prefix_formatter` |*any type* | Formats value as it's serialized size followed by it's value. Requires serializer that supports `position()` and `seek()` methods.
 `string_formatter` | `std::string`, `std::wstring`, `std::u16string`, `std::u32string`, `std::basic_string`| Formats strings as length followed by characters.
@@ -73,7 +73,8 @@ Formatters that can be used to save and load data from a `std::string`.
 
 Name | Types supported | Description
 :---------|:---------|:-------------
-`lexical_stringizer` | *any type* | Formatter that uses `boost::lexical_cast` to convert data to and from an `std::string`.
+`lexical_stringizer` | *any type* | Formatter that uses `boost::lexical_cast` to convert data to and from an `std::string`.<br/>**Note:** Enums are formatter as numbers.<br/>**Note:** `char` types are formatted as numbers, not as characters. This is because of unfortunate issue in C++, where `int8_t` is a typedef for one of the character types.
+`hex_stringizer` | *any type* | Formatter that formats ints, chars and enums as hexadecimal numbers. On load accepts hexadecimal as well as decimal numbers. All other types are serialized using fallback formatter (`lexical_stringizer` by default).
 
 ### external_value
 Example:
