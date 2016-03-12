@@ -45,17 +45,21 @@ public:
     }
 };
 
-/// @note is_verbatim_formatter type trait is intended to be specialized for other foratters. little_endian is also a verbatim_formatter.
-/// @brief is_verbatim_formatter is a false_type if formatter will serialize given type differently than verbatim_formatter<sizeof(T)>.
+/// @note declare_verbatim_formatter type trait is intended to be specialized for other foratters. little_endian is also a verbatim_formatter.
+/// @brief declare_verbatim_formatter is a false_type if formatter will serialize given type differently than verbatim_formatter<sizeof(T)>.
 /// @note Last type parameter is to allow for enable_if usage in specializations.
 template<typename Formatter, typename T, typename = void>
-struct is_verbatim_formatter : public std::false_type
+struct declare_verbatim_formatter : public std::false_type
+{};
+
+/// @brief declare_verbatim_formatter is a true_type if formatter will serialize given type the same way as verbatim_formatter<sizeof(T)>.
+template<typename T>
+struct declare_verbatim_formatter< verbatim_formatter<sizeof(T)>, T > : public std::true_type
 {};
 
 /// @brief is_verbatim_formatter is a true_type if formatter will serialize given type the same way as verbatim_formatter<sizeof(T)>.
-template<typename T>
-struct is_verbatim_formatter< verbatim_formatter<sizeof(T)>, T > : public std::true_type
-{};
+template<typename Formatter, typename T>
+using is_verbatim_formatter = declare_verbatim_formatter< typename std::remove_cv< typename std::remove_reference<Formatter>::type >::type, T >;
 
 } // namespace binary
 } // namespace arbitrary_format

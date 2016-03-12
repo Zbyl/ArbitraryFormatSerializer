@@ -2,6 +2,7 @@
 //
 
 #include <arbitrary_format/serialize.h>
+#include <arbitrary_format/serialization_exceptions.h>
 #include <arbitrary_format/binary_serializers/VectorSaveSerializer.h>
 #include <arbitrary_format/binary_serializers/MemorySerializer.h>
 
@@ -11,14 +12,115 @@
 #include <arbitrary_format/formatters/vector_formatter.h>
 #include <arbitrary_format/formatters/array_formatter.h>
 #include <arbitrary_format/formatters/external_value.h>
+#include <arbitrary_format/formatters/serialize_buffer.h>
+#include <arbitrary_format/binary_formatters/verbatim_formatter.h>
+
+#include <type_traits>
 
 #include "gtest/gtest.h"
+
+struct fake_verbatim
+{
+    template<typename T, typename TSerializer>
+    void save(TSerializer& serializer, const T& value) const
+    {
+        BOOST_THROW_EXCEPTION(serialization_exception());
+    }
+
+    template<typename T, typename TSerializer>
+    void load(TSerializer& serializer, T& value) const
+    {
+        BOOST_THROW_EXCEPTION(serialization_exception());
+    }
+};
+
+namespace arbitrary_format
+{
+namespace binary
+{
+
+template<typename T>
+struct declare_verbatim_formatter<fake_verbatim, T> : public std::true_type
+{};
+
+} // namespace binary
+} // namespace arbitrary_format
 
 namespace {
 
 using namespace arbitrary_format;
 using namespace binary;
     
+TEST(SerializeBufferWorks, SavingAndLoading)
+{
+    const auto value = std::vector<uint8_t> { 0x12, 0x34, 0x56, 0x78 };
+    const auto data = std::vector<uint8_t> { 0x04, 0x12, 0x34, 0x56, 0x78 };
+
+    using vec_formatter = vector_formatter<little_endian<1>, fake_verbatim>;
+    auto vec_format = vec_formatter();
+    auto fake_format = fake_verbatim();
+
+    /// @brief saving buffer with rvalue formatter
+    {
+        VectorSaveSerializer vectorWriter;
+        EXPECT_NO_THROW(( save_buffer(vectorWriter, value.size(), value.data(), fake_verbatim()) ));
+        EXPECT_EQ(vectorWriter.getData(), value);
+    }
+
+    /// @brief saving buffer with lvalue formatter
+    {
+        VectorSaveSerializer vectorWriter;
+        EXPECT_NO_THROW(( save_buffer(vectorWriter, value.size(), value.data(), fake_format) ));
+        EXPECT_EQ(vectorWriter.getData(), value);
+    }
+
+    /// @brief loading buffer with rvalue formatter
+    {
+        MemoryLoadSerializer vectorReader(value);
+        auto loadedValue = std::vector<uint8_t>(value.size());
+        EXPECT_NO_THROW(( load_buffer(vectorReader, loadedValue.size(), loadedValue.data(), fake_verbatim()) ));
+        EXPECT_EQ(value, loadedValue);
+    }
+
+    /// @brief loading buffer with lvalue formatter
+    {
+        MemoryLoadSerializer vectorReader(value);
+        auto loadedValue = std::vector<uint8_t>(value.size());
+        EXPECT_NO_THROW(( load_buffer(vectorReader, loadedValue.size(), loadedValue.data(), fake_format) ));
+        EXPECT_EQ(value, loadedValue);
+    }
+
+    /// @brief saving vector with rvalue formatter
+    {
+        VectorSaveSerializer vectorWriter;
+        EXPECT_NO_THROW(( save<vec_formatter>(vectorWriter, value) ));
+        EXPECT_EQ(vectorWriter.getData(), data);
+    }
+
+    /// @brief saving vector with lvalue formatter
+    {
+        VectorSaveSerializer vectorWriter;
+        EXPECT_NO_THROW(( save(vectorWriter, value, vec_format) ));
+        EXPECT_EQ(vectorWriter.getData(), data);
+    }
+
+    /// @brief loading vector with rvalue formatter
+    {
+        MemoryLoadSerializer vectorReader(data);
+        auto loadedValue = std::vector<uint8_t> {};
+        EXPECT_NO_THROW(( load<vec_formatter>(vectorReader, loadedValue) ));
+        EXPECT_EQ(value, loadedValue);
+    }
+
+    /// @brief loading vector with lvalue formatter
+    {
+        MemoryLoadSerializer vectorReader(data);
+        auto loadedValue = std::vector<uint8_t> {};
+        EXPECT_NO_THROW(( load(vectorReader, loadedValue, vec_format) ));
+        EXPECT_EQ(value, loadedValue);
+    }
+}
+
 TEST(ConstFormatterWorks, SavingAndLoading)
 {
     {
@@ -43,8 +145,6 @@ TEST(ConstFormatterWorks, SavingAndLoading)
 
 TEST(ConstFormatterWorks, SavingAndLoadingArrayOfConsts)
 {
-    //static_assert(is_verbatim_formatter< const_formatter<little_endian<1>>, uint8_t >::value, "const_formatter<verbatim formatter> should be a verbatim formatter.");
-    //static_assert(is_verbatim_formatter< const const_formatter<little_endian<1>>&, uint8_t >::value, "const_formatter<verbatim formatter> should be a verbatim formatter.");
     {
         VectorSaveSerializer vectorWriter;
         save< array_formatter< const_formatter<little_endian<1>> > >(vectorWriter, std::array<uint8_t, 3> { 0x01, 0x02, 0x03 });

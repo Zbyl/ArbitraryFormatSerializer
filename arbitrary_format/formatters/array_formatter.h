@@ -98,19 +98,19 @@ namespace binary
 /// @brief array_formatter<ValueFormatter, -1> is a verbatim formatter if ValueFormatter is.
 ///        array_formatter<ValueFormatter, ArraySize> is a verbatim formatter if ValueFormatter is and if ArraySize equals to size of array serialized.
 template<typename ValueFormatter, int ArraySize, typename T>
-struct is_verbatim_formatter< array_formatter<ValueFormatter, -1>, T[ArraySize] > : public is_verbatim_formatter<ValueFormatter, typename std::remove_pointer<typename std::decay<T>::type>::type>
+struct declare_verbatim_formatter< array_formatter<ValueFormatter, -1>, T[ArraySize] > : public is_verbatim_formatter<ValueFormatter, typename std::remove_pointer<typename std::decay<T>::type>::type>
 {};
 
 template<typename ValueFormatter, int ArraySize, typename T>
-struct is_verbatim_formatter< array_formatter<ValueFormatter, -1>, std::array<T, ArraySize> > : public is_verbatim_formatter<ValueFormatter, typename std::remove_pointer<typename std::decay<T>::type>::type>
+struct declare_verbatim_formatter< array_formatter<ValueFormatter, -1>, std::array<T, ArraySize> > : public is_verbatim_formatter<ValueFormatter, typename std::remove_pointer<typename std::decay<T>::type>::type>
 {};
 
 template<typename ValueFormatter, int ArraySize, typename T>
-struct is_verbatim_formatter< array_formatter<ValueFormatter, ArraySize>, T[ArraySize] > : public is_verbatim_formatter<ValueFormatter, typename std::remove_pointer<typename std::decay<T>::type>::type>
+struct declare_verbatim_formatter< array_formatter<ValueFormatter, ArraySize>, T[ArraySize] > : public is_verbatim_formatter<ValueFormatter, typename std::remove_pointer<typename std::decay<T>::type>::type>
 {};
 
 template<typename ValueFormatter, int ArraySize, typename T>
-struct is_verbatim_formatter< array_formatter<ValueFormatter, ArraySize>, std::array<T, ArraySize> > : public is_verbatim_formatter<ValueFormatter, typename std::remove_pointer<typename std::decay<T>::type>::type>
+struct declare_verbatim_formatter< array_formatter<ValueFormatter, ArraySize>, std::array<T, ArraySize> > : public is_verbatim_formatter<ValueFormatter, typename std::remove_pointer<typename std::decay<T>::type>::type>
 {};
 
 static_assert(is_verbatim_formatter< array_formatter< verbatim_formatter<2>, 10 >, uint16_t[10] >::value, "array_formatter<verbatim formatter> should be a verbatim formatter.");

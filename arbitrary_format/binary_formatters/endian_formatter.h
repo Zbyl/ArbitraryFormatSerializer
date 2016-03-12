@@ -226,11 +226,11 @@ using big_endian = endian_formatter<arbitrary_format_endian::order::big, Size>;
 ///        For pods of size S endian_formatter<native, S> will serialize T the same way as a verbatim formatter.
 /// @note  For bools it is more problematic.
 template<typename T>
-struct is_verbatim_formatter< endian_formatter<(arbitrary_format_endian::order::native == arbitrary_format_endian::order::big) ? arbitrary_format_endian::order::little : arbitrary_format_endian::order::big, 1>, T > : public std::integral_constant<bool, (sizeof(T) == 1) && std::is_pod<T>::value>::type
+struct declare_verbatim_formatter< endian_formatter<(arbitrary_format_endian::order::native == arbitrary_format_endian::order::big) ? arbitrary_format_endian::order::little : arbitrary_format_endian::order::big, 1>, T > : public std::integral_constant<bool, (sizeof(T) == 1) && std::is_pod<T>::value>::type
 {};
 
 template<typename T>
-struct is_verbatim_formatter< endian_formatter<arbitrary_format_endian::order::native, sizeof(T)>, T > : public std::integral_constant<bool, std::is_pod<T>::value>::type
+struct declare_verbatim_formatter< endian_formatter<arbitrary_format_endian::order::native, sizeof(T)>, T > : public std::integral_constant<bool, std::is_pod<T>::value>::type
 {};
 
 static_assert(is_verbatim_formatter< little_endian<1>, uint8_t >::value, "little_endian<1> should be a verbatim formatter for uint8_t.");
