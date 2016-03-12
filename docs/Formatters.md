@@ -20,6 +20,8 @@ Name | Types supported | Description
 `array_formatter` | `T[]`, `T*`, `std::array<T, Size>` | Formats fixed size arrays as a sequence of values.
 `collection_formatter` | `std::list`, `std::set`, `std::map`, `std::vector`... | Formats collections as size followed by values. Takes arbitrary `size_formatter` and `value_formatter` as parameters.<br/>Use `vector_formatter` for `std::vector`. See `map_formatter` for a more convenient serializer for `std::map`.
 `const_formatter` | *any type* | A formatter wrapper, that allows for saving a constant and verifying it on load, i.e.:<br/>`serialize< const_formatter<little_endian<1>> >(serializer, 5);`
+`ensure_empty` | *any type* | A formatter, that ensures that given value will be empty. On save throws if `!value.empty()`. On load calls `value.clear()`. This is useful for stubbing out serialization of complex structures.
+`ensure_value` | *any type* | A formatter, that ensures that given object will have a specific value. On save throws if `value != storedValue`. On load assigns `value = storedValue`. This is useful for stubbing out serialization of complex structures.
 `external_value` | *any type* | A formatter wrapper, that allows for using a value stored externally. It verifies that external value has proper value on save and loads external value on load. See example in [external_value](#external_value).
 `generic_formatter` | *any type* |  Formats a type using a `save_or_load()` function found using Argument Dependent Lookup.
 `map_formatter` | `std::map`, `std::multimap` | Formats maps as size followed by key and value for each element. Takes arbitrary `size_formatter`, `key_formatter` and `value_formatter` as parameters.
