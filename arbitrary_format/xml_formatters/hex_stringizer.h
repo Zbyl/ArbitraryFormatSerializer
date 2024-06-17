@@ -88,7 +88,7 @@ public:
 
     /// @note We want lexical loading for integrals (including chars) and enums.
     template<typename T, typename String>
-    typename std::enable_if< !std::is_integral<T>::value && !std::is_enum<T>::value >::type
+    typename std::enable_if< std::is_integral<T>::value || std::is_enum<T>::value >::type
     load(const String& string, T& object) const
     {
         lexical_stringizer().load(string, object);
