@@ -89,6 +89,9 @@ public:
 protected:
     void saveDataImpl(const uint8_t* data, size_t size) override
     {
+        (void)data;
+        (void)size;
+
         if (!saving())
         {
             BOOST_THROW_EXCEPTION(serialization_exception() << errinfo_description("Can't save to a loading serializer."));
@@ -99,6 +102,9 @@ protected:
 
     void loadDataImpl(uint8_t* data, size_t size) override
     {
+        (void)data;
+        (void)size;
+
         if (!loading())
         {
             BOOST_THROW_EXCEPTION(serialization_exception() << errinfo_description("Can't load from a saving serializer."));

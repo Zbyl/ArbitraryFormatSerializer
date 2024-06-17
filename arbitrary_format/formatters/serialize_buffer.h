@@ -36,6 +36,7 @@ template<typename ValueFormatter, typename ValueType, typename TSerializer, type
 typename std::enable_if< binary::is_verbatim_formatter<ValueFormatter, ValueType>::value >::type 
 save_buffer(TSerializer& serializer, SizeType size, const ValueType *const array, ValueFormatter&& value_formatter)
 {
+    (void)value_formatter;
     serializer.saveData(reinterpret_cast<const uint8_t*>(array), size * sizeof(ValueType));
 }
 
@@ -53,6 +54,7 @@ template<typename ValueFormatter, typename ValueType, typename TSerializer, type
 typename std::enable_if< binary::is_verbatim_formatter<ValueFormatter, ValueType>::value >::type 
 load_buffer(TSerializer& serializer, SizeType size, ValueType *const array, ValueFormatter&& value_formatter)
 {
+    (void)value_formatter;
     serializer.loadData(reinterpret_cast<uint8_t*>(array), size * sizeof(ValueType));
 }
 

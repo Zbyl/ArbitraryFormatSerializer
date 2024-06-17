@@ -24,9 +24,9 @@ namespace arbitrary_format
 template<typename T>
 class external_value
 {
-    T& ext_value;
+    const T& ext_value;
 public:
-    explicit external_value(T& ext_value)
+    explicit external_value(const T& ext_value)
         : ext_value(ext_value)
     {
     }
@@ -34,6 +34,7 @@ public:
     template<typename TSerializer, typename U>
     void save(TSerializer& serializer, const U& value) const
     {
+        (void)serializer;
         if (value != ext_value)
         {
             BOOST_THROW_EXCEPTION(serialization_exception());
@@ -41,9 +42,9 @@ public:
     }
 
     template<typename TSerializer, typename U>
-    typename std::enable_if< !std::is_const<T>::value && (sizeof(TSerializer) >= 0) >::type
-    load(TSerializer& serializer, U& value) const
+    void load(TSerializer& serializer, U& value) const
     {
+        (void)serializer;
         value = ext_value;
     }
 };
